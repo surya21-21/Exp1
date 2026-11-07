@@ -1,0 +1,66 @@
+name: Study a reference video
+
+# Downloads the audio of a reference video with yt-dlp and transcribes it with
+# Whisper, so you can study its script structure and pacing.
+# Note: YouTube often blocks downloads from GitHub's servers. If this fails,
+# run yt-dlp on your phone in Termux instead and upload the audio file.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Reference video URL"
+        type: string
+        required: true
+      whisper_model:
+        description: "Whisper model"
+        type: choice
+        default: base
+        options:
+          - tiny
+          - base
+          - small
+
+permissions:
+  contents: read
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install yt-dlp faster-whisper
+
+      - name: Download audio
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          mkdir -p ref
+          yt-dlp --no-playlist -x --audio-format mp3 -o "ref/audio.%(ext)s" "$URL" || {
+            echo "::error::Download failed. YouTube often blocks GitHub runners; try yt-dlp in Termux and upload the audio instead."
+            exit 1
+          }
+
+      - name: Transcribe
+        env:
+          WHISPER_MODEL: ${{ inputs.whisper_model }}
+        run: python3 scripts/transcribe.py ref/audio.mp3 --out-dir ref --model "$WHISPER_MODEL"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reference-transcript
+          path: |
+            ref/transcript.txt
+            ref/captions.srt
+            ref/captions.json
+          if-no-files-found: error
