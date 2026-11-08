@@ -1,0 +1,7 @@
+run: 42481942877
+commit: a4cdccc818e61ba7d537f4bba1ae454eab037681
+preview: success
+full: success
+stream|codec_type=video|width=1080|height=1920
+stream|codec_type=audio
+format|duration=20.900000

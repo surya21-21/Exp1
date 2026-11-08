@@ -1,0 +1,600 @@
+{
+  "title": "Why is the Moon drifting away?",
+  "subtitle": "A 60-second science story",
+  "accent": "#c6ff3d",
+  "sections": [
+    {
+      "type": "hook",
+      "start": 0.0,
+      "end": 3.525,
+      "text": "These 3 free GitHub repos replaced my paid video tools.",
+      "keywords": [
+        "3",
+        "free",
+        "GitHub",
+        "repos"
+      ],
+      "arg": ""
+    },
+    {
+      "type": "repo",
+      "start": 3.525,
+      "end": 8.4,
+      "text": "Number one, Remotion. You write the animation as code and it renders the video.",
+      "keywords": [
+        "Remotion."
+      ],
+      "arg": "remotion-dev/remotion",
+      "repo": {
+        "full": "remotion-dev/remotion",
+        "owner": "remotion-dev",
+        "name": "remotion",
+        "description": "🎥      Make videos programmatically with React",
+        "stars": 71629,
+        "forks": 5946,
+        "language": "TypeScript",
+        "openIssues": 192,
+        "index": 1,
+        "replaces": "After Effects",
+        "price": 22.99
+      }
+    },
+    {
+      "type": "repo",
+      "start": 8.4,
+      "end": 11.4,
+      "text": "Number two, HyperFrames. Plain HTML becomes motion graphics.",
+      "keywords": [
+        "HyperFrames."
+      ],
+      "arg": "heygen-com/hyperframes",
+      "repo": {
+        "full": "heygen-com/hyperframes",
+        "owner": "heygen-com",
+        "name": "hyperframes",
+        "description": "Write HTML. Render video. Built for agents.",
+        "stars": 80812,
+        "forks": 7460,
+        "language": "TypeScript",
+        "openIssues": 220,
+        "index": 2,
+        "replaces": "Motion design apps",
+        "price": 15.0
+      }
+    },
+    {
+      "type": "text",
+      "start": 11.4,
+      "end": 14.15,
+      "text": "But here's the mistake I made at first.",
+      "keywords": [
+        "mistake"
+      ],
+      "arg": ""
+    },
+    {
+      "type": "repo",
+      "start": 14.15,
+      "end": 17.463,
+      "text": "Number three, yt-dlp. One command grabs any reference video.",
+      "keywords": [
+        "yt-dlp."
+      ],
+      "arg": "yt-dlp/yt-dlp",
+      "repo": {
+        "full": "yt-dlp/yt-dlp",
+        "owner": "yt-dlp",
+        "name": "yt-dlp",
+        "description": "A feature-rich command-line audio/video downloader",
+        "stars": 206121,
+        "forks": 18109,
+        "language": "Python",
+        "openIssues": 2774,
+        "index": 3,
+        "replaces": "Video downloader apps",
+        "price": 5.0
+      }
+    },
+    {
+      "type": "cta",
+      "start": 17.463,
+      "end": 20.881,
+      "text": "Comment REPO and I'll send you every link.",
+      "keywords": [
+        "REPO"
+      ],
+      "arg": "REPO"
+    }
+  ],
+  "totalMonthly": 42.99,
+  "repoCount": 3,
+  "ctaKeyword": "REPO",
+  "captions": [
+    {
+      "start": 0.3,
+      "end": 1.519,
+      "text": "These 3 free GitHub",
+      "words": [
+        {
+          "text": "These",
+          "start": 0.3,
+          "end": 0.581,
+          "key": false
+        },
+        {
+          "text": "3",
+          "start": 0.613,
+          "end": 0.894,
+          "key": true
+        },
+        {
+          "text": "free",
+          "start": 0.925,
+          "end": 1.206,
+          "key": true
+        },
+        {
+          "text": "GitHub",
+          "start": 1.238,
+          "end": 1.519,
+          "key": true
+        }
+      ]
+    },
+    {
+      "start": 1.55,
+      "end": 2.769,
+      "text": "repos replaced my paid",
+      "words": [
+        {
+          "text": "repos",
+          "start": 1.55,
+          "end": 1.831,
+          "key": true
+        },
+        {
+          "text": "replaced",
+          "start": 1.863,
+          "end": 2.144,
+          "key": false
+        },
+        {
+          "text": "my",
+          "start": 2.175,
+          "end": 2.456,
+          "key": false
+        },
+        {
+          "text": "paid",
+          "start": 2.487,
+          "end": 2.769,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 2.8,
+      "end": 3.394,
+      "text": "video tools.",
+      "words": [
+        {
+          "text": "video",
+          "start": 2.8,
+          "end": 3.081,
+          "key": false
+        },
+        {
+          "text": "tools.",
+          "start": 3.112,
+          "end": 3.394,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 3.675,
+      "end": 4.269,
+      "text": "Number one,",
+      "words": [
+        {
+          "text": "Number",
+          "start": 3.675,
+          "end": 3.956,
+          "key": false
+        },
+        {
+          "text": "one,",
+          "start": 3.987,
+          "end": 4.269,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 4.3,
+      "end": 4.581,
+      "text": "Remotion.",
+      "words": [
+        {
+          "text": "Remotion.",
+          "start": 4.3,
+          "end": 4.581,
+          "key": true
+        }
+      ]
+    },
+    {
+      "start": 4.862,
+      "end": 6.081,
+      "text": "You write the animation",
+      "words": [
+        {
+          "text": "You",
+          "start": 4.862,
+          "end": 5.144,
+          "key": false
+        },
+        {
+          "text": "write",
+          "start": 5.175,
+          "end": 5.456,
+          "key": false
+        },
+        {
+          "text": "the",
+          "start": 5.487,
+          "end": 5.769,
+          "key": false
+        },
+        {
+          "text": "animation",
+          "start": 5.8,
+          "end": 6.081,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 6.112,
+      "end": 7.331,
+      "text": "as code and it",
+      "words": [
+        {
+          "text": "as",
+          "start": 6.112,
+          "end": 6.394,
+          "key": false
+        },
+        {
+          "text": "code",
+          "start": 6.425,
+          "end": 6.706,
+          "key": false
+        },
+        {
+          "text": "and",
+          "start": 6.737,
+          "end": 7.019,
+          "key": false
+        },
+        {
+          "text": "it",
+          "start": 7.05,
+          "end": 7.331,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 7.362,
+      "end": 8.269,
+      "text": "renders the video.",
+      "words": [
+        {
+          "text": "renders",
+          "start": 7.362,
+          "end": 7.644,
+          "key": false
+        },
+        {
+          "text": "the",
+          "start": 7.675,
+          "end": 7.956,
+          "key": false
+        },
+        {
+          "text": "video.",
+          "start": 7.987,
+          "end": 8.269,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 8.55,
+      "end": 9.144,
+      "text": "Number two,",
+      "words": [
+        {
+          "text": "Number",
+          "start": 8.55,
+          "end": 8.831,
+          "key": false
+        },
+        {
+          "text": "two,",
+          "start": 8.863,
+          "end": 9.144,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 9.175,
+      "end": 9.456,
+      "text": "HyperFrames.",
+      "words": [
+        {
+          "text": "HyperFrames.",
+          "start": 9.175,
+          "end": 9.456,
+          "key": true
+        }
+      ]
+    },
+    {
+      "start": 9.738,
+      "end": 10.956,
+      "text": "Plain HTML becomes motion",
+      "words": [
+        {
+          "text": "Plain",
+          "start": 9.738,
+          "end": 10.019,
+          "key": false
+        },
+        {
+          "text": "HTML",
+          "start": 10.05,
+          "end": 10.331,
+          "key": false
+        },
+        {
+          "text": "becomes",
+          "start": 10.363,
+          "end": 10.644,
+          "key": false
+        },
+        {
+          "text": "motion",
+          "start": 10.675,
+          "end": 10.956,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 10.988,
+      "end": 11.269,
+      "text": "graphics.",
+      "words": [
+        {
+          "text": "graphics.",
+          "start": 10.988,
+          "end": 11.269,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 11.55,
+      "end": 12.769,
+      "text": "But here's the mistake",
+      "words": [
+        {
+          "text": "But",
+          "start": 11.55,
+          "end": 11.831,
+          "key": false
+        },
+        {
+          "text": "here's",
+          "start": 11.863,
+          "end": 12.144,
+          "key": false
+        },
+        {
+          "text": "the",
+          "start": 12.175,
+          "end": 12.456,
+          "key": false
+        },
+        {
+          "text": "mistake",
+          "start": 12.488,
+          "end": 12.769,
+          "key": true
+        }
+      ]
+    },
+    {
+      "start": 12.8,
+      "end": 14.019,
+      "text": "I made at first.",
+      "words": [
+        {
+          "text": "I",
+          "start": 12.8,
+          "end": 13.081,
+          "key": false
+        },
+        {
+          "text": "made",
+          "start": 13.113,
+          "end": 13.394,
+          "key": false
+        },
+        {
+          "text": "at",
+          "start": 13.425,
+          "end": 13.706,
+          "key": false
+        },
+        {
+          "text": "first.",
+          "start": 13.738,
+          "end": 14.019,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 14.3,
+      "end": 14.894,
+      "text": "Number three,",
+      "words": [
+        {
+          "text": "Number",
+          "start": 14.3,
+          "end": 14.581,
+          "key": false
+        },
+        {
+          "text": "three,",
+          "start": 14.613,
+          "end": 14.894,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 14.925,
+      "end": 15.206,
+      "text": "yt-dlp.",
+      "words": [
+        {
+          "text": "yt-dlp.",
+          "start": 14.925,
+          "end": 15.206,
+          "key": true
+        }
+      ]
+    },
+    {
+      "start": 15.488,
+      "end": 16.706,
+      "text": "One command grabs any",
+      "words": [
+        {
+          "text": "One",
+          "start": 15.488,
+          "end": 15.769,
+          "key": false
+        },
+        {
+          "text": "command",
+          "start": 15.8,
+          "end": 16.081,
+          "key": false
+        },
+        {
+          "text": "grabs",
+          "start": 16.113,
+          "end": 16.394,
+          "key": false
+        },
+        {
+          "text": "any",
+          "start": 16.425,
+          "end": 16.706,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 16.738,
+      "end": 17.331,
+      "text": "reference video.",
+      "words": [
+        {
+          "text": "reference",
+          "start": 16.738,
+          "end": 17.019,
+          "key": false
+        },
+        {
+          "text": "video.",
+          "start": 17.05,
+          "end": 17.331,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 17.613,
+      "end": 18.831,
+      "text": "Comment REPO and I'll",
+      "words": [
+        {
+          "text": "Comment",
+          "start": 17.613,
+          "end": 17.894,
+          "key": false
+        },
+        {
+          "text": "REPO",
+          "start": 17.925,
+          "end": 18.206,
+          "key": true
+        },
+        {
+          "text": "and",
+          "start": 18.238,
+          "end": 18.519,
+          "key": false
+        },
+        {
+          "text": "I'll",
+          "start": 18.55,
+          "end": 18.831,
+          "key": false
+        }
+      ]
+    },
+    {
+      "start": 18.863,
+      "end": 20.081,
+      "text": "send you every link.",
+      "words": [
+        {
+          "text": "send",
+          "start": 18.863,
+          "end": 19.144,
+          "key": false
+        },
+        {
+          "text": "you",
+          "start": 19.175,
+          "end": 19.456,
+          "key": false
+        },
+        {
+          "text": "every",
+          "start": 19.488,
+          "end": 19.769,
+          "key": false
+        },
+        {
+          "text": "link.",
+          "start": 19.8,
+          "end": 20.081,
+          "key": false
+        }
+      ]
+    }
+  ],
+  "durationInFrames": 626,
+  "fps": 30,
+  "width": 1080,
+  "height": 1920
+}

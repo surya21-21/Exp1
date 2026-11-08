@@ -1,0 +1,8 @@
+Audio from Openverse (api.openverse.org). Licences as listed.
+sfx/whoosh: "Deep Whoosh #1" by Kinoton (CC0 1.0) https://freesound.org/people/Kinoton/sounds/351256
+sfx/swoosh: "Fast Swoosh.wav" by swidmark (CC0 1.0) https://freesound.org/people/swidmark/sounds/171321
+sfx/pop: "Pop (made by DuffyBro)" by DuffyBro (CC0 1.0) https://freesound.org/people/DuffyBro/sounds/319107
+sfx/click: "Mouse click sounds" by Masgame (CC0 1.0) https://freesound.org/people/Masgame/sounds/347544
+sfx/impact: "Impact" by chriskalos (CC0 1.0) https://freesound.org/people/chriskalos/sounds/172779
+sfx/riser: "Percusive Noise Riser.wav" by Stereo Surgeon (CC0 1.0) https://freesound.org/people/Stereo%20Surgeon/sounds/261415
+music: "technology ambience" by burning-mir (CC0 1.0) https://freesound.org/people/burning-mir/sounds/223442
