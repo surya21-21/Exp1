@@ -1,5 +1,6 @@
 import React from "react";
-import {interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from "remotion";
+import {interpolate, spring, Easing} from "remotion";
+import {useT} from "./time";
 import {C, SANS, fmtNum} from "./theme";
 import {Repo} from "./types";
 import beats from "../beats.json";
@@ -50,9 +51,7 @@ const FILES = [
 // Simplified, restyled repository page inside a macOS Safari window.
 // Not a copy of GitHub's interface: our own layout keeping the main tabs.
 export const SafariWindow: React.FC<{repo: Repo; accent: string}> = ({repo, accent}) => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const t = frame / fps;
+  const {frame, fps, t} = useT();
 
   const enter = spring({frame: frame - B.window * fps, fps, config: {damping: 16, mass: 0.9}});
   const stars = interpolate(t, [B.starsFrom, B.starsTo], [(repo.stars ?? 0) * 0.82, repo.stars ?? 0], {

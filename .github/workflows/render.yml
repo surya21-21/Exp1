@@ -83,31 +83,62 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Pick script
+        id: script
+        env:
+          SCRIPT: ${{ inputs.script }}
+        run: |
+          if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ]; then
+            echo "path=$SCRIPT" >> "$GITHUB_OUTPUT"; echo "demo=false" >> "$GITHUB_OUTPUT"
+          elif [ -f assets/script.example.txt ]; then
+            echo "::notice::No script at '$SCRIPT' - using the demo script (no voiceover)."
+            echo "path=assets/script.example.txt" >> "$GITHUB_OUTPUT"; echo "demo=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=" >> "$GITHUB_OUTPUT"; echo "demo=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Reuse the last ElevenLabs voiceover when the script and voice are unchanged,
+      # so re-renders after visual tweaks cost no credits.
+      - name: Restore saved voiceover
+        if: inputs.engine == 'remotion' && steps.script.outputs.demo == 'false'
+        uses: actions/cache@v4
+        with:
+          path: build/tts
+          key: elevenlabs-${{ inputs.voice_id }}-${{ hashFiles(steps.script.outputs.path) }}
+
       - name: Make or find narration
         id: audio
         env:
-          SCRIPT: ${{ inputs.script }}
+          SCRIPT: ${{ steps.script.outputs.path }}
+          DEMO: ${{ steps.script.outputs.demo }}
           VOICE_ID: ${{ inputs.voice_id }}
           VOICEOVER: ${{ inputs.voiceover }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ENGINE: ${{ inputs.engine }}
         run: |
           mkdir -p build
-          if [ "$ENGINE" = "remotion" ] && [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ] && [ -n "$ELEVENLABS_API_KEY" ]; then
-            python3 scripts/tts.py "$SCRIPT" --voice "$VOICE_ID" --out-dir build
-            echo "found=true" >> "$GITHUB_OUTPUT"
-            echo "captions=elevenlabs" >> "$GITHUB_OUTPUT"
-          elif [ -n "$VOICEOVER" ] && [ -f "$VOICEOVER" ]; then
+          if [ -n "$VOICEOVER" ] && [ -f "$VOICEOVER" ]; then
+            echo "Using the uploaded recording $VOICEOVER (no ElevenLabs credits used)."
             cp "$VOICEOVER" build/voiceover.mp3
             echo "found=true" >> "$GITHUB_OUTPUT"
             echo "captions=whisper" >> "$GITHUB_OUTPUT"
+          elif [ "$ENGINE" = "remotion" ] && [ "$DEMO" = "false" ] && [ -f build/tts/voiceover.mp3 ]; then
+            echo "Reusing saved voiceover (script and voice unchanged) - no ElevenLabs credits used."
+            cp build/tts/* build/
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "captions=elevenlabs" >> "$GITHUB_OUTPUT"
+          elif [ "$ENGINE" = "remotion" ] && [ "$DEMO" = "false" ] && [ -n "$ELEVENLABS_API_KEY" ]; then
+            python3 scripts/tts.py "$SCRIPT" --voice "$VOICE_ID" --out-dir build/tts
+            cp build/tts/* build/
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "captions=elevenlabs" >> "$GITHUB_OUTPUT"
           else
-            if [ -f "$SCRIPT" ] && [ -z "$ELEVENLABS_API_KEY" ]; then
+            if [ "$ENGINE" = "remotion" ] && [ "$DEMO" = "false" ] && [ -z "$ELEVENLABS_API_KEY" ]; then
               echo "::warning::Found $SCRIPT but no ELEVENLABS_API_KEY secret, so no voiceover was made."
             fi
             echo "found=false" >> "$GITHUB_OUTPUT"
             echo "captions=none" >> "$GITHUB_OUTPUT"
-            echo "No narration - rendering silent with the default duration."
+            echo "No narration - timing comes from the script at ~3.2 words/sec."
           fi
 
       - name: Install ffmpeg
@@ -127,7 +158,7 @@ jobs:
 
       - name: Build timeline (sections, repo data, sound cues)
         env:
-          SCRIPT: ${{ inputs.script }}
+          SCRIPT: ${{ steps.script.outputs.path }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ]; then

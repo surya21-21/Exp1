@@ -158,8 +158,11 @@ def main():
 
     cues = []
     for sec in out_sections:
+        speed = 1.0
+        if sec["type"] == "repo":   # same formula as repoSpeed() in src/reel/time.ts
+            speed = max(1.0, (beats["repo"]["strike"] + 0.5) / max(0.5, sec["end"] - sec["start"] - 0.3))
         for at, sfx, gain in beats[sec["type"]]["cues"]:
-            t = sec["start"] + at
+            t = sec["start"] + at / speed
             if t < sec["end"]:
                 cues.append({"t": round(t, 3), "sfx": sfx, "gain": gain})
         if sec["type"] == "hook":   # counter ticks while the hook counter runs

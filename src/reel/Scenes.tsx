@@ -1,17 +1,12 @@
 import React from "react";
-import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from "remotion";
+import {AbsoluteFill, interpolate, spring, Easing} from "remotion";
 import {C, SANS, SERIF, fmtMoney} from "./theme";
 import {Repo, Section} from "./types";
 import {SafariWindow} from "./SafariWindow";
+import {useT} from "./time";
 import beats from "../beats.json";
 
 const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
-
-const useT = () => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  return {frame, fps, t: frame / fps};
-};
 
 // Quick slide-in so every scene change reads as a cut on the whoosh.
 const Enter: React.FC<{children: React.ReactNode}> = ({children}) => {
@@ -26,6 +21,7 @@ const Enter: React.FC<{children: React.ReactNode}> = ({children}) => {
 
 const Strike: React.FC<{progress: number; color: string}> = ({progress, color}) => (
   <div style={{position: "absolute", left: -10, top: "52%", height: 10, borderRadius: 5,
+    opacity: progress > 0 ? 1 : 0,
     width: `calc(${progress * 100}% + 20px)`, background: color, transform: "rotate(-4deg)",
     boxShadow: "0 2px 10px rgba(0,0,0,0.4)"}} />
 );

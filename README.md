@@ -43,7 +43,8 @@ The repo name, description, stars, forks, language and issue count are fetched f
 ## Voice
 
 - **ElevenLabs (default):** add the repo secret `ELEVENLABS_API_KEY` (Settings > Secrets and variables > Actions). Pick a voice with the `voice_id` box. Free plan: about 10 min/month, non-commercial, credit required. A monetized channel needs a paid plan.
-- **Your own recording or a voice made elsewhere (e.g. InVideo):** upload it as `assets/voiceover.mp3` and remove the API key secret, or run when credits are out. Whisper times it and the words are matched to your script, so captions keep your spelling.
+- **Saving credits:** a full render reuses the last ElevenLabs voiceover whenever the script and voice are unchanged, so re-rendering after visual changes is free. Preview mode never uses credits.
+- **Your own recording or a voice made elsewhere (e.g. InVideo):** upload it as `assets/voiceover.mp3`. An uploaded file is always used instead of ElevenLabs; delete it to go back. Whisper times it and the words are matched to your script, so captions keep your spelling.
 
 ## Sound
 

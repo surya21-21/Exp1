@@ -11,11 +11,13 @@ for s in p.get("sections", []):
     if s["type"] == "hook":
         picks += [s["start"] + 0.6, s["start"] + beats["hook"]["free"] + 0.3]
     elif s["type"] == "repo":
-        picks += [s["start"] + beats["repo"]["strike"] + 0.4]
+        speed = max(1.0, (beats["repo"]["strike"] + 0.5) / max(0.5, s["end"] - s["start"] - 0.3))
+        picks += [s["start"] + (beats["repo"]["strike"] + 0.4) / speed]
     elif s["type"] == "cta":
         picks += [s["start"] + beats["cta"]["keyword"] + 0.4]
     else:
         picks += [s["start"] + 0.8]
+    picks[-1] = min(picks[-1], s["end"] - 0.25)   # never land on the cut to the next scene
 if not picks:
     picks = [total / fps * k / 8 for k in range(8)]
 if len(picks) > 8:   # keep the first two, last one, and spread the rest

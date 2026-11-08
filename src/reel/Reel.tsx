@@ -5,6 +5,7 @@ import {ReelProps, Repo} from "./types";
 import {ReelCaptions} from "./ReelCaptions";
 import {CtaScene, HookScene, RepoScene, TextScene} from "./Scenes";
 import beats from "../beats.json";
+import {SpeedContext, repoSpeed} from "./time";
 
 const W = 1080;
 const H = 1920;
@@ -82,7 +83,7 @@ export const Reel: React.FC<ReelProps> = (props) => {
   const repos = props.sections.filter((s) => s.type === "repo" && s.repo).map((s) => s.repo!);
   const strikes = props.sections
     .filter((s) => s.type === "repo" && s.repo)
-    .map((s) => ({repo: s.repo!, at: s.start + beats.repo.strike}));
+    .map((s) => ({repo: s.repo!, at: s.start + beats.repo.strike / repoSpeed(s.end - s.start)}));
   // Slow constant push-in so even "still" moments move.
   const drift = 1 + 0.025 * (frame / Math.max(1, props.durationInFrames)) + 0.006 * Math.sin(frame / 45);
 
@@ -101,7 +102,9 @@ export const Reel: React.FC<ReelProps> = (props) => {
                   <HookScene section={s} repos={repos} total={props.totalMonthly} accent={props.accent} />
                 )}
                 {s.type === "repo" && s.repo && (
-                  <RepoScene section={s} count={props.repoCount} accent={props.accent} />
+                  <SpeedContext.Provider value={repoSpeed(s.end - s.start)}>
+                    <RepoScene section={s} count={props.repoCount} accent={props.accent} />
+                  </SpeedContext.Provider>
                 )}
                 {s.type === "text" && <TextScene section={s} accent={props.accent} />}
                 {s.type === "cta" && (
