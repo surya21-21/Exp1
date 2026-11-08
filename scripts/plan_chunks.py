@@ -17,6 +17,7 @@ def main():
     ap.add_argument("--base", default="props.base.json")
     ap.add_argument("--audio", default="")
     ap.add_argument("--captions", default="build/captions.json")
+    ap.add_argument("--extra", default="build/extra_props.json")
     ap.add_argument("--size", default="1280x720")
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--chunks", type=int, default=1)
@@ -47,6 +48,14 @@ def main():
     if os.path.exists(args.captions):
         with open(args.captions, encoding="utf-8") as f:
             captions = json.load(f)
+
+    # Timeline from build_timeline.py (Reel): sections, word captions, duration.
+    if os.path.exists(args.extra):
+        with open(args.extra, encoding="utf-8") as f:
+            extra = json.load(f)
+        captions = extra.pop("captions", captions)
+        duration = max(duration, float(extra.pop("durationSeconds", 0)))
+        props.update(extra)
 
     total = max(1, int(math.floor(duration * args.fps + 0.5)))
     props.update(

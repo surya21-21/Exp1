@@ -4,16 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       engine:
-        description: "Render engine"
+        description: "remotion = full video; remotion-preview = 8 still frames in a few minutes (no ElevenLabs credits)"
         type: choice
-        default: remotion
+        default: remotion-preview
         options:
+          - remotion-preview
           - remotion
           - hyperframes
       composition:
-        description: "Remotion composition id"
+        description: "Remotion composition (Reel or Explainer)"
         type: string
-        default: Explainer
+        default: Reel
       script:
         description: "Script for an ElevenLabs voiceover (needs ELEVENLABS_API_KEY secret)"
         type: string
@@ -70,7 +71,7 @@ permissions:
 jobs:
   # ---------------------------------------------------------------- Remotion
   prepare:
-    if: inputs.engine == 'remotion'
+    if: inputs.engine != 'hyperframes'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -89,9 +90,10 @@ jobs:
           VOICE_ID: ${{ inputs.voice_id }}
           VOICEOVER: ${{ inputs.voiceover }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ENGINE: ${{ inputs.engine }}
         run: |
           mkdir -p build
-          if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ] && [ -n "$ELEVENLABS_API_KEY" ]; then
+          if [ "$ENGINE" = "remotion" ] && [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ] && [ -n "$ELEVENLABS_API_KEY" ]; then
             python3 scripts/tts.py "$SCRIPT" --voice "$VOICE_ID" --out-dir build
             echo "found=true" >> "$GITHUB_OUTPUT"
             echo "captions=elevenlabs" >> "$GITHUB_OUTPUT"
@@ -123,6 +125,17 @@ jobs:
           WHISPER_MODEL: ${{ inputs.whisper_model }}
         run: python3 scripts/transcribe.py build/voiceover.mp3 --out-dir build --model "$WHISPER_MODEL"
 
+      - name: Build timeline (sections, repo data, sound cues)
+        env:
+          SCRIPT: ${{ inputs.script }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ]; then
+            python3 scripts/build_timeline.py --script "$SCRIPT"
+          else
+            echo "No script at '$SCRIPT' - skipping the Reel timeline."
+          fi
+
       - name: Plan render
         id: plan
         env:
@@ -135,6 +148,10 @@ jobs:
           if [ "$AUDIO_FOUND" = "true" ]; then AUDIO="build/voiceover.mp3"; fi
           python3 scripts/plan_chunks.py --audio "$AUDIO" --size "$SIZE" --fps "$FPS" --chunks "$CHUNKS"
 
+      - name: Synthesize sound effects
+        run: |
+          if [ -f build/sfx_cues.json ]; then python3 scripts/make_sfx.py build/sfx_cues.json; fi
+
       - uses: actions/upload-artifact@v4
         with:
           name: inputs
@@ -143,6 +160,7 @@ jobs:
 
   render:
     needs: prepare
+    if: inputs.engine == 'remotion'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
@@ -193,6 +211,7 @@ jobs:
 
   assemble:
     needs: [prepare, render]
+    if: inputs.engine == 'remotion'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -216,21 +235,12 @@ jobs:
           name: inputs
           path: build
 
-      - name: Join chunks, add narration, make thumbnail
-        env:
-          VOICEOVER: build/voiceover.mp3
+      - name: Join chunks, mix voice + SFX + music, make thumbnail
         run: |
           mkdir -p out
           for f in parts/part-*.mp4; do echo "file '$PWD/$f'"; done > list.txt
           ffmpeg -y -f concat -safe 0 -i list.txt -c copy out/silent.mp4
-
-          if [ -n "$VOICEOVER" ] && [ -f "$VOICEOVER" ]; then
-            ffmpeg -y -i out/silent.mp4 -i "$VOICEOVER" \
-              -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k \
-              -af loudnorm=I=-16:TP=-1.5:LRA=11 -shortest out/final.mp4
-          else
-            cp out/silent.mp4 out/final.mp4
-          fi
+          python3 scripts/mix_audio.py out/silent.mp4 out/final.mp4
 
           ffmpeg -y -ss 00:00:02 -i out/final.mp4 -frames:v 1 -q:v 2 out/thumbnail.jpg
           cp build/captions.srt build/captions.json out/ 2>/dev/null || true
@@ -252,6 +262,77 @@ jobs:
             --draft --title "Render #${GITHUB_RUN_NUMBER}" \
             --notes "Rendered by workflow run ${GITHUB_RUN_ID}."
           echo "Draft release created: Releases tab > Render #${GITHUB_RUN_NUMBER}" >> "$GITHUB_STEP_SUMMARY"
+
+  # ----------------------------------------------------------------- Preview
+  preview:
+    needs: prepare
+    if: inputs.engine == 'remotion-preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install ffmpeg and Chrome libraries
+        run: |
+          sudo apt-get update
+          ASOUND=libasound2t64
+          apt-cache show libasound2t64 >/dev/null 2>&1 || ASOUND=libasound2
+          sudo apt-get install -y ffmpeg libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 \
+            libgbm1 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+            libcups2 libpango-1.0-0 libcairo2 "$ASOUND"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: inputs
+          path: build
+
+      - name: Render 8 still frames
+        env:
+          COMPOSITION: ${{ inputs.composition }}
+        run: |
+          mkdir -p out/stills
+          FRAMES=$(python3 scripts/preview_frames.py build/props.json)
+          echo "Frames: $FRAMES"
+          # Bundle once so each still doesn't rebuild the project.
+          ENTRY=src/index.ts
+          if npx remotion bundle src/index.ts --out-dir=bundle; then ENTRY=bundle; fi
+          i=0
+          for F in $FRAMES; do
+            OUT="out/stills/$(printf %02d $i).png"
+            npx remotion still "$ENTRY" "$COMPOSITION" "$OUT" --props=build/props.json --frame="$F" \
+              || npx remotion still src/index.ts "$COMPOSITION" "$OUT" --props=build/props.json --frame="$F"
+            i=$((i+1))
+          done
+
+      - name: Make contact sheet
+        run: |
+          N=$(ls out/stills/*.png | wc -l)
+          ffmpeg -y -framerate 1 -pattern_type glob -i 'out/stills/*.png' \
+            -vf "scale=540:-2,tile=4x$(( (N + 3) / 4 )):padding=8:color=black" -frames:v 1 out/preview.jpg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview
+          path: out/
+          if-no-files-found: error
+
+      - name: Draft release with the preview
+        if: inputs.publish_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "preview-${GITHUB_RUN_NUMBER}" out/preview.jpg \
+            --draft --title "Preview #${GITHUB_RUN_NUMBER}" \
+            --notes "8 still frames from workflow run ${GITHUB_RUN_ID}. Approve the look, then run with engine = remotion."
 
   # ------------------------------------------------------------- HyperFrames
   hyperframes:

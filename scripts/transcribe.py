@@ -81,6 +81,10 @@ def main():
     with open(os.path.join(args.out_dir, "transcript.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
+    with open(os.path.join(args.out_dir, "words.json"), "w", encoding="utf-8") as f:
+        json.dump([{"word": w.word.strip(), "start": round(w.start, 3), "end": round(w.end, 3)}
+                   for w in words if w.word.strip()], f, ensure_ascii=False, indent=1)
+
     print(f"Language: {info.language}; {len(captions)} caption lines written to {args.out_dir}")
 
 

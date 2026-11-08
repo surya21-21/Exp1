@@ -1,46 +1,58 @@
 # Motion video pipeline
 
-Voiceover in, captioned motion-graphics video out, all rendered on GitHub Actions.
+A script goes in and a finished, captioned reel comes out. Everything renders on GitHub Actions, so your phone only starts the run.
 
 ```
-voiceover.mp3 --Whisper--> captions --Remotion (parallel chunks)--> video --ffmpeg--> final.mp4
+script.txt --ElevenLabs--> voice + word timings --> timeline (scenes, repo data, sound cues)
+          --Remotion--> video --ffmpeg--> voice + synthesized SFX + music (ducked) --> final.mp4
 ```
 
-## Set up from the phone (Termux)
+The pacing rules come from `docs/reel-style-guide.md`, which was measured from the reference reels.
 
-```bash
-pkg install -y git unzip gh
-unzip motion-pipeline.zip && cd motion-pipeline
-git init && git add -A && git commit -m "Add motion pipeline"
-gh auth login
-gh repo create my-motion-videos --private --source=. --push
+## Make a reel
+
+1. Copy `assets/script.example.txt` to `assets/script.txt` and write your script (format below).
+2. **Preview first.** Go to Actions > **Render motion video** > Run workflow, keep `engine = remotion-preview`. In a few minutes you get 8 still frames as `preview.jpg` (in Releases, or the run's Artifacts). This uses no ElevenLabs credits.
+3. **Full render.** Run again with `engine = remotion`. It makes the ElevenLabs voice, renders, mixes the audio and puts `final.mp4` plus `captions.srt` in a draft release.
+
+For heavy videos, set `chunks` to 3-4 to render in parallel.
+
+## Script format
+
+```
+# Lines starting with # are notes, never spoken.
+[[hook]]
+These *9 free GitHub repos* replaced my paid tools.
+[[repo remotion-dev/remotion | replaces=After Effects | price=22.99]]
+Number one, *Remotion*. You write the animation as code.
+[[text]]
+But here's the *mistake* I made at first.
+[[cta REPO]]
+Comment *REPO* and I'll send you every link.
 ```
 
-## Render a video
+| Marker | Scene |
+|---|---|
+| `[[hook]]` | Monthly cost counts up, repo names flash every 0.2s, then a strike-through and "$0" |
+| `[[repo owner/name \| replaces=Tool \| price=12]]` | Number card, Apple-style Safari window with a restyled repo page (main tabs, live star count, cursor clicking Star), "Replaces Tool $12/mo" with a strike-through and a FREE stamp. The savings counter goes up. |
+| `[[text]]` | Big kinetic statement (the `*keywords*`) |
+| `[[cta KEYWORD]]` | "Comment KEYWORD" end card |
 
-1. Upload your narration to `assets/voiceover.mp3` (GitHub app or web: Add file > Upload files).
-2. Edit `props.base.json` for the title, subtitle and accent colour.
-3. Actions tab > **Render motion video** > Run workflow.
-4. Download `final.mp4` from the draft release (Releases tab), or from the run's Artifacts.
+The repo name, description, stars, forks, language and issue count are fetched from GitHub when the workflow runs. `*asterisks*` mark keywords, which pop in the accent colour in the captions. Change the accent in `props.base.json`.
 
-Workflow options: size (720p default, keeps it fast), fps, parallel chunks (use 2-4 for heavy scenes), Whisper model, and engine.
+## Voice
 
-## ElevenLabs voiceover (optional)
+- **ElevenLabs (default):** add the repo secret `ELEVENLABS_API_KEY` (Settings > Secrets and variables > Actions). Pick a voice with the `voice_id` box. Free plan: about 10 min/month, non-commercial, credit required. A monetized channel needs a paid plan.
+- **Your own recording or a voice made elsewhere (e.g. InVideo):** upload it as `assets/voiceover.mp3` and remove the API key secret, or run when credits are out. Whisper times it and the words are matched to your script, so captions keep your spelling.
 
-1. Get an API key from elevenlabs.io (Profile > API keys).
-2. In this repo: Settings > Secrets and variables > Actions > New repository secret. Name it `ELEVENLABS_API_KEY` and paste the key. Never paste the key into a chat or a file.
-3. Put your script in `assets/script.txt`. Lines starting with `#` are notes and aren't spoken.
-4. Run **Render motion video**. It makes the voiceover, takes word timings straight from ElevenLabs for the captions (no Whisper needed), then renders.
+## Sound
 
-To use a different voice, copy its Voice ID from the ElevenLabs Voices page into the `voice_id` box. The free ElevenLabs plan doesn't allow commercial use and requires credit to ElevenLabs. A monetized channel needs a paid plan.
+- **Sound effects** are synthesized in code (whoosh, pop, click, tick, impact, riser) and placed on every animation beat from `src/beats.json`. No licences needed.
+- **Music:** put one royalty-free track in `assets/music/` (YouTube Audio Library or Pixabay Music). It loops to fit, dips under the voice and fades out. The final mix is normalized to -14 LUFS for Reels and Shorts.
 
 ## Other pieces
 
-- **Study a reference video** workflow: yt-dlp + Whisper turn a reference URL into a transcript. YouTube often blocks GitHub's servers; if it fails, run yt-dlp in Termux and upload the audio.
-- **HyperFrames engine**: create a project with `npx hyperframes init hyperframes`, commit it, then pick `hyperframes` in the workflow.
-- Edit `src/Explainer.tsx` to change the scene. Preview locally with `npm install && npm run studio` on a PC.
-
-## Notes
-
-- Remotion is free for individuals and small teams; check its license if the channel grows.
-- Use reference videos for study, not as footage in your own videos.
+- **Study a reference video** workflow: yt-dlp plus Whisper on a URL. Instagram blocks GitHub's servers, so for reels save them on your phone and share them in chat.
+- **HyperFrames engine:** `npx hyperframes init hyperframes`, commit the folder, pick `hyperframes`.
+- The science-channel `Explainer` composition is still there. Set `composition = Explainer` and size 1280x720.
+- Remotion is free for individuals and small teams. Check its license if the channel grows.
