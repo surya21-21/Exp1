@@ -44,24 +44,36 @@ def ffmpeg(*args):
     subprocess.run(["ffmpeg", "-v", "error", "-y", *args], check=True)
 
 
-def relevant(r, query):
-    """True when the main word of the query (or its stem) is in the title or tags."""
+def score(r, query):
+    """2 = query word in the title, 1 = in the tags, 0 = neither."""
     words = [w for w in query.lower().split() if len(w) > 2]
     if not words:
-        return True
-    hay = (r.get("title") or "").lower() + " " + " ".join(
-        (t.get("name") or "").lower() for t in (r.get("tags") or []) if isinstance(t, dict))
+        return 1
     stem = words[0][:5]
-    return words[0] in hay or stem in hay
+    title = (r.get("title") or "").lower()
+    tags = " ".join((t.get("name") or "").lower() for t in (r.get("tags") or []) if isinstance(t, dict))
+    if words[0] in title or stem in title:
+        return 2
+    return 1 if (words[0] in tags or stem in tags) else 0
+
+
+def ext_of(r):
+    ft = (r.get("filetype") or "").lower()
+    if ft:
+        return ft
+    path = urllib.parse.urlparse(r.get("url") or "").path
+    return path.rsplit(".", 1)[-1].lower() if "." in path.rsplit("/", 1)[-1] else ""
 
 
 def pick(results, min_ms=None, max_ms=None, query=None):
-    # Best matches first: results whose title/tags mention the query word.
+    # Best matches first (title beats tags), then the rest in API order.
     if query:
-        results = [r for r in results if relevant(r, query)] + [r for r in results if not relevant(r, query)]
+        results = sorted(results, key=lambda r: -score(r, query))
     for r in results:
-        ext = (r.get("filetype") or r.get("url", "").rsplit(".", 1)[-1]).lower()
-        if ext not in EXTS or not r.get("url"):
+        if not r.get("url"):
+            continue
+        ext = ext_of(r)
+        if ext and ext not in EXTS:      # unknown type: let ffmpeg try it
             continue
         d = r.get("duration")
         if d and min_ms and d < min_ms:
@@ -125,10 +137,11 @@ def main():
         for lic_try, needs_credit in tries:
             for q in queries:
                 try:
-                    res = search(q, "music", lic_try)
+                    res = search(q, "music", lic_try) or search(q, None, lic_try)
                 except Exception as e:
                     print(f"  music search '{q}' failed: {e}")
                     continue
+                print(f"  music '{q}' ({lic_try}): {len(res)} results")
                 for r in pick(res, min_ms=int(m.get("min_seconds", 30)) * 1000, query=q):
                     raw = f"{tmp}/music.src"
                     try:

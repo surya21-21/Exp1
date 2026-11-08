@@ -201,7 +201,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/audio
-          key: openverse-${{ hashFiles('assets/audio.json', 'scripts/openverse_audio.py') }}-v2
+          key: openverse-${{ hashFiles('assets/audio.json', 'scripts/openverse_audio.py') }}-v3
 
       - name: Fetch music and sound effects from Openverse
         run: |
