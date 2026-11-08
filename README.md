@@ -50,6 +50,7 @@ The repo name, description, stars, forks, language and issue count are fetched f
 
 - **Sound effects** are synthesized in code (whoosh, pop, click, tick, impact, riser) and placed on every animation beat from `src/beats.json`. No licences needed.
 - **Music:** put one royalty-free track in `assets/music/` (YouTube Audio Library or Pixabay Music). It loops to fit, dips under the voice and fades out. The final mix is normalized to -14 LUFS for Reels and Shorts.
+- **Openverse:** with no track in `assets/music/`, the workflow searches Openverse for music and for the whoosh, pop, click, impact, swoosh and riser sounds, using `assets/audio.json` (CC0 / public domain by default, so no credit is needed). Results are cached, so every render sounds the same until you change a query. Anything not found falls back to the code-generated sound. Credits go in `CREDITS.txt` in the release. If no music turns up, add `by` to `licenses` and copy the credit into your caption.
 
 ## Other pieces
 

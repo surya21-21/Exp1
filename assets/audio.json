@@ -1,0 +1,13 @@
+{
+  "_note": "Music and sound effects fetched from Openverse (api.openverse.org) on GitHub Actions. Change a query to get a different sound; delete a line to use the code-generated version. 'licenses': cc0 and pdm need no credit; add 'by' to allow tracks that need a credit (written to CREDITS.txt).",
+  "licenses": "cc0,pdm",
+  "music": {"query": "upbeat electronic loop", "min_seconds": 30},
+  "sfx": {
+    "whoosh": "whoosh transition",
+    "swoosh": "swoosh fast",
+    "pop": "pop bubble",
+    "click": "mouse click",
+    "impact": "impact boom",
+    "riser": "riser sweep"
+  }
+}

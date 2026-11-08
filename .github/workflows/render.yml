@@ -179,6 +179,21 @@ jobs:
           if [ "$AUDIO_FOUND" = "true" ]; then AUDIO="build/voiceover.mp3"; fi
           python3 scripts/plan_chunks.py --audio "$AUDIO" --size "$SIZE" --fps "$FPS" --chunks "$CHUNKS"
 
+      # Same audio.json = same sounds every render, and no repeat API calls.
+      - name: Restore Openverse audio
+        uses: actions/cache@v4
+        with:
+          path: build/audio
+          key: openverse-${{ hashFiles('assets/audio.json') }}-v1
+
+      - name: Fetch music and sound effects from Openverse
+        run: |
+          if [ -f assets/audio.json ] && [ ! -f build/audio/CREDITS.txt ]; then
+            python3 scripts/openverse_audio.py --config assets/audio.json --out build/audio || \
+              echo "::warning::Openverse fetch failed - using generated sounds."
+          fi
+          [ -f build/audio/CREDITS.txt ] && cat build/audio/CREDITS.txt >> "$GITHUB_STEP_SUMMARY" || true
+
       - name: Synthesize sound effects
         run: |
           if [ -f build/sfx_cues.json ]; then python3 scripts/make_sfx.py build/sfx_cues.json; fi
@@ -275,6 +290,7 @@ jobs:
 
           ffmpeg -y -ss 00:00:02 -i out/final.mp4 -frames:v 1 -q:v 2 out/thumbnail.jpg
           cp build/captions.srt build/captions.json out/ 2>/dev/null || true
+          cp build/audio/CREDITS.txt out/ 2>/dev/null || true
           rm -f out/silent.mp4
           ls -lh out
 
@@ -289,9 +305,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "render-${GITHUB_RUN_NUMBER}" out/final.mp4 out/thumbnail.jpg \
+          EXTRA=""; [ -f out/CREDITS.txt ] && EXTRA="out/CREDITS.txt"
+          gh release create "render-${GITHUB_RUN_NUMBER}" out/final.mp4 out/thumbnail.jpg $EXTRA \
             --draft --title "Render #${GITHUB_RUN_NUMBER}" \
-            --notes "Rendered by workflow run ${GITHUB_RUN_ID}."
+            --notes "Rendered by workflow run ${GITHUB_RUN_ID}. Audio credits (if any) are in CREDITS.txt."
           echo "Draft release created: Releases tab > Render #${GITHUB_RUN_NUMBER}" >> "$GITHUB_STEP_SUMMARY"
 
   # ----------------------------------------------------------------- Preview

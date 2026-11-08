@@ -31,9 +31,13 @@ def main():
     dur = duration(args.video)
     voice = args.voice if os.path.isfile(args.voice) else None
     sfx = args.sfx if os.path.isfile(args.sfx) else None
-    music = sorted(f for f in glob.glob(os.path.join(args.music_dir, "*"))
-                   if f.lower().endswith((".mp3", ".wav", ".m4a", ".ogg", ".aac", ".flac")))
-    music = music[0] if music else None
+    music = None
+    for d in (args.music_dir, "build/audio/music"):   # your own track first, then Openverse
+        found = sorted(f for f in glob.glob(os.path.join(d, "*"))
+                       if f.lower().endswith((".mp3", ".wav", ".m4a", ".ogg", ".aac", ".flac")))
+        if found:
+            music = found[0]
+            break
 
     cmd, filters, mix = ["ffmpeg", "-y", "-i", args.video], [], []
     idx = 1

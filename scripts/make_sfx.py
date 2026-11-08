@@ -103,11 +103,27 @@ SOUNDS = {"whoosh": whoosh, "swoosh": swoosh, "pop": pop, "click": click,
           "tick": tick, "impact": impact, "riser": riser}
 
 
+def load_wav(path):
+    """Mono 16-bit 44.1kHz WAV -> floats scaled to peak 0.8, or None."""
+    try:
+        with wave.open(path, "rb") as w:
+            if w.getnchannels() != 1 or w.getsampwidth() != 2 or w.getframerate() != SR:
+                return None
+            raw = w.readframes(w.getnframes())
+    except (FileNotFoundError, wave.Error, EOFError):
+        return None
+    vals = [v / 32768 for v in struct.unpack(f"<{len(raw) // 2}h", raw)]
+    peak = max(1e-6, max(abs(v) for v in vals))
+    return [0.8 * v / peak for v in vals]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cues")
     ap.add_argument("--props", default="build/props.json")
     ap.add_argument("--out", default="build/sfx_track.wav")
+    ap.add_argument("--library", default="build/audio/sfx",
+                    help="folder of downloaded sounds (Openverse); a <name>.wav there replaces the generated one")
     args = ap.parse_args()
 
     cues = json.load(open(args.cues))
@@ -117,11 +133,12 @@ def main():
     cache = {}
     for k, c in enumerate(cues):
         fn = SOUNDS.get(c["sfx"])
-        if not fn:
+        lib = load_wav(f"{args.library}/{c['sfx']}.wav")
+        if not fn and lib is None:
             continue
-        key = (c["sfx"], k % 3)               # 3 variations of each noise sound
+        key = (c["sfx"], 0 if lib is not None else k % 3)   # 3 variations of each generated sound
         if key not in cache:
-            cache[key] = fn(k % 3 + 7)
+            cache[key] = lib if lib is not None else fn(k % 3 + 7)
         s, g = int(c["t"] * SR), float(c.get("gain", 1.0))
         for i, v in enumerate(cache[key]):
             if 0 <= s + i < total:
