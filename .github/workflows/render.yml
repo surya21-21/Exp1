@@ -14,14 +14,22 @@ on:
         description: "Remotion composition id"
         type: string
         default: Explainer
+      script:
+        description: "Script for an ElevenLabs voiceover (needs ELEVENLABS_API_KEY secret)"
+        type: string
+        default: assets/script.txt
+      voice_id:
+        description: "ElevenLabs voice ID"
+        type: string
+        default: JBFqnCBsd6RMkjVDRZzb
       voiceover:
-        description: "Narration audio path in this repo (blank = silent render)"
+        description: "Recorded narration, used when there is no script (blank = silent)"
         type: string
         default: assets/voiceover.mp3
       size:
         description: "Video size"
         type: choice
-        default: 1280x720
+        default: 1080x1920
         options:
           - 1280x720
           - 1920x1080
@@ -70,16 +78,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for narration audio
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Make or find narration
         id: audio
         env:
+          SCRIPT: ${{ inputs.script }}
+          VOICE_ID: ${{ inputs.voice_id }}
           VOICEOVER: ${{ inputs.voiceover }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: |
-          if [ -n "$VOICEOVER" ] && [ -f "$VOICEOVER" ]; then
+          mkdir -p build
+          if [ -n "$SCRIPT" ] && [ -f "$SCRIPT" ] && [ -n "$ELEVENLABS_API_KEY" ]; then
+            python3 scripts/tts.py "$SCRIPT" --voice "$VOICE_ID" --out-dir build
             echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "captions=elevenlabs" >> "$GITHUB_OUTPUT"
+          elif [ -n "$VOICEOVER" ] && [ -f "$VOICEOVER" ]; then
+            cp "$VOICEOVER" build/voiceover.mp3
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "captions=whisper" >> "$GITHUB_OUTPUT"
           else
+            if [ -f "$SCRIPT" ] && [ -z "$ELEVENLABS_API_KEY" ]; then
+              echo "::warning::Found $SCRIPT but no ELEVENLABS_API_KEY secret, so no voiceover was made."
+            fi
             echo "found=false" >> "$GITHUB_OUTPUT"
-            echo "No narration file at '$VOICEOVER' - rendering silent with the default duration."
+            echo "captions=none" >> "$GITHUB_OUTPUT"
+            echo "No narration - rendering silent with the default duration."
           fi
 
       - name: Install ffmpeg
@@ -87,34 +113,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
-      - uses: actions/setup-python@v5
-        if: steps.audio.outputs.found == 'true'
-        with:
-          python-version: "3.12"
-
       - name: Install Whisper (faster-whisper)
-        if: steps.audio.outputs.found == 'true'
+        if: steps.audio.outputs.captions == 'whisper'
         run: pip install faster-whisper
 
       - name: Transcribe narration to captions
-        if: steps.audio.outputs.found == 'true'
+        if: steps.audio.outputs.captions == 'whisper'
         env:
-          VOICEOVER: ${{ inputs.voiceover }}
           WHISPER_MODEL: ${{ inputs.whisper_model }}
-        run: python3 scripts/transcribe.py "$VOICEOVER" --out-dir build --model "$WHISPER_MODEL"
+        run: python3 scripts/transcribe.py build/voiceover.mp3 --out-dir build --model "$WHISPER_MODEL"
 
       - name: Plan render
         id: plan
         env:
-          VOICEOVER: ${{ inputs.voiceover }}
           AUDIO_FOUND: ${{ steps.audio.outputs.found }}
           SIZE: ${{ inputs.size }}
           FPS: ${{ inputs.fps }}
           CHUNKS: ${{ inputs.chunks }}
         run: |
-          mkdir -p build
           AUDIO=""
-          if [ "$AUDIO_FOUND" = "true" ]; then AUDIO="$VOICEOVER"; fi
+          if [ "$AUDIO_FOUND" = "true" ]; then AUDIO="build/voiceover.mp3"; fi
           python3 scripts/plan_chunks.py --audio "$AUDIO" --size "$SIZE" --fps "$FPS" --chunks "$CHUNKS"
 
       - uses: actions/upload-artifact@v4
@@ -200,7 +218,7 @@ jobs:
 
       - name: Join chunks, add narration, make thumbnail
         env:
-          VOICEOVER: ${{ inputs.voiceover }}
+          VOICEOVER: build/voiceover.mp3
         run: |
           mkdir -p out
           for f in parts/part-*.mp4; do echo "file '$PWD/$f'"; done > list.txt

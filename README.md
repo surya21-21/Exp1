@@ -25,6 +25,15 @@ gh repo create my-motion-videos --private --source=. --push
 
 Workflow options: size (720p default, keeps it fast), fps, parallel chunks (use 2-4 for heavy scenes), Whisper model, and engine.
 
+## ElevenLabs voiceover (optional)
+
+1. Get an API key from elevenlabs.io (Profile > API keys).
+2. In this repo: Settings > Secrets and variables > Actions > New repository secret. Name it `ELEVENLABS_API_KEY` and paste the key. Never paste the key into a chat or a file.
+3. Put your script in `assets/script.txt`. Lines starting with `#` are notes and aren't spoken.
+4. Run **Render motion video**. It makes the voiceover, takes word timings straight from ElevenLabs for the captions (no Whisper needed), then renders.
+
+To use a different voice, copy its Voice ID from the ElevenLabs Voices page into the `voice_id` box. The free ElevenLabs plan doesn't allow commercial use and requires credit to ElevenLabs. A monetized channel needs a paid plan.
+
 ## Other pieces
 
 - **Study a reference video** workflow: yt-dlp + Whisper turn a reference URL into a transcript. YouTube often blocks GitHub's servers; if it fails, run yt-dlp in Termux and upload the audio.
