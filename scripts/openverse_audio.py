@@ -44,7 +44,21 @@ def ffmpeg(*args):
     subprocess.run(["ffmpeg", "-v", "error", "-y", *args], check=True)
 
 
-def pick(results, min_ms=None, max_ms=None):
+def relevant(r, query):
+    """True when the main word of the query (or its stem) is in the title or tags."""
+    words = [w for w in query.lower().split() if len(w) > 2]
+    if not words:
+        return True
+    hay = (r.get("title") or "").lower() + " " + " ".join(
+        (t.get("name") or "").lower() for t in (r.get("tags") or []) if isinstance(t, dict))
+    stem = words[0][:5]
+    return words[0] in hay or stem in hay
+
+
+def pick(results, min_ms=None, max_ms=None, query=None):
+    # Best matches first: results whose title/tags mention the query word.
+    if query:
+        results = [r for r in results if relevant(r, query)] + [r for r in results if not relevant(r, query)]
     for r in results:
         ext = (r.get("filetype") or r.get("url", "").rsplit(".", 1)[-1]).lower()
         if ext not in EXTS or not r.get("url"):
@@ -79,7 +93,7 @@ def main():
     for name, q in cfg.get("sfx", {}).items():
         try:
             res = search(q, "sound_effect", lic) or search(q, None, lic)
-            for r in pick(res, max_ms=8000):
+            for r in pick(res, max_ms=8000, query=q):
                 raw = f"{tmp}/{name}.src"
                 try:
                     download(r["url"], raw)
@@ -103,23 +117,41 @@ def main():
     own_music = os.path.isdir("assets/music") and any(
         f.rsplit(".", 1)[-1].lower() in EXTS for f in os.listdir("assets/music"))
     if m and not own_music:
-        try:
-            res = search(m["query"], "music", lic)
-            for r in pick(res, min_ms=int(m.get("min_seconds", 30)) * 1000):
-                raw = f"{tmp}/music.src"
+        queries = [m["query"]] + list(m.get("fallback_queries", []))
+        tries = [(lic, False)]
+        if m.get("fallback_licenses"):
+            tries.append((m["fallback_licenses"], True))
+        done = False
+        for lic_try, needs_credit in tries:
+            for q in queries:
                 try:
-                    download(r["url"], raw)
-                    ffmpeg("-i", raw, "-ac", "2", "-ar", "44100", "-b:a", "192k",
-                           f"{args.out}/music/track.mp3")
-                    credits.append(credit("music", r))
-                    print(f"music: {r.get('title')} [{r.get('license')}]")
-                    break
+                    res = search(q, "music", lic_try)
                 except Exception as e:
-                    print(f"  skip {r.get('title')}: {e}")
-            else:
-                print("::warning::No usable Openverse music result - the reel will have no music.")
-        except Exception as e:
-            print(f"::warning::Openverse music search failed: {e}")
+                    print(f"  music search '{q}' failed: {e}")
+                    continue
+                for r in pick(res, min_ms=int(m.get("min_seconds", 30)) * 1000, query=q):
+                    raw = f"{tmp}/music.src"
+                    try:
+                        download(r["url"], raw)
+                        ffmpeg("-i", raw, "-ac", "2", "-ar", "44100", "-b:a", "192k",
+                               f"{args.out}/music/track.mp3")
+                        line = credit("music", r)
+                        if needs_credit:
+                            line += "  <- CREDIT REQUIRED: put this line in your post caption"
+                            print("::warning::Music needs a credit in your caption - see CREDITS.txt")
+                        credits.append(line)
+                        print(f"music ('{q}'): {r.get('title')} [{r.get('license')}]")
+                        done = True
+                        break
+                    except Exception as e:
+                        print(f"  skip {r.get('title')}: {e}")
+                if done:
+                    break
+            if done:
+                break
+        if not done:
+            print("::warning::No usable Openverse music - the reel will have no music. "
+                  "Add a track to assets/music/ or change the queries in assets/audio.json.")
     elif own_music:
         print("Using your own track from assets/music - no music search.")
 

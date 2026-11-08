@@ -1,7 +1,18 @@
 {
-  "_note": "Music and sound effects fetched from Openverse (api.openverse.org) on GitHub Actions. Change a query to get a different sound; delete a line to use the code-generated version. 'licenses': cc0 and pdm need no credit; add 'by' to allow tracks that need a credit (written to CREDITS.txt).",
+  "_note": "Music and sound effects fetched from Openverse (api.openverse.org) on GitHub Actions. Change a query to get a different sound; delete a line to use the code-generated version. 'licenses': cc0 and pdm need no credit; add 'by' to allow tracks that need a credit (written to CREDITS.txt). Music tries every query with cc0/pdm first, then 'fallback_licenses' (credit required, written to CREDITS.txt). Remove fallback_licenses to never use credit-required music.",
   "licenses": "cc0,pdm",
-  "music": {"query": "upbeat electronic loop", "min_seconds": 30},
+  "music": {
+    "query": "upbeat electronic",
+    "fallback_queries": [
+      "electronic loop",
+      "lofi",
+      "hip hop beat",
+      "ambient",
+      "background music"
+    ],
+    "min_seconds": 30,
+    "fallback_licenses": "by"
+  },
   "sfx": {
     "whoosh": "whoosh transition",
     "swoosh": "swoosh fast",

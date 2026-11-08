@@ -5,24 +5,88 @@
     "montageStep": 0.2,
     "strike": 1.6,
     "free": 1.9,
-    "cues": [[0.0, "whoosh", 0.8], [1.6, "click", 1.0], [1.9, "pop", 0.9]]
+    "cues": [
+      [
+        0.0,
+        "whoosh",
+        0.8
+      ],
+      [
+        1.6,
+        "click",
+        1.0
+      ],
+      [
+        1.9,
+        "pop",
+        0.9
+      ]
+    ]
   },
   "repo": {
     "number": 0.0,
-    "window": 0.35,
+    "window": 0.1,
     "cursorClick": 0.95,
     "starsFrom": 0.95,
     "starsTo": 1.7,
     "tabSlide": 1.5,
     "replaces": 1.9,
     "strike": 2.6,
-    "cues": [[0.0, "whoosh", 0.8], [0.06, "pop", 0.8], [0.35, "swoosh", 0.6], [0.95, "click", 0.7], [1.9, "pop", 0.8], [2.6, "click", 1.0]]
+    "cues": [
+      [
+        0.0,
+        "whoosh",
+        0.8
+      ],
+      [
+        0.06,
+        "pop",
+        0.8
+      ],
+      [
+        0.1,
+        "swoosh",
+        0.6
+      ],
+      [
+        0.95,
+        "click",
+        0.7
+      ],
+      [
+        1.9,
+        "pop",
+        0.8
+      ],
+      [
+        2.6,
+        "click",
+        1.0
+      ]
+    ]
   },
   "text": {
-    "cues": [[0.0, "impact", 0.8]]
+    "cues": [
+      [
+        0.0,
+        "impact",
+        0.8
+      ]
+    ]
   },
   "cta": {
     "keyword": 0.5,
-    "cues": [[0.0, "riser", 0.7], [0.5, "impact", 1.0]]
+    "cues": [
+      [
+        0.0,
+        "riser",
+        0.7
+      ],
+      [
+        0.5,
+        "impact",
+        1.0
+      ]
+    ]
   }
 }

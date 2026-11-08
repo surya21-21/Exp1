@@ -89,7 +89,7 @@ jobs:
   # ---------------------------------------------------------------- Remotion
   prepare:
     if: inputs.engine != 'hyperframes'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     outputs:
       matrix: ${{ steps.plan.outputs.matrix }}
@@ -201,7 +201,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/audio
-          key: openverse-${{ hashFiles('assets/audio.json') }}-v1
+          key: openverse-${{ hashFiles('assets/audio.json', 'scripts/openverse_audio.py') }}-v2
 
       - name: Fetch music and sound effects from Openverse
         run: |
@@ -224,7 +224,7 @@ jobs:
   render:
     needs: prepare
     if: inputs.engine == 'remotion'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     strategy:
       fail-fast: true
@@ -246,7 +246,9 @@ jobs:
             libcups2 libpango-1.0-0 libcairo2 "$ASOUND"
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: |
+          npm install --no-audit --no-fund
+          npm ls remotion @remotion/cli @remotion/google-fonts --depth=0 || true
 
       - uses: actions/download-artifact@v4
         with:
@@ -275,7 +277,7 @@ jobs:
   assemble:
     needs: [prepare, render]
     if: inputs.engine == 'remotion'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: write
@@ -332,7 +334,7 @@ jobs:
   preview:
     needs: prepare
     if: inputs.engine == 'remotion-preview'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: write
@@ -353,7 +355,9 @@ jobs:
             libcups2 libpango-1.0-0 libcairo2 "$ASOUND"
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: |
+          npm install --no-audit --no-fund
+          npm ls remotion @remotion/cli @remotion/google-fonts --depth=0 || true
 
       - uses: actions/download-artifact@v4
         with:
@@ -402,7 +406,7 @@ jobs:
   # ------------------------------------------------------------- HyperFrames
   hyperframes:
     if: inputs.engine == 'hyperframes'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     permissions:
       contents: write
