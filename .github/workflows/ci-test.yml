@@ -1,0 +1,95 @@
+name: Pipeline test
+
+# Runs the whole pipeline on the demo script whenever the ci-test branch is
+# pushed: a preview (8 stills) and a full silent render. No ElevenLabs credits
+# are used (the demo script never gets a voiceover). Results are committed to
+# the ci-results branch so they can be checked without downloading artifacts.
+
+on:
+  push:
+    branches: [ci-test]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pipeline-test
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    uses: ./.github/workflows/render.yml
+    with:
+      engine: remotion-preview
+      script: assets/__demo__.txt
+      voiceover: assets/__none__.mp3
+      publish_release: false
+      artifact_prefix: "pv-"
+
+  full:
+    uses: ./.github/workflows/render.yml
+    with:
+      engine: remotion
+      script: assets/__demo__.txt
+      voiceover: assets/__none__.mp3
+      chunks: "2"
+      publish_release: false
+      artifact_prefix: "fv-"
+
+  results:
+    needs: [preview, full]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: pv-preview
+          path: got/preview
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: fv-final-video
+          path: got/final
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: fv-inputs
+          path: got/inputs
+
+      - name: Commit a small copy of the results to ci-results
+        env:
+          PREVIEW: ${{ needs.preview.result }}
+          FULL: ${{ needs.full.result }}
+        run: |
+          mkdir -p r
+          {
+            echo "run: ${GITHUB_RUN_ID}"
+            echo "commit: ${GITHUB_SHA}"
+            echo "preview: ${PREVIEW}"
+            echo "full: ${FULL}"
+          } > r/STATUS.txt
+          [ -f got/preview/preview.jpg ] && cp got/preview/preview.jpg r/preview.jpg
+          if [ -f got/final/final.mp4 ]; then
+            ffprobe -v error -show_entries format=duration:stream=codec_type,width,height -of compact got/final/final.mp4 >> r/STATUS.txt
+            ffmpeg -v error -i got/final/final.mp4 -af ebur128=framelog=quiet -f null - 2>> r/STATUS.txt || true
+            ffmpeg -v error -y -i got/final/final.mp4 -vf "scale=360:-2" -c:v libx264 -crf 30 -preset veryfast -c:a aac -b:a 96k r/final-small.mp4
+            ffmpeg -v error -y -i got/final/final.mp4 -vf "fps=1,scale=180:-2,tile=8x8:padding=4" -frames:v 1 r/final-sheet.jpg
+          fi
+          cp got/inputs/props.json got/inputs/sfx_cues.json r/ 2>/dev/null || true
+          cp got/inputs/audio/CREDITS.txt r/ 2>/dev/null || true
+          cd r
+          git init -q -b ci-results
+          git config user.name "pipeline-test"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Pipeline test results for ${GITHUB_SHA} (run ${GITHUB_RUN_ID})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" ci-results

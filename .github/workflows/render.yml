@@ -65,6 +65,23 @@ on:
         type: boolean
         default: true
 
+  # Lets other workflows (the test workflow) run this one with fixed settings.
+  workflow_call:
+    inputs:
+      engine: {type: string, default: remotion-preview}
+      composition: {type: string, default: Reel}
+      script: {type: string, default: assets/script.txt}
+      voice_id: {type: string, default: JBFqnCBsd6RMkjVDRZzb}
+      voiceover: {type: string, default: assets/voiceover.mp3}
+      size: {type: string, default: 1080x1920}
+      fps: {type: string, default: "30"}
+      chunks: {type: string, default: "1"}
+      whisper_model: {type: string, default: base}
+      publish_release: {type: boolean, default: false}
+      artifact_prefix: {type: string, default: ""}
+    secrets:
+      ELEVENLABS_API_KEY: {required: false}
+
 permissions:
   contents: read
 
@@ -200,7 +217,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: inputs
+          name: ${{ inputs.artifact_prefix }}inputs
           path: build/
           if-no-files-found: error
 
@@ -233,7 +250,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: inputs
+          name: ${{ inputs.artifact_prefix }}inputs
           path: build
 
       - name: Render chunk
@@ -251,7 +268,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: part-${{ matrix.idx }}
+          name: ${{ inputs.artifact_prefix }}part-${{ matrix.idx }}
           path: out/part-${{ matrix.idx }}.mp4
           if-no-files-found: error
 
@@ -272,13 +289,13 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          pattern: part-*
+          pattern: ${{ inputs.artifact_prefix }}part-*
           merge-multiple: true
           path: parts
 
       - uses: actions/download-artifact@v4
         with:
-          name: inputs
+          name: ${{ inputs.artifact_prefix }}inputs
           path: build
 
       - name: Join chunks, mix voice + SFX + music, make thumbnail
@@ -296,7 +313,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: final-video
+          name: ${{ inputs.artifact_prefix }}final-video
           path: out/
           if-no-files-found: error
 
@@ -340,7 +357,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: inputs
+          name: ${{ inputs.artifact_prefix }}inputs
           path: build
 
       - name: Render 8 still frames
@@ -369,7 +386,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: preview
+          name: ${{ inputs.artifact_prefix }}preview
           path: out/
           if-no-files-found: error
 
@@ -441,7 +458,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: final-video
+          name: ${{ inputs.artifact_prefix }}final-video
           path: out/
           if-no-files-found: error
 
