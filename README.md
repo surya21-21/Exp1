@@ -52,6 +52,10 @@ The repo name, description, stars, forks, language and issue count are fetched f
 - **Music:** put one royalty-free track in `assets/music/` (YouTube Audio Library or Pixabay Music). It loops to fit, dips under the voice and fades out. The final mix is normalized to -14 LUFS for Reels and Shorts.
 - **Openverse:** with no track in `assets/music/`, the workflow searches Openverse for music and for the whoosh, pop, click, impact, swoosh and riser sounds, using `assets/audio.json` (CC0 / public domain by default, so no credit is needed). Results are cached, so every render sounds the same until you change a query. Anything not found falls back to the code-generated sound. Credits go in `CREDITS.txt` in the release. If no music turns up, add `by` to `licenses` and copy the credit into your caption.
 
+## Pipeline test
+
+Pushing the `ci-test` branch runs **Pipeline test**: a preview and a full silent render of the demo script, with no ElevenLabs credits used. A small copy of the results (preview sheet, 360p video, frame sheet, audio credits, status) is committed to the `ci-results` branch. Run it after any change to the pipeline.
+
 ## Other pieces
 
 - **Study a reference video** workflow: yt-dlp plus Whisper on a URL. Instagram blocks GitHub's servers, so for reels save them on your phone and share them in chat.
