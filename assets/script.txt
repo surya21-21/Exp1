@@ -1,0 +1,26 @@
+# Example script format. Copy this to assets/script.txt and write your own.
+# Lines starting with # are notes and are never spoken.
+# Section markers decide which scene plays:
+#   [[hook]]                                  money counter + repo montage
+#   [[repo owner/name | replaces=Tool | price=12.99]]  Safari window with the repo
+#   [[text]]                                  big kinetic statement
+#   [[cta KEYWORD]]                           "Comment KEYWORD" end card
+# Wrap words in *asterisks* to make them pop in the accent colour.
+
+[[hook]]
+These *3 free GitHub repos* replaced my paid video tools.
+
+[[repo remotion-dev/remotion | replaces=After Effects | price=22.99]]
+Number one, *Remotion*. You write the animation as code and it renders the video.
+
+[[repo heygen-com/hyperframes | replaces=Motion design apps | price=15]]
+Number two, *HyperFrames*. Plain HTML becomes motion graphics.
+
+[[text]]
+But here's the *mistake* I made at first.
+
+[[repo yt-dlp/yt-dlp | replaces=Video downloader apps | price=5]]
+Number three, *yt-dlp*. One command grabs any reference video.
+
+[[cta REPO]]
+Comment *REPO* and I'll send you every link.

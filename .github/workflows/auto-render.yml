@@ -8,7 +8,7 @@ name: Auto render
 
 on:
   push:
-    branches: [main]
+    branches: [auto-test]
     paths:
       - assets/script.txt
       - assets/voiceover.mp3
@@ -36,6 +36,22 @@ jobs:
     uses: ./.github/workflows/render.yml
     with:
       engine: remotion
+      script: assets/__demo__.txt
       chunks: "2"
       publish_release: true
     secrets: inherit
+
+  cleanup:
+    needs: [preview, full]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check and delete the test drafts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for t in preview-${{ github.run_id }} render-${{ github.run_id }}; do
+            if gh release view "$t" -R "$GITHUB_REPOSITORY" --json tagName,isDraft,assets -q '"\(.tagName) draft=\(.isDraft) files=\([.assets[].name]|join(","))"'; then
+              gh release delete "$t" -R "$GITHUB_REPOSITORY" -y --cleanup-tag
+            fi
+          done
