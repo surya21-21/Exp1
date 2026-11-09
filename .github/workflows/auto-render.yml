@@ -52,6 +52,9 @@ jobs:
         run: |
           for t in preview-${{ github.run_id }} render-${{ github.run_id }}; do
             if gh release view "$t" -R "$GITHUB_REPOSITORY" --json tagName,isDraft,assets -q '"\(.tagName) draft=\(.isDraft) files=\([.assets[].name]|join(","))"'; then
-              gh release delete "$t" -R "$GITHUB_REPOSITORY" -y --cleanup-tag
+              gh release delete "$t" -R "$GITHUB_REPOSITORY" -y || echo "could not delete $t"
             fi
           done
+          # also remove the draft left by the first test run
+          gh release delete preview-42592264681 -R "$GITHUB_REPOSITORY" -y || true
+          true
