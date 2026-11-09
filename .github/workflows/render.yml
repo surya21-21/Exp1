@@ -325,8 +325,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           EXTRA=""; [ -f out/CREDITS.txt ] && EXTRA="out/CREDITS.txt"
-          gh release create "render-${GITHUB_RUN_NUMBER}" out/final.mp4 out/thumbnail.jpg $EXTRA \
-            --draft --title "Render #${GITHUB_RUN_NUMBER}" \
+          gh release create -R "$GITHUB_REPOSITORY" "render-${GITHUB_RUN_ID}" out/final.mp4 out/thumbnail.jpg $EXTRA \
+            --draft --title "Render #${GITHUB_RUN_NUMBER} (${GITHUB_WORKFLOW})" \
             --notes "Rendered by workflow run ${GITHUB_RUN_ID}. Audio credits (if any) are in CREDITS.txt."
           echo "Draft release created: Releases tab > Render #${GITHUB_RUN_NUMBER}" >> "$GITHUB_STEP_SUMMARY"
 
@@ -399,8 +399,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "preview-${GITHUB_RUN_NUMBER}" out/preview.jpg \
-            --draft --title "Preview #${GITHUB_RUN_NUMBER}" \
+          gh release create -R "$GITHUB_REPOSITORY" "preview-${GITHUB_RUN_ID}" out/preview.jpg \
+            --draft --title "Preview #${GITHUB_RUN_NUMBER} (${GITHUB_WORKFLOW})" \
             --notes "8 still frames from workflow run ${GITHUB_RUN_ID}. Approve the look, then run with engine = remotion."
 
   # ------------------------------------------------------------- HyperFrames
@@ -471,6 +471,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "render-${GITHUB_RUN_NUMBER}" out/final.mp4 out/thumbnail.jpg \
-            --draft --title "Render #${GITHUB_RUN_NUMBER}" \
+          gh release create -R "$GITHUB_REPOSITORY" "render-${GITHUB_RUN_ID}" out/final.mp4 out/thumbnail.jpg \
+            --draft --title "Render #${GITHUB_RUN_NUMBER} (${GITHUB_WORKFLOW})" \
             --notes "Rendered by workflow run ${GITHUB_RUN_ID}."

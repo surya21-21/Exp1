@@ -1,0 +1,41 @@
+name: Auto render
+
+# Runs by itself when you change your script, recording, music or audio
+# settings on main (for example by editing assets/script.txt in the GitHub app).
+#   - Every change: a free preview (8 stills, no ElevenLabs credits).
+#   - Put #render in the commit message: the full video with voiceover.
+# Results appear as draft releases in the Releases tab.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - assets/script.txt
+      - assets/voiceover.mp3
+      - assets/music/**
+      - assets/audio.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-render
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    if: ${{ !contains(github.event.head_commit.message, '#render') }}
+    uses: ./.github/workflows/render.yml
+    with:
+      engine: remotion-preview
+      publish_release: true
+    secrets: inherit
+
+  full:
+    if: ${{ contains(github.event.head_commit.message, '#render') }}
+    uses: ./.github/workflows/render.yml
+    with:
+      engine: remotion
+      chunks: "2"
+      publish_release: true
+    secrets: inherit
