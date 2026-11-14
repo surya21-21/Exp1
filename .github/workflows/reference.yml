@@ -1,17 +1,25 @@
 name: Study a reference video
 
-# Downloads the audio of a reference video with yt-dlp and transcribes it with
-# Whisper, so you can study its script structure and pacing.
-# Note: YouTube often blocks downloads from GitHub's servers. If this fails,
-# run yt-dlp on your phone in Termux instead and upload the audio file.
+# Downloads a reference video with yt-dlp (video and audio), then studies it:
+#   1. Whisper transcript and captions (script structure and pacing)
+#   2. Frame-by-frame study: cuts, motion peaks, and burst strips that keep
+#      every frame around each cut or fast move (scripts/study_reference.py)
+#   3. Sound map: each sound onset labelled with LAION-CLAP and PANNs
+#      (scripts/label_sfx.py)
+# The results are saved as a run artifact. The video itself is not kept
+# unless you tick "keep_video": this repository is public, and a reference
+# video belongs to its creator. Reference videos are for study only.
+# Note: YouTube and Instagram often block downloads from GitHub's servers.
+# If the download fails, upload the video file to Claude instead.
 
 on:
   workflow_dispatch:
     inputs:
       url:
-        description: "Reference video URL"
+        description: "Reference video URL (leave empty when self_test is ticked)"
         type: string
-        required: true
+        required: false
+        default: ""
       whisper_model:
         description: "Whisper model"
         type: choice
@@ -20,47 +28,112 @@ on:
           - tiny
           - base
           - small
+      label_sounds:
+        description: "Label sound effects with LAION-CLAP and PANNs (adds several minutes)"
+        type: boolean
+        default: true
+      keep_video:
+        description: "Also save the downloaded video in the artifact"
+        type: boolean
+        default: false
+      self_test:
+        description: "Ignore the URL and run on a generated test clip"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
-  transcribe:
+  study:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
+      # Python 3.10: laion-clap pins an older numpy that has no build for 3.12.
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.10"
 
       - name: Install tools
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-          pip install yt-dlp faster-whisper
+          pip install yt-dlp faster-whisper numpy
 
-      - name: Download audio
+      - name: Make test clip
+        if: ${{ inputs.self_test }}
+        run: |
+          mkdir -p ref
+          ffmpeg -v error -y \
+            -f lavfi -i "testsrc2=s=540x960:r=30:d=6" \
+            -f lavfi -i "sine=f=880:d=6" \
+            -vf "negate=enable='lt(mod(t,3),1.5)'" \
+            -af "volume='if(lt(mod(t,1.5),0.08),1,0)':eval=frame" \
+            -c:v libx264 -pix_fmt yuv420p -c:a aac ref/video.mp4
+
+      - name: Download video
+        if: ${{ !inputs.self_test }}
         env:
           URL: ${{ inputs.url }}
         run: |
+          if [ -z "$URL" ]; then
+            echo "::error::Give a video URL, or tick self_test."
+            exit 1
+          fi
           mkdir -p ref
-          yt-dlp --no-playlist -x --audio-format mp3 -o "ref/audio.%(ext)s" "$URL" || {
-            echo "::error::Download failed. YouTube often blocks GitHub runners; try yt-dlp in Termux and upload the audio instead."
+          yt-dlp --no-playlist \
+            -f "bv*[height<=1920]+ba/b[height<=1920]/b" \
+            --merge-output-format mp4 -o "ref/video.%(ext)s" "$URL" || {
+            echo "::error::Download failed. YouTube and Instagram often block GitHub's servers; upload the video file to Claude instead."
             exit 1
           }
+
+      - name: Extract audio
+        run: ffmpeg -v error -y -i ref/video.mp4 -vn -ac 1 -ar 48000 ref/audio.wav
 
       - name: Transcribe
         env:
           WHISPER_MODEL: ${{ inputs.whisper_model }}
-        run: python3 scripts/transcribe.py ref/audio.mp3 --out-dir ref --model "$WHISPER_MODEL"
+        run: python3 scripts/transcribe.py ref/audio.wav --out-dir ref --model "$WHISPER_MODEL"
+
+      - name: Frame-by-frame study
+        run: python3 scripts/study_reference.py ref/video.mp4 --out-dir ref
+
+      # A failure here does not fail the run: the frame study above still
+      # counts, and sfx-report.md says which model ran.
+      - name: Install LAION-CLAP and PANNs
+        id: sfx_install
+        if: ${{ inputs.label_sounds }}
+        continue-on-error: true
+        run: |
+          pip install torch==2.5.1 torchaudio==2.5.1 torchvision==0.20.1 \
+            --index-url https://download.pytorch.org/whl/cpu
+          # transformers 4.46 is the line that works with torch 2.5; newer ones stop seeing it.
+          pip install "transformers==4.46.3" laion-clap panns-inference
+          pip list 2>/dev/null | grep -i -E "^(torch|numpy|laion|panns|transformers|librosa) "
+
+      - name: Label sound effects
+        if: ${{ inputs.label_sounds }}
+        continue-on-error: true
+        run: python3 scripts/label_sfx.py ref/video.mp4 --out-dir ref
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            [ -f ref/report.md ] && cat ref/report.md
+            echo
+            [ -f ref/sfx-report.md ] && cat ref/sfx-report.md || echo "No sound map was written."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Drop the video unless asked to keep it
+        if: ${{ !inputs.keep_video }}
+        run: rm -f ref/video.mp4 ref/audio.wav
 
       - uses: actions/upload-artifact@v4
         with:
-          name: reference-transcript
-          path: |
-            ref/transcript.txt
-            ref/captions.srt
-            ref/captions.json
+          name: reference-study
+          path: ref/
           if-no-files-found: error
