@@ -1,0 +1,89 @@
+<!doctype html><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:540px;height:960px;overflow:hidden}
+body{font-family:"Inter Display",Inter,sans-serif;position:relative;background:var(--bg)}
+.stage{position:absolute;inset:0;overflow:hidden}
+.layer{position:absolute;inset:0}
+.cap{position:absolute;left:0;right:0;text-align:center;font-weight:800;color:var(--ink);letter-spacing:-.5px}
+.kw{font-family:Lora,serif;font-style:italic;font-weight:600;color:var(--accent)}
+.prog{position:absolute;top:132px;left:36px;right:36px;display:flex;gap:6px}
+.prog i{flex:1;height:4px;border-radius:2px;background:var(--track)}
+.prog i.on{background:var(--accent)}
+.num{position:absolute;top:300px;left:40px;font-family:Lora,serif;font-style:italic;font-size:46px;color:var(--accent);font-weight:600}
+.num small{font-family:"Inter Display";font-style:normal;font-size:17px;color:var(--muted);font-weight:500}
+.card{position:absolute;left:40px;right:40px;top:368px;height:250px;border-radius:16px;background:var(--card);
+  box-shadow:var(--edge),0 3px 6px var(--sh1),0 26px 50px -12px var(--sh2);transform:perspective(1500px) rotateX(7deg) rotateY(-6deg);transform-origin:50% 100%}
+.bar{height:34px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 14px}
+.bar b{width:9px;height:9px;border-radius:50%;background:var(--dot)}
+.url{margin-left:12px;flex:1;height:18px;border-radius:9px;background:var(--line);font:500 9px "DejaVu Sans Mono";color:var(--muted);display:flex;align-items:center;padding-left:10px}
+.repo{padding:16px 18px;font:700 17px Inter;color:var(--cardink)}
+.repo span{color:var(--accent2)}
+.rows{padding:0 18px;display:grid;gap:9px}
+.rows div{height:10px;border-radius:5px;background:var(--line)}
+.stars{position:absolute;right:18px;top:48px;font:600 12px Inter;color:var(--cardink);padding:5px 9px;border-radius:7px;border:1px solid var(--line)}
+.sweep{position:absolute;inset:0;border-radius:16px;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.13) 45%,transparent 55%)}
+.av{position:absolute;bottom:0;filter:var(--avf)}
+.av img{display:block;width:100%;-webkit-mask:radial-gradient(62% 120% at 50% 22%,#000 78%,transparent 96%)}
+.contact{position:absolute;bottom:-18px;height:40px;border-radius:50%;background:radial-gradient(closest-side,var(--sh1),transparent)}
+.tile{position:absolute;left:50%;transform:translateX(-50%) rotate(-2deg);top:232px;padding:10px 34px 14px;border-radius:18px;background:var(--tile);
+ color:var(--tileink);font:900 92px "Inter Display";letter-spacing:-2px;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -6px 0 rgba(0,0,0,.18),0 4px 8px var(--sh1),0 30px 50px -14px var(--sh2)}
+.sign{position:absolute;top:388px;left:0;right:0;text-align:center;font-family:Lora,serif;font-style:italic;font-size:30px;color:var(--ink)}
+.sign b{font-style:normal;font-family:"Inter Display";font-weight:800;color:var(--accent)}
+.label{position:absolute;bottom:12px;right:14px;font:600 11px Inter;color:var(--muted);opacity:.8}
+</style>
+<div class="stage" id="s"></div>
+<script>
+const P=new URLSearchParams(location.search), theme=P.get('t'), frame=P.get('f');
+const T={
+ midnight:{name:'1 · Midnight Lime',v:{'--bg':'#0a0c0a','--ink':'#f4f6f0','--muted':'#8b927f','--accent':'#c8f53c','--accent2':'#c8f53c','--track':'#262b22',
+  '--card':'linear-gradient(160deg,#20251d,#121510 70%)','--cardink':'#e9eee2','--line':'#2d3328','--dot':'#3a4233','--sh1':'rgba(0,0,0,.7)','--sh2':'rgba(0,0,0,.85)',
+  '--edge':'inset 1px 1px 0 rgba(255,255,255,.08), inset -1px -1px 0 rgba(200,245,60,.25)','--tile':'linear-gradient(170deg,#d6ff55,#a9d81c)','--tileink':'#0d1006',
+  '--avf':'drop-shadow(-3px -2px 0 rgba(255,255,255,.12)) drop-shadow(4px 0 0 rgba(200,245,60,.5)) drop-shadow(0 0 30px rgba(200,245,60,.18))'},
+  bg:`<div class=layer style="background:radial-gradient(60% 40% at 50% 62%,rgba(200,245,60,.16),transparent 70%),radial-gradient(120% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.75))"></div>
+  <canvas class=layer id=pt width=1080 height=1920 style="width:540px;height:960px"></canvas>`},
+ graphite:{name:'2 · Graphite Studio',v:{'--bg':'#16171a','--ink':'#f2f0ec','--muted':'#8d8c88','--accent':'#ffb347','--accent2':'#ffb347','--track':'#2c2d31',
+  '--card':'linear-gradient(160deg,#34363b,#222428 70%)','--cardink':'#ecebe8','--line':'#3b3d42','--dot':'#4a4c52','--sh1':'rgba(0,0,0,.65)','--sh2':'rgba(0,0,0,.8)',
+  '--edge':'inset 1px 1px 0 rgba(255,255,255,.12), inset -1px -1px 0 rgba(0,0,0,.4)','--tile':'linear-gradient(170deg,#ffc56b,#f0962a)','--tileink':'#1b1206',
+  '--avf':'drop-shadow(-3px -3px 0 rgba(255,236,200,.22)) drop-shadow(3px 1px 0 rgba(255,179,71,.35))'},
+  bg:`<div class=layer style="background:linear-gradient(#1c1d21 0 63%,#101113 63%)"></div>
+  <div class=layer style="top:63%;background:linear-gradient(#1a1b1e,#0d0e10);"></div>
+  <div class=layer style="top:63%;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:40px 40px;transform:perspective(500px) rotateX(62deg);transform-origin:50% 0;height:140%;-webkit-mask:linear-gradient(#000,transparent 55%)"></div>
+  <div class=layer style="background:radial-gradient(55% 45% at 30% 30%,rgba(255,230,190,.13),transparent 70%),radial-gradient(40% 18% at 50% 64%,rgba(255,179,71,.08),transparent 70%),radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.7))"></div>`},
+ blueprint:{name:'3 · Blueprint',v:{'--bg':'#0b1a33','--ink':'#eef4ff','--muted':'#7f97bd','--accent':'#7fe3ff','--accent2':'#7fe3ff','--track':'#1d3256',
+  '--card':'linear-gradient(160deg,#173058,#0f2242 70%)','--cardink':'#e4eeff','--line':'#25426e','--dot':'#2e4f80','--sh1':'rgba(2,8,20,.7)','--sh2':'rgba(2,8,20,.85)',
+  '--edge':'inset 1px 1px 0 rgba(160,210,255,.18), inset -1px -1px 0 rgba(127,227,255,.25)','--tile':'linear-gradient(170deg,#9cecff,#4ccbf0)','--tileink':'#051526',
+  '--avf':'drop-shadow(-3px -2px 0 rgba(200,230,255,.16)) drop-shadow(4px 0 0 rgba(127,227,255,.45))'},
+  bg:`<div class=layer style="background-image:linear-gradient(rgba(127,227,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(127,227,255,.07) 1px,transparent 1px),linear-gradient(rgba(127,227,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(127,227,255,.035) 1px,transparent 1px);background-size:90px 90px,90px 90px,18px 18px,18px 18px;background-position:-15px -15px"></div>
+  <svg class=layer viewBox="0 0 540 960"><g stroke="rgba(127,227,255,.35)" fill="none" stroke-width="1"><path d="M30 660 H510 M30 652 v16 M510 652 v16"/><circle cx="462" cy="790" r="34"/><path d="M462 745 v90 M417 790 h90"/></g>
+  <g fill="rgba(127,227,255,.5)" font-family="DejaVu Sans Mono" font-size="9"><text x="250" y="652">480 PX</text><text x="420" y="845">R 34</text><text x="34" y="120">SHEET 01 / EXP1</text></g></svg>
+  <div class=layer style="background:radial-gradient(60% 40% at 50% 60%,rgba(80,170,255,.14),transparent 70%),radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(2,8,20,.7))"></div>`},
+ paper:{name:'4 · Paper Studio',v:{'--bg':'#efeae0','--ink':'#1b1a17','--muted':'#7c766a','--accent':'#e5492b','--accent2':'#c2381d','--track':'#d9d2c3',
+  '--card':'linear-gradient(160deg,#fffdf8,#f2ede3 70%)','--cardink':'#22201b','--line':'#e2dacb','--dot':'#d6cdbc','--sh1':'rgba(70,52,25,.28)','--sh2':'rgba(70,52,25,.32)',
+  '--edge':'inset 1px 1px 0 #fff, inset -1px -1px 0 rgba(0,0,0,.06)','--tile':'linear-gradient(170deg,#f2603f,#d23d1f)','--tileink':'#fff8f2',
+  '--avf':'drop-shadow(-4px 6px 10px rgba(70,52,25,.22))'},
+  bg:`<div class=layer style="background:radial-gradient(70% 45% at 28% 22%,#fbf8f1,transparent 70%),linear-gradient(#efeae0 0 66%,#e6dfd1 66%)"></div>
+  <div class=layer style="top:66%;height:2px;background:rgba(0,0,0,.05)"></div>
+  <div class=layer style="background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence baseFrequency=%22.9%22 numOctaves=%222%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%22.05%22/></svg>');mix-blend-mode:multiply"></div>
+  <div class=layer style="background:radial-gradient(120% 90% at 50% 45%,transparent 60%,rgba(90,70,40,.18))"></div>`},
+};
+const th=T[theme]; for(const [k,v] of Object.entries(th.v)) document.documentElement.style.setProperty(k,v);
+let h=th.bg;
+if(frame==='content'){
+ h+=`<div class=prog><i class=on></i><i class=on></i><i></i><i></i><i></i><i></i></div>
+ <div class=cap style="top:178px;font-size:38px;line-height:1.1">Claude Code <span class=kw>edits</span><br>my reels</div>
+ <div class=num>02<small> / 04</small></div>
+ <div class=card><div class=bar><b></b><b></b><b></b><div class=url>github.com/heygen-com/hyperframes</div></div>
+  <div class=repo>heygen-com / <span>hyperframes</span></div><div class=stars>★ 83.9k</div>
+  <div class=rows><div style="width:92%"></div><div style="width:78%"></div><div style="width:85%"></div><div style="width:60%"></div><div style="width:70%"></div></div><div class=sweep></div></div>
+ <div class=av style="left:6px;width:200px"><div class=contact style="left:20px;right:20px"></div><img src="../avatar/avatar.png"></div>`;
+}else{
+ h+=`<div class=cap style="top:176px;font-size:40px">Comment</div><div class=tile>REPO</div>
+ <div class=sign>This is your <b>AI guy.</b></div>
+ <div class=av style="left:105px;width:330px"><div class=contact style="left:30px;right:30px"></div><img src="../avatar/avatar.png"></div>`;
+}
+h+=`<div class=label>${th.name}</div>`;
+document.getElementById('s').innerHTML=h;
+const c=document.getElementById('pt'); if(c){const x=c.getContext('2d');let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+ for(let i=0;i<70;i++){const a=r();x.fillStyle=`rgba(200,245,60,${.08+.25*a})`;x.beginPath();x.arc(r()*1080,r()*1920,1+3*r(),0,7);x.fill();}}
+</script>
