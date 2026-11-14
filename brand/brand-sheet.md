@@ -9,7 +9,7 @@ look card for approval. Edit this file to change what is fixed.
 
 | Item | Value | File |
 | --- | --- | --- |
-| Background | Not chosen yet. Options: Midnight Lime, Graphite Studio, Blueprint, Paper Studio | `brand/backgrounds/` |
+| Background | Paper Studio: warm off-white #efeae0, soft light from the top-left, a floor at about two-thirds height (#e6dfd1), light paper grain, warm brown shadows, soft vignette | `brand/backgrounds/paper-content.jpg`, `paper-outro.jpg`, drawn by `options.html?t=paper` |
 
 ## Signature (same in every reel)
 
@@ -17,6 +17,12 @@ look card for approval. Edit this file to change what is fixed.
 | --- | --- | --- |
 | Avatar | Line-art bust with glasses, beard and headphones round the neck | `brand/avatar/avatar.png` |
 | Outro | "Comment KEYWORD and I'll send you the links. This is your AI guy." | `brand/outro/outro.md` |
+
+## Notes for Paper Studio
+
+- It is a light background: text is near-black, and the accent must reach 4.5 to 1 contrast on #efeae0 (the red-orange in the sample, #e5492b, is an example, not locked).
+- Shadows are warm brown, never grey or black, and soft.
+- The avatar sits on it with a soft drop shadow; no glow or rim light, which reads wrong on paper.
 
 ## Avoid
 
