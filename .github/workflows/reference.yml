@@ -110,7 +110,8 @@ jobs:
         run: |
           pip install torch==2.5.1 torchaudio==2.5.1 torchvision==0.20.1 \
             --index-url https://download.pytorch.org/whl/cpu
-          pip install laion-clap panns-inference
+          # transformers 4.46 is the line that works with torch 2.5; newer ones stop seeing it.
+          pip install "transformers==4.46.3" laion-clap panns-inference
           pip list 2>/dev/null | grep -i -E "^(torch|numpy|laion|panns|transformers|librosa) "
 
       - name: Label sound effects
