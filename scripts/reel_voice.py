@@ -31,7 +31,12 @@ def main():
     if not key:
         print("BLOCKED: ELEVENLABS_API_KEY is not set, so no voice was made. The reel will be a silent draft with estimated timing.")
         return
-    voice = reel.get("voice", {})
+    voice = dict(reel.get("voice", {}))
+    brand = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "brand", "voice", "voice.json")
+    if "id" not in voice and os.path.isfile(brand):          # the channel's own voice
+        b = json.load(open(brand))
+        voice = {"id": b["voice_id"], "model": b.get("model"), "speed": b.get("speed"), **voice}
+    voice = {k: v for k, v in voice.items() if v is not None}
     body = json.dumps({
         "text": spoken_text(reel),
         "model_id": voice.get("model", "eleven_multilingual_v2"),
@@ -51,7 +56,7 @@ def main():
     json.dump(words, open(os.path.join(args.out_dir, "words.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     if words:
         span = words[-1]["end"] - words[0]["start"]
-        print(f"voice: {len(words)} words in {span:.1f}s = {len(words) / span:.2f} words a second")
+        print(f"voice {voice.get('id')}: {len(words)} words in {span:.1f}s = {len(words) / span:.2f} words a second")
 
 
 if __name__ == "__main__":

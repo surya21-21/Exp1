@@ -1,0 +1,69 @@
+name: Voice setup
+
+# Makes the channel's voice in ElevenLabs from the owner's samples, then speaks
+# the first reel's script with it and makes a music bed, so both can be heard
+# before any video is rendered. Results: brand/voice/voice.json on main, and the
+# audio in a draft release.
+#
+# The samples sit in the repository only encrypted (brand/voice/samples.tar.gpg)
+# and are deleted by this run once the voice exists.
+
+on:
+  workflow_dispatch:
+    inputs:
+      passphrase:
+        description: "Passphrase for the encrypted samples"
+        required: true
+      reel:
+        description: "Reel whose script to speak as a test"
+        default: "2026-11-15-12-reels"
+
+permissions:
+  contents: write
+
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unlock the samples
+        env:
+          PASS: ${{ inputs.passphrase }}
+        run: |
+          echo "::add-mask::$PASS"
+          mkdir -p "$RUNNER_TEMP/v"
+          gpg --batch --quiet --pinentry-mode loopback --passphrase "$PASS" -d brand/voice/samples.tar.gpg | tar -C "$RUNNER_TEMP/v" -xf -
+          ls -la "$RUNNER_TEMP/v/samples"
+      - name: Clone the voice
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/voice_clone.py "$RUNNER_TEMP/v/samples"
+      - name: Speak the test script and make music
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          REEL: ${{ inputs.reel }}
+        run: |
+          mkdir -p build
+          python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
+          python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
+          python scripts/reel_music.py build/reel.timed.json --reel "reels/$REEL/reel.json" --out build/music.mp3
+          ls -la build
+      - name: Save the voice id and delete the samples
+        run: |
+          rm -rf "$RUNNER_TEMP/v"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -q brand/voice/samples.tar.gpg
+          git add brand/voice/voice.json
+          git commit -qm "Channel voice made in ElevenLabs; samples removed"
+          git push -q origin HEAD:main
+      - name: Draft release with the audio
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REEL: ${{ inputs.reel }}
+        run: |
+          FILES="build/voiceover.mp3"
+          [ -f build/music.mp3 ] && FILES="$FILES build/music.mp3"
+          gh release create -R "$GITHUB_REPOSITORY" "voice-test-${GITHUB_RUN_NUMBER}" $FILES --draft \
+            --title "Voice test: ${REEL}" --notes "The channel voice speaking the script of ${REEL}, and the music bed. Listen before the video is rendered."
