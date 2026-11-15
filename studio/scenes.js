@@ -9,6 +9,17 @@ import { travel } from '../collection/lib/avatar.js';
 
 const { DISPLAY, SANS, SERIF } = E;
 const beat = (ctx, i, d) => (ctx.beats && ctx.beats[i] != null ? ctx.beats[i] : d);
+// n moments in order: the voice's keyword beats where there are enough of them, and for
+// any beat the script does not mark, `gap` seconds after the one before, so nothing
+// ever lands out of order.
+function beatList(ctx, n, first, gap) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const prev = i ? out[i - 1] : null, b = ctx.beats && ctx.beats[i];
+    out.push(b != null && (prev == null || b >= prev + 0.15) ? b : prev == null ? first : prev + gap);
+  }
+  return out;
+}
 // A scene that arrives by a hard cut is already mid-entrance on its first frame (T02).
 const enter = (ctx, t, delay = 0) => (ctx.pre ? 1 : outCubic(prog(t, delay - fr(2), fr(7))));
 const rise = (el, e, dy = 44) => { el.style.opacity = e.toFixed(3); el.style.transform = `translateY(${((1 - e) * dy).toFixed(1)}px)`; };
@@ -86,7 +97,7 @@ export const SCENES = {
       `<i style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:block"></i><i style="width:20px;height:20px;border-radius:50%;background:${P.track};display:block"></i><i style="width:20px;height:20px;border-radius:50%;background:${P.track};display:block;margin-right:14px"></i>${p.title || ''}`));
     const hi = h('div', abs(14, 0, CW - 28, RH - 12, 'border-radius:24px;border:5px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);opacity:0'));
     c.append(hi);
-    const at = i => beat(ctx, i, 0.55 + i * 0.7);
+    const B = beatList(ctx, rows.length + 1, 0.55, 0.7), at = i => B[i];
     const built = rows.map((r, i) => {
       const row = h('div', abs(0, HD + i * RH + 4, CW, RH, `display:flex;align-items:center;justify-content:space-between;padding:0 52px 0 132px;font:700 48px ${SANS};letter-spacing:-.5px;color:${P.ink};white-space:nowrap`));
       row.append(h('div', '', r.label));
@@ -106,7 +117,7 @@ export const SCENES = {
       return { row, upd };
     });
     const st = p.stamp ? E.stamp(p.stamp.text, { size: p.stamp.size || 96, rot: -9 }) : null;
-    const stAt = beat(ctx, rows.length, at(rows.length - 1) + 0.6);
+    const stAt = B[rows.length];
     if (st) { st.el.style.left = `${X + CW - 290}px`; st.el.style.top = `${Y + CH + 86}px`; }
     wrap.append(kick, c); if (st) wrap.append(st.el);
     const rowY = i => Y + HD + i * RH + 4 + RH / 2;
@@ -141,7 +152,7 @@ export const SCENES = {
     wrap.append(numeral, row, name, ul.el);
     const lines = p.lines || [], LH = 134, CY = p.cardY || 830, CH = 60 + lines.length * LH + (p.prompt ? 196 : 0);
     const c = card(100, CY, 850, CH); c.dataset.key = 'card';
-    const at = i => beat(ctx, i + 1, 0.7 + i * 0.6);
+    const B = beatList(ctx, lines.length + 2, 0.25, 0.6), at = i => B[i + 1];
     const els = lines.map((tx, i) => {
       const l = h('div', abs(0, 30 + i * LH, 850, LH, `display:flex;align-items:center;gap:26px;padding:0 40px 0 112px;font:700 46px/1.12 ${SANS};letter-spacing:-.5px;color:${P.ink}`),
         `<i style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);display:block"></i><span>${tx}</span>`);
@@ -151,10 +162,10 @@ export const SCENES = {
     if (p.prompt) {
       const boxp = h('div', abs(40, 30 + lines.length * LH + 10, 770, 156, `border-radius:28px;background:#fff;box-shadow:inset 3px 4px 10px rgba(70,52,25,.16);padding:0 36px;display:flex;align-items:center;font:500 40px/1.22 ${SANS};color:${P.graphite}`));
       ty = E.typer(p.prompt, { cps: 26 }); boxp.append(ty.el); c.append(boxp);
-      pAt = beat(ctx, lines.length + 1, at(lines.length - 1) + 0.5);
+      pAt = B[lines.length + 1];
     }
     wrap.append(c);
-    const u0 = beat(ctx, 0, 0.25);
+    const u0 = B[0];
     return {
       update(t) {
         const e = enter(ctx, t);
@@ -179,7 +190,7 @@ export const SCENES = {
     wrap.append(title, svg);
     const HX = 540, HY = 1000, tiles = p.tiles || [], n = tiles.length;
     const hub = E.tile(p.hub.name, { size: 240, logo: p.hub.logo, label: false }); hub.el.style.left = `${HX - 120}px`; hub.el.style.top = `${HY - 120}px`; hub.el.dataset.key = 'hub';
-    const at = i => beat(ctx, i, 0.5 + i * 0.45);
+    const B = beatList(ctx, tiles.length, 0.5, 0.45), at = i => B[i];
     const items = tiles.map((tl, i) => {
       const a = -Math.PI / 2 + (i / n) * 2 * Math.PI + (n % 2 ? 0 : Math.PI / n), x = HX + 330 * Math.cos(a), y = HY + 40 + 300 * Math.sin(a);
       const tEl = E.tile(tl.name, { size: 172, logo: tl.logo, sub: tl.sub || '', above: y < HY - 40 }); tEl.el.style.left = `${x - 86}px`; tEl.el.style.top = `${y - 86}px`;
