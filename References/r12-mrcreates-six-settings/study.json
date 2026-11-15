@@ -1,0 +1,113 @@
+{
+  "source": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30.0,
+    "duration": 72.641,
+    "analysis_fps": 30,
+    "frames": 2178
+  },
+  "cuts": [
+    27.6,
+    30.1
+  ],
+  "motion_peaks": [
+    3.267,
+    10.167,
+    21.2,
+    24.0,
+    30.733,
+    39.767,
+    48.133,
+    57.933,
+    58.567
+  ],
+  "shot_lengths": [
+    27.6,
+    2.5,
+    42.5
+  ],
+  "still_share": 0.581,
+  "sound_onsets": 277,
+  "bursts": [
+    {
+      "file": "burst_000_t000.000.jpg",
+      "start": 0.0,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_001_t001.333.jpg",
+      "start": 1.333,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_002_t002.667.jpg",
+      "start": 2.667,
+      "frames": 33,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_003_t009.667.jpg",
+      "start": 9.667,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_004_t020.700.jpg",
+      "start": 20.7,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_005_t023.500.jpg",
+      "start": 23.5,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_006_t027.100.jpg",
+      "start": 27.1,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_007_t029.600.jpg",
+      "start": 29.6,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_008_t030.933.jpg",
+      "start": 30.933,
+      "frames": 9,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_009_t039.267.jpg",
+      "start": 39.267,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_010_t047.633.jpg",
+      "start": 47.633,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_011_t057.433.jpg",
+      "start": 57.433,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_012_t058.767.jpg",
+      "start": 58.767,
+      "frames": 9,
+      "seconds_per_frame": 0.0333
+    }
+  ],
+  "limits": "Nothing shorter than one source frame can be seen; compression smears fast motion."
+}
