@@ -76,7 +76,7 @@ jobs:
 
       - name: Voice
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
         run: |
           mkdir -p build
           if [ "$VOICE" = "none" ]; then
@@ -92,7 +92,7 @@ jobs:
       - name: Music
         if: env.MAKE == 'finished reel' && env.VOICE != 'none'
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
         run: |
           python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
           if ls assets/music/* >/dev/null 2>&1 || [ -f "reels/$REEL/music.mp3" ]; then
@@ -120,7 +120,7 @@ jobs:
         if: env.MAKE == 'finished reel'
         run: |
           python3 -c "import json; s=json.load(open('build/reel.timed.json')); json.dump({'durationInFrames': round(s['duration']*s['fps']), 'fps': s['fps']}, open('build/props.json','w'))"
-          python scripts/make_sfx.py build/cues.json --props build/props.json --out build/sfx_track.wav
+          python scripts/make_sfx.py build/cues.json --props build/props.json --out build/sfx_track.wav --library assets/sfx
           python scripts/mix_audio.py build/silent.mp4 build/final.mp4 --voice build/voiceover.mp3 --sfx build/sfx_track.wav --music-dir build/audio/music --music-volume 0.16
 
       - name: Quality checks

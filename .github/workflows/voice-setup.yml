@@ -37,11 +37,11 @@ jobs:
           ls -la "$RUNNER_TEMP/v/samples"
       - name: Clone the voice
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
         run: python scripts/voice_clone.py "$RUNNER_TEMP/v/samples"
       - name: Speak the test script and make music
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
           REEL: ${{ inputs.reel }}
         run: |
           mkdir -p build
@@ -49,13 +49,18 @@ jobs:
           python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
           python scripts/reel_music.py build/reel.timed.json --reel "reels/$REEL/reel.json" --out build/music.mp3
           ls -la build
+      - name: Sound effects from ElevenLabs
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
+        run: python scripts/sfx_library.py --out assets/sfx
+
       - name: Save the voice id and delete the samples
         run: |
           rm -rf "$RUNNER_TEMP/v"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm -q brand/voice/samples.tar.gpg
-          git add brand/voice/voice.json
+          git add brand/voice/voice.json assets/sfx
           git commit -qm "Channel voice made in ElevenLabs; samples removed"
           git push -q origin HEAD:main
       - name: Draft release with the audio

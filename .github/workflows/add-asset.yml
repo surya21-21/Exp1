@@ -1,0 +1,34 @@
+name: Add asset
+
+# Downloads a file from a link (for example an invideo image) into the repository.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Direct link to the file"
+        required: true
+      path:
+        description: "Where to save it in the repository"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and commit
+        env:
+          URL: ${{ inputs.url }}
+          DEST: ${{ inputs.path }}
+        run: |
+          mkdir -p "$(dirname "$DEST")"
+          curl -fsSL "$URL" -o "$DEST"
+          file "$DEST"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          git commit -qm "Add $DEST"
+          git push -q origin HEAD:main
