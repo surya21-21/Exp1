@@ -309,7 +309,7 @@ export const SCENES = {
         fb.style.transform = `scale(${(1 - 0.1 * pulse(t, tFollow, fr(1), fr(4))).toFixed(4)})`;
         fr2.update(prog(t, tFollow, fr(9)));
       },
-      avatar: t => ({ chip: { x: 232, y: 1305 + (1 - outCubic(prog(t, tSign - fr(5), fr(8)))) * 60, size: 190, o: prog(t, tSign - fr(5), fr(5)), ring: prog(t, tSign + fr(3), fr(9)) } }),
+      avatar: t => ({ chip: { face: t > tFollow ? 'grin' : null, x: 232, y: 1305 + (1 - outCubic(prog(t, tSign - fr(5), fr(8)))) * 60, size: 190, o: prog(t, tSign - fr(5), fr(5)), ring: prog(t, tSign + fr(3), fr(9)) } }),
       lamp: t => ({ x: 540, y: t < tSign ? 800 : 1290, k: 1 }),
       cues: [...[...word].map((_, i) => ({ t: i * fr(2), sfx: 'click', gain: 0.5 })), ...ticks(tType, tType + ty.dur, 1 / 12, 0.35), { t: tSend, sfx: 'pop', gain: 0.8 },
         { t: tSign - fr(4), sfx: 'swoosh', gain: 0.5 }, { t: tSign + fr(6), sfx: 'scratch', gain: 0.6 }, { t: tFollow, sfx: 'click', gain: 0.8 }],

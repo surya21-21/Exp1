@@ -51,7 +51,9 @@ export async function boot(specUrl) {
 
   const groups = spec.captions || groupWords(spec.words || []);
   const caps = captions(capLayer, groups, { accent });
-  const av = avatar(avLayer, spec.avatar || '../brand/avatar/avatar.png');
+  const av = avatar(avLayer, spec.avatar || '../brand/avatar/avatar.png', spec.heads === false ? null : '../brand/avatar/heads');
+  const spoken = groups.flatMap(g => g.words);
+  const speakingAt = t => spoken.some(w => t >= w.s - 0.02 && t < w.e);
   const bar = progress(scenes.length);
   bar.el.style.cssText += 'position:absolute;left:0;right:0;top:196px';
   furn.append(bar.el);
@@ -90,7 +92,7 @@ export async function boot(specUrl) {
       show(main, local(main, t), false);
       state = main.impl.avatar ? main.impl.avatar(local(main, t)) : null;
     }
-    av.update(state);
+    av.update(state, t, speakingAt(t));
     const lp = main.impl.lamp ? main.impl.lamp(Math.max(0, local(main, t))) : null;
     lamp.update(lp ? lp.x : W / 2, lp ? lp.y : 900, lp ? lp.k : 0);
     caps.update(t);

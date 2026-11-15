@@ -15,3 +15,7 @@ The avatar was cut from a screenshot of the character sheet, so it is not full
 quality. The original sheet with the separate eyes, eyebrows and mouths is on the
 laptop; add it as `avatar/sheet.png` when it is back, and the mouth and blink rig
 will be cut from it.
+
+## Cursor heads
+
+`avatar/heads/` holds six simplified heads (neutral, talk, blink, wink, grin, curious), cut from `avatar/heads-sheet.png` (Seedream 5 Flash in invideo, from `avatar/avatar.png`). The engine uses them for the small cursor avatar: blinking, talking with the voice, and grinning at the outro. The full bust in `avatar/avatar.png` is unchanged.

@@ -52,4 +52,4 @@ Our caption (in `../lib/captions.js`): Inter, near-black on paper, 2 to 4 words 
 | A09 | Ring when active | A thin ring appears round the head when it "clicks" |
 | A10 | Appears as content | Style variants of the avatar shown as cards |
 
-Ours (`../lib/avatar.js`): the full bust from `brand/avatar/avatar.png` for A01 and A06; a round head chip cut from the same file, with a paper edge and a warm shadow, for A02 to A04 and A07; a ring pulse on arrival (A09). Blinks and mouth shapes (A05) need the original character sheet and are not built yet.
+Ours (`../lib/avatar.js`): the full bust from `brand/avatar/avatar.png` for A01 and A06; a round head chip cut from the same file, with a paper edge and a warm shadow, for A02 to A04 and A07; a ring pulse on arrival (A09). The cursor chip now uses the simplified heads in `brand/avatar/heads/` (made with Seedream 5 Flash from the avatar and approved by the owner): it blinks for 3 frames about every 3.4 s, opens and closes its mouth while a word is spoken, and grins once Follow is tapped (A05). The full bust stays the original signature drawing.
