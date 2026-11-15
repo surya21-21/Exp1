@@ -1,97 +1,26 @@
 time,strength,label,score,second,margin,unsure,panns_top3,shape_guess,dur,attack,centroid_hz,low_share,noisiness,sweep,db_vs_voice,visual_event,frames_from_event
-0.070,6.9,servo,0.174,riser,0.018,yes,"Music 0.59; Musical instrument 0.01; Marimba, xylophone 0.01",other,0.72,0.18,751,0.422,0.106,flat,-9.0,,-39.9
-0.163,5.2,swoosh,0.150,riser,0.019,yes,"Music 0.59; Musical instrument 0.01; Marimba, xylophone 0.01",other,0.72,0.1,743,0.388,0.102,down,-9.2,,-37.1
-0.720,4.8,slash,0.153,riser,0.059,,Music 0.53; Musical instrument 0.05; Classical music 0.03,other,0.72,0.3,945,0.263,0.131,flat,-8.0,,-20.4
 1.335,4.6,swoosh,0.129,sparkle,0.012,yes,Music 0.51; Musical instrument 0.03; Classical music 0.02,other,0.72,0.63,823,0.276,0.101,flat,-8.7,cut,-1.9
 2.032,16.8,swoosh,0.274,whoosh,0.085,,Music 0.57; Thunk 0.01; Speech 0.01,other,0.72,0.17,840,0.221,0.116,down,-9.3,cut,-2.0
-2.914,4.7,whoosh,0.311,swoosh,0.008,yes,Music 0.58; Thunk 0.11; Crack 0.02,other,0.51,0.48,967,0.337,0.143,flat,10.8,,-13.6
-2.995,7.0,whoosh,0.349,swoosh,0.022,yes,Music 0.58; Thunk 0.11; Crack 0.02,other,0.43,0.4,990,0.372,0.15,down,10.3,,-11.1
-3.088,5.4,whoosh,0.360,swoosh,0.034,,Music 0.58; Thunk 0.11; Crack 0.02,other,0.34,0.3,1010,0.417,0.153,down,9.5,,-8.4
-3.239,7.5,swoosh,0.371,whoosh,0.011,yes,Music 0.58; Thunk 0.11; Crack 0.02,impact,0.19,0.16,918,0.487,0.138,flat,9.6,,-3.8
 3.309,11.9,whoosh,0.327,swoosh,0.048,,Music 0.53; Thunk 0.11; Crack 0.02,impact,0.12,0.09,755,0.551,0.109,down,9.6,cut,-1.7
 3.402,7.9,swoosh,0.292,whoosh,0.022,yes,Music 0.53; Thunk 0.11; Crack 0.02,pop,0.02,0.0,1261,0.289,0.217,down,8.6,cut,1.0
-3.587,13.8,swoosh,0.138,slash,0.001,yes,Music 0.49; Thunk 0.11; Crack 0.01,other,0.72,0.29,772,0.31,0.088,down,-8.6,,6.6
-3.750,7.1,chime,0.200,sparkle,0.012,yes,Music 0.49; Thunk 0.11; Crack 0.01,other,0.72,0.19,870,0.322,0.122,down,-8.5,,11.5
-4.783,15.7,coin,0.238,servo,0.061,,Music 0.49; Musical instrument 0.07; Vibraphone 0.04,other,0.72,0.57,768,0.268,0.095,down,-8.0,,3.5
-6.223,7.8,chime,0.163,swoosh,0.026,yes,"Music 0.48; Marimba, xylophone 0.25; Vibraphone 0.25",other,0.72,0.22,1219,0.129,0.08,flat,-2.5,,-8.3
 6.385,10.0,chime,0.200,sparkle,0.061,,"Music 0.50; Marimba, xylophone 0.25; Vibraphone 0.25",other,0.72,0.05,1029,0.157,0.089,down,-2.2,,-3.4
 6.490,4.6,chime,0.225,sparkle,0.091,,"Music 0.50; Marimba, xylophone 0.25; Vibraphone 0.20",other,0.72,0.05,926,0.194,0.095,down,-3.2,fast move,-0.3
-6.711,5.0,swoosh,0.202,chime,0.035,,"Music 0.50; Marimba, xylophone 0.25; Vibraphone 0.20",other,0.72,0.02,810,0.206,0.095,flat,-8.8,,6.3
-7.384,4.8,swoosh,0.262,sparkle,0.081,,"Music 0.51; Marimba, xylophone 0.20; Mallet percussion 0.10",other,0.72,0.69,880,0.31,0.13,down,-7.5,,26.5
 8.812,11.0,swoosh,0.193,sparkle,0.050,,"Music 0.45; Marimba, xylophone 0.03; Mallet percussion 0.02",impact,0.37,0.09,687,0.482,0.105,flat,-2.0,cut,0.4
 10.124,4.7,swoosh,0.187,whoosh,0.031,,Music 0.45; Musical instrument 0.08; Classical music 0.03,other,0.72,0.36,700,0.314,0.096,down,-5.5,cut,1.7
-10.194,4.9,scratch,0.144,swoosh,0.018,yes,Music 0.45; Musical instrument 0.13; Piano 0.04,other,0.72,0.44,694,0.298,0.093,down,-5.4,,3.8
-10.356,4.1,slash,0.144,scratch,0.011,yes,Music 0.44; Musical instrument 0.13; Piano 0.04,other,0.72,0.27,706,0.236,0.092,flat,-4.9,,8.7
-11.285,6.7,chime,0.142,sparkle,0.003,yes,Music 0.37; Musical instrument 0.15; Organ 0.08,other,0.72,0.71,688,0.373,0.086,down,12.0,,36.5
-11.517,5.6,impact,0.163,swoosh,0.016,yes,Music 0.41; Musical instrument 0.15; Organ 0.08,other,0.72,0.53,262,0.814,0.032,down,15.2,,-30.5
-11.656,4.1,impact,0.162,swoosh,0.035,,Music 0.41; Musical instrument 0.13; Organ 0.08,other,0.72,0.39,219,0.862,0.027,down,15.3,,-26.3
-11.865,9.3,impact,0.135,swoosh,0.020,yes,Music 0.44; Musical instrument 0.13; Organ 0.08,other,0.72,0.18,226,0.855,0.027,down,15.5,,-20.0
-11.935,8.2,impact,0.142,whoosh,0.023,yes,Music 0.44; Musical instrument 0.06; Organ 0.04,other,0.68,0.11,230,0.85,0.026,up,15.5,,-17.9
 12.585,9.1,servo,0.164,swoosh,0.022,yes,"Music 0.42; Flute 0.03; Marimba, xylophone 0.03",other,0.28,0.05,1162,0.328,0.051,flat,4.5,cut,1.6
-12.725,6.2,impact,0.177,swoosh,0.026,yes,"Music 0.42; Marimba, xylophone 0.06; Mallet percussion 0.04",other,0.45,0.03,820,0.426,0.072,down,4.4,,5.7
-12.806,7.7,pop,0.155,swoosh,0.013,yes,"Music 0.42; Marimba, xylophone 0.06; Mallet percussion 0.04",impact,0.47,0.0,745,0.468,0.081,down,0.4,,8.2
-14.408,4.9,swoosh,0.152,servo,0.033,,Music 0.40; Organ 0.08; Musical instrument 0.07,other,0.72,0.44,754,0.401,0.104,flat,-7.2,,-23.8
-14.791,5.0,swoosh,0.128,tick,0.001,yes,Music 0.35; Musical instrument 0.09; Organ 0.08,other,0.72,0.06,827,0.401,0.125,flat,-6.9,,-12.3
 15.383,4.7,slash,0.148,swoosh,0.018,yes,Music 0.42; Musical instrument 0.09; Organ 0.07,other,0.72,0.7,811,0.163,0.098,down,-5.1,cut,1.5
-15.662,6.1,swoosh,0.213,music,0.061,,Music 0.45; Musical instrument 0.08; Flute 0.05,other,0.72,0.44,601,0.347,0.055,down,-3.9,,9.9
-15.987,4.2,chime,0.160,swoosh,0.015,yes,Music 0.47; Musical instrument 0.07; Flute 0.05,other,0.72,0.11,743,0.365,0.101,flat,-4.3,,-6.4
-16.788,4.2,swoosh,0.280,slash,0.074,,Music 0.45; Flute 0.03; Musical instrument 0.03,other,0.72,0.12,1136,0.2,0.155,flat,-8.8,,13.7
-16.858,4.6,swoosh,0.177,servo,0.005,yes,Music 0.45; Flute 0.03; Musical instrument 0.03,other,0.72,0.05,1040,0.207,0.141,down,-8.8,,15.7
 18.471,10.5,whoosh,0.172,swoosh,0.019,yes,"Music 0.56; Chink, clink 0.03; Speech 0.01",impact,0.45,0.1,1317,0.531,0.258,flat,-0.7,cut,-2.9
 18.541,7.2,whoosh,0.185,scratch,0.011,yes,"Music 0.56; Chink, clink 0.03; Speech 0.01",impact,0.41,0.03,988,0.638,0.186,up,-0.8,cut,-0.8
-18.669,6.5,impact,0.213,swoosh,0.017,yes,"Music 0.47; Chink, clink 0.03; Speech 0.01",impact,0.25,0.02,807,0.71,0.141,up,-1.0,,3.1
-18.855,11.0,swoosh,0.205,whoosh,0.009,yes,"Music 0.47; Chink, clink 0.03; Speech 0.02",riser,0.45,0.01,5514,0.216,0.473,up,-3.9,,8.6
-19.075,9.7,swoosh,0.259,servo,0.068,,"Music 0.40; Speech 0.02; Chink, clink 0.02",whoosh,0.34,0.15,6524,0.185,0.425,down,-13.9,,15.2
-19.145,6.3,servo,0.275,slash,0.070,,Music 0.51; Musical instrument 0.03; Speech 0.03,whoosh,0.27,0.07,6011,0.25,0.381,down,-13.8,,17.3
-19.284,4.3,swoosh,0.278,servo,0.071,,Music 0.51; Musical instrument 0.03; Speech 0.03,whoosh,0.27,0.0,2826,0.376,0.35,down,-16.6,,21.5
-21.409,9.6,swoosh,0.175,chime,0.014,yes,"Music 0.38; Musical instrument 0.08; Marimba, xylophone 0.07",other,0.72,0.01,902,0.219,0.108,down,-8.0,,5.3
-21.537,4.6,slash,0.194,swoosh,0.029,yes,"Music 0.28; Marimba, xylophone 0.06; Mallet percussion 0.05",other,0.72,0.59,805,0.213,0.089,down,-8.2,,9.1
-22.523,4.6,chime,0.196,swoosh,0.057,,Music 0.23; Singing bowl 0.04; Musical instrument 0.02,other,0.72,0.0,850,0.266,0.098,down,-7.2,,-13.3
-23.290,4.4,chime,0.136,swoosh,0.005,yes,"Music 0.47; Musical instrument 0.10; Marimba, xylophone 0.04",other,0.72,0.01,909,0.266,0.108,flat,-9.9,,9.7
-24.300,5.1,servo,0.183,chime,0.035,,Music 0.51; Musical instrument 0.10; Piano 0.05,other,0.72,0.56,775,0.419,0.095,down,-6.4,,9.0
-24.973,4.3,chime,0.116,paper,0.013,yes,Music 0.49; Musical instrument 0.09; Piano 0.06,other,0.72,0.25,690,0.194,0.046,flat,-5.8,,29.2
-25.159,4.4,chime,0.145,sparkle,0.047,,Music 0.48; Musical instrument 0.09; Piano 0.06,other,0.72,0.08,806,0.174,0.082,flat,-5.8,,-33.2
-25.472,4.3,chime,0.142,music,0.019,yes,Music 0.48; Musical instrument 0.09; Piano 0.06,other,0.72,0.51,774,0.272,0.065,down,-4.2,,-23.8
-25.867,4.4,music,0.133,chime,0.007,yes,Music 0.48; Musical instrument 0.08; Vibraphone 0.06,other,0.72,0.12,682,0.248,0.038,flat,-4.2,,-12.0
 26.239,4.1,chime,0.171,music,0.056,,Music 0.48; Musical instrument 0.07; Vibraphone 0.07,other,0.72,0.09,775,0.204,0.084,flat,-5.8,fast move,-0.9
-26.970,7.9,swoosh,0.166,music,0.010,yes,"Music 0.41; Marimba, xylophone 0.10; Glockenspiel 0.08",other,0.72,0.11,730,0.283,0.066,down,-4.2,,21.1
-27.922,5.0,swoosh,0.188,chime,0.000,yes,"Music 0.46; Marimba, xylophone 0.09; Glockenspiel 0.07",other,0.72,0.37,886,0.279,0.098,flat,-7.2,,-19.4
-29.025,5.6,servo,0.149,slash,0.018,yes,Music 0.50; Musical instrument 0.05; Classical music 0.02,other,0.72,0.42,927,0.424,0.127,down,-7.8,,-7.3
-29.095,4.6,servo,0.169,slash,0.034,,Music 0.51; Musical instrument 0.05; Classical music 0.02,other,0.72,0.35,960,0.427,0.135,down,-7.9,,-5.2
 29.246,4.5,servo,0.127,tick,0.006,yes,Music 0.51; Musical instrument 0.05; Classical music 0.02,other,0.72,0.2,934,0.38,0.13,down,-7.8,fast move,-0.6
 29.315,6.3,slash,0.151,servo,0.001,yes,Music 0.51; Musical instrument 0.05; Classical music 0.02,other,0.72,0.13,890,0.347,0.118,down,-7.8,fast move,1.4
 29.455,10.1,slash,0.174,servo,0.011,yes,Music 0.51; Musical instrument 0.06; Classical music 0.02,other,0.72,0.67,940,0.292,0.126,down,-6.3,cut,0.6
-29.698,9.5,sparkle,0.149,swoosh,0.003,yes,Music 0.51; Musical instrument 0.09; Vibraphone 0.06,other,0.72,0.37,919,0.281,0.117,down,-6.3,,8.0
-29.780,8.5,swoosh,0.174,sparkle,0.025,yes,Music 0.51; Musical instrument 0.09; Vibraphone 0.06,other,0.72,0.29,855,0.287,0.108,flat,-6.5,,10.4
-29.931,8.9,swoosh,0.223,sparkle,0.046,,Music 0.49; Musical instrument 0.09; Vibraphone 0.06,other,0.72,0.14,762,0.275,0.081,down,-6.6,,14.9
-30.151,6.9,swoosh,0.188,music,0.013,yes,Music 0.45; Vibraphone 0.14; Musical instrument 0.12,other,0.72,0.61,788,0.237,0.069,down,-7.1,,21.5
-30.523,4.5,chime,0.156,swoosh,0.031,,Music 0.41; Musical instrument 0.15; Vibraphone 0.14,other,0.72,0.57,652,0.327,0.046,flat,-5.4,,32.7
-30.883,7.2,chime,0.241,sparkle,0.027,yes,Music 0.39; Musical instrument 0.15; Vibraphone 0.13,other,0.72,0.16,788,0.357,0.095,flat,-5.0,,43.5
-32.055,4.2,swoosh,0.145,shutter,0.012,yes,Music 0.39; Musical instrument 0.06; Piano 0.05,other,0.72,0.07,766,0.364,0.108,flat,-6.6,,-75.4
-32.183,5.8,swoosh,0.132,slash,0.008,yes,Music 0.39; Musical instrument 0.06; Piano 0.05,other,0.66,0.02,742,0.365,0.103,flat,-7.3,,-71.5
-32.345,4.1,shutter,0.145,rewind,0.001,yes,Music 0.46; Musical instrument 0.06; Piano 0.05,other,0.72,0.14,739,0.323,0.089,flat,-9.3,,-66.6
-32.415,4.9,swoosh,0.209,music,0.049,,Music 0.46; Organ 0.03; Musical instrument 0.03,other,0.72,0.07,768,0.307,0.09,flat,-9.4,,-64.6
-32.821,4.7,swoosh,0.180,whoosh,0.040,,Music 0.50; Speech 0.07; Organ 0.01,other,0.72,0.19,877,0.334,0.13,up,-10.7,,-52.4
-33.390,12.0,swoosh,0.301,slash,0.090,,"Music 0.55; Speech 0.08; Inside, large room or hall 0.01",whoosh,0.72,0.0,1495,0.269,0.251,down,-12.6,,-35.3
-33.495,5.0,swoosh,0.270,slash,0.094,,"Music 0.55; Speech 0.08; Inside, large room or hall 0.01",other,0.72,0.69,904,0.318,0.142,down,-4.7,,-32.2
 34.226,6.6,servo,0.078,riser,0.002,yes,Music 0.60; Musical instrument 0.03; Speech 0.02,impact,0.35,0.0,562,0.538,0.08,flat,-1.8,,-10.2
 34.307,6.6,servo,0.097,chime,0.006,yes,Music 0.60; Musical instrument 0.03; Classical music 0.02,other,0.72,0.04,666,0.319,0.082,flat,-4.7,,-7.8
 34.598,4.3,swoosh,0.159,sparkle,0.024,yes,Music 0.60; Musical instrument 0.03; Classical music 0.02,other,0.72,0.07,810,0.244,0.108,flat,-8.2,fast move,0.9
-35.527,11.4,slash,0.202,whoosh,0.006,yes,Music 0.52; Speech 0.01; Musical instrument 0.01,other,0.72,0.18,1240,0.458,0.241,down,-3.1,,-6.2
 35.643,10.2,scratch,0.249,servo,0.030,,Music 0.51; Speech 0.01; Squish 0.01,impact,0.37,0.06,938,0.507,0.173,down,-2.6,fast move,-2.7
 35.747,4.4,swoosh,0.221,impact,0.017,yes,Music 0.51; Speech 0.01; Squish 0.01,other,0.72,0.07,736,0.504,0.121,down,-4.7,fast move,0.4
-35.898,4.5,swoosh,0.290,riser,0.144,,Music 0.47; Speech 0.01; Squish 0.01,whoosh,0.72,0.6,1766,0.343,0.319,flat,-3.9,,5.0
-36.061,4.8,swoosh,0.222,scratch,0.036,,Music 0.47; Speech 0.01; Squish 0.01,whoosh,0.62,0.47,1897,0.361,0.345,flat,-3.8,,-8.2
 36.339,48.3,swoosh,0.172,stamp,0.054,,"Music 0.45; Speech 0.01; Inside, large room or hall 0.01",impact,0.34,0.19,869,0.506,0.141,down,-3.9,cut,0.2
-36.444,4.8,impact,0.145,swoosh,0.023,yes,"Music 0.45; Marimba, xylophone 0.02; Speech 0.02",other,0.72,0.06,766,0.432,0.116,flat,-4.3,,3.3
-36.676,5.2,paper,0.118,music,0.011,yes,"Music 0.44; Marimba, xylophone 0.02; Speech 0.02",other,0.72,0.66,793,0.348,0.119,down,-10.2,,10.3
-36.746,4.5,music,0.109,paper,0.001,yes,"Music 0.46; Marimba, xylophone 0.03; Musical instrument 0.02",other,0.72,0.59,790,0.321,0.119,down,-10.4,,12.4
-37.094,4.9,swoosh,0.099,riser,0.019,yes,"Music 0.47; Musical instrument 0.04; Marimba, xylophone 0.03",other,0.72,0.25,734,0.245,0.098,flat,-10.7,,22.8
-38.208,4.9,chime,0.213,servo,0.054,,Music 0.51; Musical instrument 0.06; Orchestra 0.05,other,0.71,0.02,937,0.386,0.155,flat,-15.8,,8.3
 39.869,4.8,impact,0.134,music,0.010,yes,Music 0.56; Musical instrument 0.07; Organ 0.03,other,0.72,0.09,316,0.769,0.041,up,10.1,fast move,1.1
 39.996,4.3,impact,0.188,music,0.074,,Music 0.56; Musical instrument 0.07; Organ 0.04,other,0.63,0.03,339,0.72,0.039,up,8.6,,4.9
-40.136,5.9,impact,0.136,music,0.012,yes,Music 0.50; Musical instrument 0.07; Organ 0.04,impact,0.49,0.0,360,0.702,0.041,up,8.5,,9.1
-40.438,4.7,swoosh,0.122,scratch,0.013,yes,Music 0.43; Musical instrument 0.07; Organ 0.06,impact,0.21,0.0,447,0.725,0.056,flat,4.7,,18.1
-40.647,8.4,paper,0.059,impact,0.006,yes,Music 0.43; Piano 0.09; Keyboard (musical) 0.08,other,0.72,0.05,501,0.495,0.053,flat,0.2,,24.4
-41.552,6.9,swoosh,0.189,slash,0.055,,Music 0.41; Keyboard (musical) 0.10; Piano 0.09,other,0.72,0.46,749,0.456,0.083,down,-1.5,,-12.4
 41.900,9.4,slash,0.122,swoosh,0.013,yes,Music 0.48; Keyboard (musical) 0.07; Piano 0.06,other,0.72,0.11,539,0.488,0.054,down,-0.8,fast move,-2.0

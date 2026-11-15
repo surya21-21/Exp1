@@ -71,4 +71,4 @@ Other notes from the tags: r02's music is mallet percussion (marimba or vibrapho
 
 The engine writes the cue list itself (`window.CUES`), from the same code that draws each event, so a sound cannot drift from its picture.
 
-Raw data: `../data/<reel>/sfx-map.csv` (every labelled sound with its time, both labels, shape and loudness) and `audio-summary.json`.
+Raw data: `../data/<reel>/sfx-map.csv` holds only the 146 sounds that land on a picture event (within 3 frames of a cut, wipe or move), with time, both labels, shape and loudness. The other labelled sound starts, mostly beats of the music, were discarded as not useful. `audio-summary.json` has the per-reel totals.
