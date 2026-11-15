@@ -24,7 +24,12 @@ def main():
     args = ap.parse_args()
     if args.video:
         tmp = tempfile.mkdtemp()
-        subprocess.run(["ffmpeg", "-v", "error", "-i", args.video, "-vf", f"fps=1/{args.every}", os.path.join(tmp, "f%04d.png")], check=True)
+        rate = subprocess.check_output(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=r_frame_rate",
+                                        "-of", "csv=p=0", args.video], text=True).strip().split("/")
+        step = max(1, round(args.every * int(rate[0]) / int(rate[1])))
+        # exactly every Nth frame, so the label on each picture is its true time
+        subprocess.run(["ffmpeg", "-v", "error", "-i", args.video, "-vf", f"select=not(mod(n\\,{step}))", "-vsync", "vfr",
+                        os.path.join(tmp, "f%04d.png")], check=True)
         files = sorted(glob.glob(os.path.join(tmp, "*.png")))
         labels = [f"{i * args.every:.1f}s" for i in range(len(files))]
     else:

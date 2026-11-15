@@ -28,10 +28,11 @@ export function captions(layer, groups, { accent = '#c2381d', top = 250, size = 
   return {
     update(t) {
       for (const b of built) {
-        const on = t >= b.g.s - fr(1) && t < b.hideAt;
+        // the old group is gone one frame before the next arrives, so two never overlap
+        const on = t >= b.g.s - fr(1) && t < b.hideAt - fr(1) - 1e-6;
         b.el.style.display = on ? 'block' : 'none';
         if (!on) continue;
-        const out = prog(t, b.hideAt - fr(3), fr(3));
+        const out = prog(t, b.hideAt - fr(4), fr(3));
         b.el.style.opacity = (1 - out).toFixed(3);
         b.el.style.transform = `translateY(${(-16 * out).toFixed(1)}px)`;
         for (const k of b.words) {
