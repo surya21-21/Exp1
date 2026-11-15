@@ -36,6 +36,8 @@ jobs:
           gpg --batch --quiet --pinentry-mode loopback --passphrase "$PASS" -d brand/voice/samples.tar.gpg | tar -C "$RUNNER_TEMP/v" -xf -
           ls -la "$RUNNER_TEMP/v/samples"
       - name: Clone the voice
+        id: clone
+        continue-on-error: true
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
         run: python scripts/voice_clone.py "$RUNNER_TEMP/v/samples"
@@ -45,30 +47,36 @@ jobs:
           REEL: ${{ inputs.reel }}
         run: |
           mkdir -p build
-          python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
+          if [ -f brand/voice/voice.json ]; then python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build; else echo "BLOCKED: no channel voice yet, so no test voiceover"; fi
           python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
           python scripts/reel_music.py build/reel.timed.json --reel "reels/$REEL/reel.json" --out build/music.mp3
           ls -la build
+
       - name: Sound effects from ElevenLabs
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
         run: python scripts/sfx_library.py --out assets/sfx
 
-      - name: Save the voice id and delete the samples
+      - name: Save what was made
         run: |
           rm -rf "$RUNNER_TEMP/v"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm -q brand/voice/samples.tar.gpg
-          git add brand/voice/voice.json assets/sfx
-          git commit -qm "Channel voice made in ElevenLabs; samples removed"
-          git push -q origin HEAD:main
+          if [ -f brand/voice/voice.json ]; then git rm -q brand/voice/samples.tar.gpg; git add brand/voice/voice.json; fi
+          git add assets/sfx 2>/dev/null || true
+          git commit -qm "ElevenLabs voice and sound effects" || echo "nothing new"
+          git pull -q --rebase origin main && git push -q origin HEAD:main
+
       - name: Draft release with the audio
         env:
           GH_TOKEN: ${{ github.token }}
           REEL: ${{ inputs.reel }}
         run: |
-          FILES="build/voiceover.mp3"
-          [ -f build/music.mp3 ] && FILES="$FILES build/music.mp3"
+          FILES=""
+          for f in build/voiceover.mp3 build/music.mp3 assets/sfx/*.wav; do [ -f "$f" ] && FILES="$FILES $f"; done
+          [ -z "$FILES" ] && { echo "nothing to listen to"; exit 0; }
           gh release create -R "$GITHUB_REPOSITORY" "voice-test-${GITHUB_RUN_NUMBER}" $FILES --draft \
-            --title "Voice test: ${REEL}" --notes "The channel voice speaking the script of ${REEL}, and the music bed. Listen before the video is rendered."
+            --title "Voice and sound test: ${REEL}" --notes "The channel voice speaking the script of ${REEL} (if made), the music bed and the sound effects. Listen before the video is rendered."
+      - name: Fail if the voice was not made
+        if: steps.clone.outcome == 'failure'
+        run: echo "::error::The voice was not cloned. See the Clone the voice step." && exit 1
