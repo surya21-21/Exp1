@@ -2,7 +2,8 @@
 """Synthesize the sound-effect track from build/sfx_cues.json.
 
 Every sound is generated from noise and sine waves here, so there is
-nothing to license. Sounds: whoosh, swoosh, pop, click, tick, impact, riser.
+nothing to license. Sounds: whoosh, swoosh, pop, click, tick, impact, riser,
+tear, stamp, scratch.
 Output: one mono 44.1kHz WAV the length of the video, ready to mix.
 Standard library only.
 """
@@ -99,8 +100,50 @@ def riser(seed):
     return [0.35 * v for v in mul(add(noise, tone, 0.4), e)]
 
 
+def highpass(x, fc):
+    a, y, prev, out = 1 / (1 + 2 * math.pi * fc / SR), 0.0, 0.0, []
+    for v in x:
+        y = a * (y + v - prev)
+        prev = v
+        out.append(y)
+    peak = max(1e-6, max(abs(v) for v in out))
+    return [v / peak for v in out]
+
+
+# Paper Studio sounds (see collection/recipes/sound.md).
+def tear(seed):
+    """Paper tearing: bright noise that flutters, with a few fibre crackles."""
+    n = int(0.30 * SR)
+    rnd = random.Random(seed + 101)
+    noise = highpass(filtered_noise(n, 5000, 9000, seed), 1800)
+    out = []
+    for i in range(n):
+        e = math.sin(math.pi * i / n) ** 0.7
+        flutter = 0.6 + 0.4 * math.sin(2 * math.pi * 41 * i / SR)
+        crack = 0.9 * rnd.uniform(-1, 1) if rnd.random() < 0.01 else 0.0
+        out.append(0.5 * e * (noise[i] * flutter + crack))
+    return out
+
+
+def stamp(seed):
+    """Rubber stamp: a short low thud with a soft slap of paper."""
+    n = int(0.22 * SR)
+    low = mul(sweep(n, 140, 58, 0.5), env(n, 0.004, 5))
+    slap = mul(filtered_noise(n, 3000, 500, seed), env(n, 0.002, 14))
+    return [0.8 * v for v in add(low, slap, 0.7)]
+
+
+def scratch(seed):
+    """Pencil stroke: thin noise with a quick wobble."""
+    n = int(0.20 * SR)
+    noise = highpass(filtered_noise(n, 6000, 4000, seed), 1500)
+    return [0.36 * noise[i] * math.sin(math.pi * i / n) ** 0.6 * (0.7 + 0.3 * math.sin(2 * math.pi * 57 * i / SR))
+            for i in range(n)]
+
+
 SOUNDS = {"whoosh": whoosh, "swoosh": swoosh, "pop": pop, "click": click,
-          "tick": tick, "impact": impact, "riser": riser}
+          "tick": tick, "impact": impact, "riser": riser,
+          "tear": tear, "stamp": stamp, "scratch": scratch}
 
 
 def load_wav(path):

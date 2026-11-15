@@ -7,7 +7,8 @@ Twelve reels the user chose as references, each reported by the user as its crea
 - Every frame measured with `scripts/study_reference.py` (cuts, motion peaks, shot lengths).
 - Looked at: every reel's first 3 seconds at 10 frames a second, every reel's full body at 1 frame a second, and three 20-frame strips across transitions at full frame rate (r03, r05, r10).
 - **Not done:** no speech transcript (Whisper is not available in the cloud workspace), so script notes come from on-screen captions only. No sound labelling (it runs only on GitHub, and the videos were not sent there). The remaining burst strips were generated but not all viewed.
-- "Still share" from the script is unreliable on these files (it reads 46-72% on reels that clearly move); treat it as a bug to fix, likely repeated frames from re-encoding.
+- Correction: an earlier version of this note called the "still share" measure a bug. It was not. It counts repeated frames, and these reels have many: several animate on every second frame (r01 about 17 drawn frames a second, r09 15), and the one-canvas reels hold still on purpose between steps.
+- This file is the first pass. The full study (every transition, the transcripts and the sound) is in `collection/`.
 
 ## The numbers
 
@@ -109,9 +110,6 @@ For us: our avatar is more detailed (beard, headphones, shading). At cursor size
 7. Transitions: a signature wipe for cut reels (ours should be our own, not the pixel wipe), in-place builds for tutorials.
 8. Outro: keyword tile, then our profile card with Follow tapped, then "This is your AI guy."
 
-## Still to do
+## Done since this note
 
-- Transcribe the audio (Whisper on GitHub or the server) to study the spoken scripts and words per second.
-- Run the sound labelling on these 12.
-- View the remaining burst strips and write transition recipes with exact frame counts for r01, r02 and r07.
-- Fix the still-share measure in `study_reference.py`.
+Transcripts, sound labelling and the full transition catalogue are finished: see `collection/README.md`.

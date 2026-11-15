@@ -1,0 +1,101 @@
+{
+ "reel": "r03",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 45,
+  "first_word_at": 0.0,
+  "last_word_at": 28.14,
+  "words_per_second": 1.6,
+  "pauses_over_0.25s": 8,
+  "longest_pause": 4.65,
+  "pause_time_share": 0.498,
+  "words_in_first_3s": 8,
+  "first_3s": "Claude Code makes great motion, but the sound..."
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 184.6,
+  "strength": 0.3
+ },
+ "bed_level_db_vs_voice": -0.7,
+ "onsets_labelled": 96,
+ "cuts": 7,
+ "cuts_with_sound_within_3_frames": 5,
+ "fast_moves": 13,
+ "fast_moves_with_sound_within_3_frames": 8,
+ "bed_tags": [
+  "Music 0.29",
+  "Shatter 0.04",
+  "Speech 0.01",
+  "Inside, large room or hall 0.01",
+  "Animal 0.01",
+  "Electronic music 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 24
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 14
+  },
+  {
+   "sound": "glitch",
+   "on": "no cut or fast move",
+   "times": 7
+  },
+  {
+   "sound": "whoosh",
+   "on": "fast move",
+   "times": 5
+  },
+  {
+   "sound": "whoosh",
+   "on": "cut",
+   "times": 4
+  },
+  {
+   "sound": "impact",
+   "on": "fast move",
+   "times": 3
+  },
+  {
+   "sound": "scratch",
+   "on": "cut",
+   "times": 2
+  },
+  {
+   "sound": "pop",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "impact",
+   "on": "cut",
+   "times": 1
+  }
+ ]
+}

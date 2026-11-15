@@ -1,0 +1,145 @@
+name: Make reel
+
+# One click: Actions tab > Make reel > Run workflow > type the reel's folder name.
+# Takes reels/<name>/reel.json and produces a finished MP4 (or only the storyboard
+# stills), with voice, captions, sound effects and a table of quality checks.
+# Nothing renders on your phone: this all runs on GitHub's computer.
+#
+# Voice, in this order:
+#   1. reels/<name>/voiceover.mp3 if you put one there (timed with Whisper)
+#   2. ElevenLabs, if the repository secret ELEVENLABS_API_KEY is set
+#   3. neither: a silent draft with estimated timing, marked BLOCKED in the checks
+#
+# Results: an MP4 in a draft release (Releases tab), and the storyboard, a contact
+# sheet and the checks on the branch "reel-previews" under <name>/.
+
+on:
+  workflow_dispatch:
+    inputs:
+      reel:
+        description: "Folder inside reels/ (it must contain reel.json)"
+        required: true
+        default: "engine-test"
+      make:
+        description: "What to make"
+        type: choice
+        options: ["finished reel", "storyboard stills only"]
+        default: "finished reel"
+      voice:
+        description: "Voice"
+        type: choice
+        options: ["auto", "none"]
+        default: "auto"
+  push:
+    branches: [reel-test]            # engine self-test: renders reels/engine-test
+
+permissions:
+  contents: write
+
+concurrency:
+  group: make-reel-${{ inputs.reel || 'engine-test' }}
+  cancel-in-progress: true
+
+env:
+  REEL: ${{ inputs.reel || 'engine-test' }}
+  MAKE: ${{ inputs.make || 'finished reel' }}
+  VOICE: ${{ inputs.voice || 'auto' }}
+
+jobs:
+  reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the reel file
+        run: |
+          test -f "reels/$REEL/reel.json" || { echo "::error::reels/$REEL/reel.json not found"; exit 1; }
+          python3 -c "import json,sys; r=json.load(open('reels/$REEL/reel.json')); print(len(r['scenes']), 'scenes:', ', '.join(s['type'] for s in r['scenes']))"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install the tools
+        run: |
+          pip install -q playwright==1.48.0 numpy opencv-python-headless pillow
+          python -m playwright install --with-deps chromium
+          ffmpeg -version | head -1
+
+      - name: Voice
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          mkdir -p build
+          if [ "$VOICE" = "none" ]; then
+            echo "voice: none (asked for a silent draft)"
+          elif [ -f "reels/$REEL/voiceover.mp3" ]; then
+            cp "reels/$REEL/voiceover.mp3" build/voiceover.mp3
+            pip install -q faster-whisper
+            python scripts/reel_words.py build/voiceover.mp3 --out build/words.json
+          else
+            python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
+          fi
+
+      - name: Plan the timing
+        run: python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
+
+      - name: Storyboard stills
+        run: |
+          TIMES=$(python3 -c "import json; s=json.load(open('build/reel.timed.json')); print(','.join(['0']+[str(round(max(sc['start'],sc['end']-0.2),3)) for sc in s['scenes']]))")
+          python studio/render.py build/reel.timed.json --stills build/storyboard --times "$TIMES" --cues build/cues.json --audit build/audit.json
+          python scripts/reel_sheet.py --stills build/storyboard --out build/storyboard.jpg --cols 5 --width 324
+
+      - name: Render every frame
+        if: env.MAKE == 'finished reel'
+        run: python studio/render.py build/reel.timed.json --out build/silent.mp4
+
+      - name: Sound effects and mix
+        if: env.MAKE == 'finished reel'
+        run: |
+          python3 -c "import json; s=json.load(open('build/reel.timed.json')); json.dump({'durationInFrames': round(s['duration']*s['fps']), 'fps': s['fps']}, open('build/props.json','w'))"
+          python scripts/make_sfx.py build/cues.json --props build/props.json --out build/sfx_track.wav
+          python scripts/mix_audio.py build/silent.mp4 build/final.mp4 --voice build/voiceover.mp3 --sfx build/sfx_track.wav
+
+      - name: Quality checks
+        if: env.MAKE == 'finished reel'
+        run: |
+          python scripts/check_reel.py --video build/final.mp4 --spec build/reel.timed.json --audit build/audit.json --cues build/cues.json --out build/checks.md
+          python scripts/reel_sheet.py --video build/final.mp4 --every 1 --out build/contact.jpg --cols 8 --width 216
+          cat build/checks.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ env.REEL }}
+          path: |
+            build/final.mp4
+            build/storyboard.jpg
+            build/contact.jpg
+            build/checks.md
+            build/reel.timed.json
+            build/cues.json
+          if-no-files-found: ignore
+
+      - name: Save previews to the reel-previews branch
+        run: |
+          OUT="$RUNNER_TEMP/previews"; mkdir -p "$OUT"
+          cp build/storyboard.jpg build/reel.timed.json build/cues.json "$OUT/" 2>/dev/null || true
+          cp build/contact.jpg build/checks.md "$OUT/" 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch -q origin reel-previews 2>/dev/null && git checkout -q reel-previews || { git checkout -q --orphan reel-previews; git rm -rfq . ; }
+          mkdir -p "$REEL" && cp "$OUT"/* "$REEL/"
+          git add "$REEL"
+          git commit -qm "Previews for $REEL (run $GITHUB_RUN_NUMBER)" || echo "nothing new"
+          git push -q origin reel-previews
+
+      - name: Draft release with the MP4
+        if: env.MAKE == 'finished reel' && github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git checkout -q "$GITHUB_SHA"
+          gh release create -R "$GITHUB_REPOSITORY" "reel-${REEL}-${GITHUB_RUN_NUMBER}" build/final.mp4 build/contact.jpg build/storyboard.jpg \
+            --draft --title "Reel: ${REEL} (#${GITHUB_RUN_NUMBER})" --notes-file build/checks.md
+          echo "Draft release created: Releases tab > Reel: ${REEL} (#${GITHUB_RUN_NUMBER})" >> "$GITHUB_STEP_SUMMARY"

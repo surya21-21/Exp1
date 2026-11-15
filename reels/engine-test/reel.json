@@ -1,0 +1,91 @@
+{
+  "title": "Engine test: every scene type and transition once",
+  "note": "A fixture for testing the engine and the showreel of the collection. Not a reel for posting.",
+  "accent": "#c2381d",
+  "keyword": "STUDY",
+  "wps": 3.4,
+  "scenes": [
+    {
+      "type": "hookCounter",
+      "say": "Eighteen thousand frames. *Twelve* viral reels. *Every* cut, *measured*.",
+      "props": { "from": 12950, "to": 18271, "label": "frames studied", "sub": "12 reference reels, every frame", "chips": ["12 reels", "210 moves", "25 kinds"] }
+    },
+    {
+      "type": "bigWord", "in": "tear",
+      "say": "This is the *paper tear*.",
+      "props": { "over": "Our own transition", "word": "PAPER<br>TEAR", "sub": "8 frames, in two steps", "font": 150 },
+      "hold": 0.5
+    },
+    {
+      "type": "uiCard", "in": "shuffle",
+      "say": "Rows *switch on*, *tick* and *count* on the word.",
+      "props": {
+        "kicker": "The collection", "title": "collection / lib",
+        "rows": [
+          { "label": "Paper tear", "kind": "toggle" },
+          { "label": "Avatar cursor", "kind": "tick" },
+          { "label": "Moves catalogued", "kind": "value", "value": 210 }
+        ],
+        "stamp": { "text": "TESTED" }
+      },
+      "hold": 0.9
+    },
+    {
+      "type": "network", "in": "iris", "at": [540, 1010],
+      "say": "Tools *join* the hub, *one* by *one*, on *drawn* *lines*.",
+      "props": {
+        "title": "What did the measuring",
+        "hub": { "name": "Claude" },
+        "tiles": [
+          { "name": "Whisper", "sub": "words" }, { "name": "CLAP", "sub": "sounds" }, { "name": "OpenCV", "sub": "motion" },
+          { "name": "ffmpeg", "sub": "frames" }, { "name": "Playwright", "sub": "render" }
+        ]
+      },
+      "hold": 0.4
+    },
+    {
+      "type": "steps", "in": "railScroll",
+      "say": "Steps *scroll* like a page. *First* line, *second* line, *third* line. Then the *prompt* types itself.",
+      "props": {
+        "n": 2, "of": 5, "name": "Label every sound", "underline": 610,
+        "lines": ["Split the voice from the music", "Find where each sound starts", "Match it to the picture"],
+        "prompt": "Label the sounds in my 12 reference reels"
+      },
+      "hold": 1.0
+    },
+    {
+      "type": "compare", "in": "whip",
+      "say": "One card is *struck out*. The other gets the *tick*.",
+      "props": {
+        "a": { "tag": "Before", "title": "A frame every half second", "lines": ["Misses anything faster"] },
+        "b": { "tag": "Now", "title": "Every single frame", "lines": ["18,271 of them"] },
+        "strikeW": 720
+      },
+      "hold": 0.5
+    },
+    {
+      "type": "chart", "in": "flicker",
+      "say": "Bars are *racing* on the first frame.",
+      "props": {
+        "title": "Moves in one reel", "sub": "transitions and fast moves, measured",
+        "bars": [
+          { "label": "Reel 07", "v": 37, "hero": true }, { "label": "Reel 02", "v": 26 },
+          { "label": "Reel 01", "v": 20 }, { "label": "Reel 06", "v": 18 }
+        ]
+      },
+      "hold": 0.8
+    },
+    {
+      "type": "save", "in": "rampCut",
+      "say": "*Save* this.",
+      "props": { "title": "Save this.", "sub": "Every effect is in the collection folder." },
+      "hold": 0.7
+    },
+    {
+      "type": "cta", "in": "tear",
+      "say": "Comment *STUDY* and I'll send you the links. *This* is your AI guy.",
+      "props": { "keyword": "STUDY", "send": "the links" },
+      "hold": 1.4
+    }
+  ]
+}

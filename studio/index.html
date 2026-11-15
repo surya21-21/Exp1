@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reel engine</title>
+<style>
+@font-face{font-family:"Inter";font-weight:500;src:url(fonts/Inter-Medium.otf)}
+@font-face{font-family:"Inter";font-weight:700;src:url(fonts/Inter-Bold.otf)}
+@font-face{font-family:"Inter";font-weight:800;src:url(fonts/Inter-ExtraBold.otf)}
+@font-face{font-family:"Inter";font-weight:900;src:url(fonts/Inter-Black.otf)}
+@font-face{font-family:"Inter Display";font-weight:900;src:url(fonts/InterDisplay-Black.otf)}
+@font-face{font-family:"Lora";font-style:italic;font-weight:400 700;src:url(fonts/Lora-Italic-Variable.ttf)}
+html,body{margin:0;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#efeae0;font-family:"Inter",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+#stage *{box-sizing:border-box}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<svg width="0" height="0" style="position:absolute"><defs id="defs"></defs></svg>
+<script type="module">
+import { boot } from './engine.js';
+const q = new URLSearchParams(location.search);
+boot(q.get('spec') || '../reels/engine-test/reel.timed.json').catch(e => { window.ERROR = String((e && e.stack) || e); });
+</script>
+</body>
+</html>

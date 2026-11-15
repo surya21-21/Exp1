@@ -1,0 +1,81 @@
+{
+ "reel": "r05",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 167,
+  "first_word_at": 0.0,
+  "last_word_at": 39.26,
+  "words_per_second": 4.25,
+  "pauses_over_0.25s": 7,
+  "longest_pause": 0.36,
+  "pause_time_share": 0.053,
+  "words_in_first_3s": 13,
+  "first_3s": "This brand new Claude plugin lets you run your Instagram on autopilot, research,"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 66.3,
+  "strength": 0.046
+ },
+ "bed_level_db_vs_voice": -22.1,
+ "onsets_labelled": 102,
+ "cuts": 12,
+ "cuts_with_sound_within_3_frames": 4,
+ "fast_moves": 3,
+ "fast_moves_with_sound_within_3_frames": 1,
+ "bed_tags": [
+  "Music 0.54",
+  "Speech 0.01",
+  "Squish 0.01",
+  "Drip 0.01",
+  "Animal 0.01",
+  "Inside, small room 0.00"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 26
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "swoosh",
+   "on": "cut",
+   "times": 3
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "pop",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "paper",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "pop",
+   "on": "no cut or fast move",
+   "times": 1
+  }
+ ]
+}

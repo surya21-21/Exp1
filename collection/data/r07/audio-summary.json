@@ -1,0 +1,116 @@
+{
+ "reel": "r07",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 225,
+  "first_word_at": 0.0,
+  "last_word_at": 89.46,
+  "words_per_second": 2.52,
+  "pauses_over_0.25s": 13,
+  "longest_pause": 10.38,
+  "pause_time_share": 0.266,
+  "words_in_first_3s": 10,
+  "first_3s": "\u0915\u094d\u0932\u094b\u0921 \u0915\u0940 \u0905\u0928\u093f\u092e\u0947\u0936\u0928 \u091c\u0928\u0930\u093f\u0915 \u0932\u0916\u0924\u0940 \u0939\u0948, \u0915\u094d\u092f\u094b\u0902\u0915\u0940 \u092a\u094d\u0930\u093e\u092e\u094d\u091f \u092e\u0947\u0902 \u0938\u094d\u0924\u093e\u0932"
+ },
+ "language": "hi",
+ "tempo": {
+  "bpm": 74.9,
+  "strength": 0.125
+ },
+ "bed_level_db_vs_voice": -23.2,
+ "onsets_labelled": 200,
+ "cuts": 15,
+ "cuts_with_sound_within_3_frames": 3,
+ "fast_moves": 25,
+ "fast_moves_with_sound_within_3_frames": 10,
+ "bed_tags": [
+  "Music 0.29",
+  "Speech 0.01",
+  "Inside, small room 0.01",
+  "Musical instrument 0.00",
+  "Chink, clink 0.00",
+  "Glass 0.00"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 48
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 16
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 9
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 5
+  },
+  {
+   "sound": "whoosh",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "servo",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "swoosh",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "pop",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "pop",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "coin",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "whoosh",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "impact",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "slash",
+   "on": "cut",
+   "times": 1
+  }
+ ]
+}

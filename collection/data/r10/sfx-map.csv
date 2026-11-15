@@ -1,0 +1,98 @@
+time,strength,label,score,second,margin,unsure,panns_top3,shape_guess,dur,attack,centroid_hz,low_share,noisiness,sweep,db_vs_voice,visual_event,frames_from_event
+0.522,4.3,servo,0.241,slash,0.020,yes,"Music 0.18; Speech 0.11; Inside, large room or hall 0.00",whoosh,0.21,0.11,2916,0.057,0.526,down,-33.7,,9.7
+1.393,4.6,riser,0.174,servo,0.018,yes,Music 0.46; Speech 0.04; Animal 0.00,whoosh,0.4,0.35,2182,0.045,0.326,up,-19.5,,35.8
+1.672,4.0,glitch,0.155,whoosh,0.013,yes,Music 0.46; Speech 0.04; Musical instrument 0.01,other,0.72,0.65,1352,0.039,0.183,down,-15.4,,44.2
+2.148,4.5,whoosh,0.152,servo,0.017,yes,Music 0.46; Speech 0.03; Telephone 0.01,other,0.72,0.7,1330,0.021,0.129,flat,-13.6,,58.4
+2.310,4.6,whoosh,0.166,riser,0.046,,Music 0.45; Speech 0.02; Musical instrument 0.02,other,0.6,0.54,1501,0.011,0.123,flat,-13.0,,63.3
+2.519,6.3,whoosh,0.160,sparkle,0.008,yes,Music 0.45; Speech 0.03; Musical instrument 0.02,other,0.39,0.33,1525,0.005,0.1,flat,-13.0,,69.6
+2.612,5.2,chime,0.184,coin,0.022,yes,Music 0.44; Speech 0.03; Musical instrument 0.02,other,0.3,0.24,1546,0.006,0.086,flat,-12.9,,72.4
+2.705,5.6,coin,0.171,whoosh,0.004,yes,Music 0.44; Speech 0.03; Musical instrument 0.02,other,0.21,0.15,1558,0.006,0.081,flat,-13.3,,75.2
+2.798,12.0,tick,0.213,coin,0.002,yes,Music 0.44; Speech 0.03; Musical instrument 0.02,pop,0.11,0.05,1579,0.008,0.094,flat,-13.1,,77.9
+3.297,4.5,coin,0.328,tick,0.072,,Music 0.43; Speech 0.06; Musical instrument 0.01,whoosh,0.57,0.51,1871,0.04,0.266,flat,-17.8,,92.9
+3.413,4.9,coin,0.304,servo,0.078,,Music 0.43; Speech 0.06; Musical instrument 0.01,other,0.45,0.4,1687,0.039,0.184,down,-17.3,,96.4
+3.738,4.6,tick,0.190,coin,0.021,yes,Music 0.43; Speech 0.06; Musical instrument 0.02,pop,0.12,0.07,1630,0.019,0.052,flat,-17.6,,106.2
+4.667,4.2,coin,0.267,tick,0.010,yes,Music 0.39; Speech 0.04; Musical instrument 0.02,other,0.41,0.37,1348,0.031,0.125,down,-13.1,,134.0
+5.050,5.5,coin,0.298,shutter,0.069,,Music 0.39; Speech 0.34; Musical instrument 0.01,pop,0.06,0.0,2070,0.076,0.336,flat,-18.1,,145.5
+5.213,6.0,tick,0.285,coin,0.009,yes,"Speech 0.34; Music 0.31; Ice cream truck, ice cream van 0.01",pop,0.08,0.01,2979,0.08,0.572,flat,-29.0,,150.4
+7.953,8.2,servo,0.151,shutter,0.030,yes,"Music 0.27; Flute 0.20; Wind instrument, woodwind instrument 0.17",other,0.21,0.17,1708,0.006,0.172,flat,-12.4,,-211.4
+8.046,6.9,tick,0.187,shutter,0.060,,"Music 0.27; Flute 0.20; Wind instrument, woodwind instrument 0.17",pop,0.11,0.08,1547,0.007,0.154,flat,-12.0,,-208.6
+8.487,6.4,swoosh,0.148,slash,0.004,yes,"Music 0.17; Wind instrument, woodwind instrument 0.16; Flute 0.14",whoosh,0.43,0.38,2799,0.052,0.479,down,-24.7,,-195.4
+10.298,5.1,whoosh,0.332,swoosh,0.058,,"Speech 0.27; Animal 0.11; Domestic animals, pets 0.07",whoosh,0.72,0.63,2901,0.098,0.53,flat,-33.0,,-141.1
+10.368,5.0,whoosh,0.296,swoosh,0.066,,"Speech 0.27; Animal 0.11; Domestic animals, pets 0.07",whoosh,0.72,0.56,3340,0.066,0.522,flat,-32.9,,-139.0
+10.867,8.3,tick,0.155,servo,0.009,yes,"Speech 0.31; Animal 0.20; Domestic animals, pets 0.13",whoosh,0.44,0.31,3316,0.025,0.321,down,-24.0,,-124.0
+11.134,11.5,tick,0.178,servo,0.043,,"Speech 0.31; Animal 0.20; Domestic animals, pets 0.13",whoosh,0.17,0.05,2776,0.013,0.276,down,-24.6,,-116.0
+12.063,6.6,slash,0.305,swoosh,0.002,yes,"Speech 0.07; Music 0.03; Inside, small room 0.01",whoosh,0.72,0.05,2690,0.154,0.502,down,-34.6,,-88.1
+12.434,7.9,swoosh,0.248,servo,0.032,,"Music 0.20; Speech 0.07; Inside, small room 0.01",whoosh,0.56,0.52,2239,0.254,0.402,down,-16.7,,-77.0
+12.620,13.8,servo,0.221,swoosh,0.017,yes,"Music 0.20; Speech 0.06; Inside, small room 0.01",whoosh,0.72,0.7,1436,0.536,0.267,down,-15.1,,-71.4
+12.841,18.4,servo,0.228,swoosh,0.021,yes,Music 0.26; Speech 0.06; Patter 0.01,whoosh,0.56,0.5,1947,0.374,0.352,down,-14.5,,-64.8
+12.910,9.4,servo,0.227,coin,0.043,,Music 0.26; Speech 0.05; Patter 0.01,whoosh,0.49,0.43,2025,0.376,0.349,flat,-14.5,,-62.7
+13.224,12.6,servo,0.211,pop,0.049,,Music 0.26; Speech 0.06; Patter 0.01,impact,0.17,0.12,1097,0.683,0.183,down,-15.7,,-53.3
+13.305,4.6,swoosh,0.213,servo,0.009,yes,Music 0.26; Speech 0.06; Patter 0.01,impact,0.09,0.04,1461,0.625,0.228,flat,-15.8,,-50.8
+13.967,4.4,tick,0.289,servo,0.082,,"Music 0.26; Speech 0.23; Inside, small room 0.01",whoosh,0.16,0.03,2076,0.094,0.345,flat,-22.8,,-31.0
+14.420,12.8,tick,0.251,slash,0.018,yes,"Speech 0.23; Music 0.17; Inside, small room 0.01",pop,0.08,0.05,4618,0.042,0.282,flat,-23.2,,-17.4
+14.803,5.7,coin,0.281,servo,0.076,,"Speech 0.16; Music 0.14; Inside, small room 0.01",whoosh,0.43,0.36,2347,0.115,0.418,down,-27.4,,-5.9
+15.766,46.0,tick,0.219,coin,0.068,,"Music 0.13; Speech 0.02; Inside, small room 0.02",whoosh,0.72,0.7,1998,0.213,0.354,down,-12.2,,23.0
+15.987,7.4,tick,0.180,servo,0.034,,"Music 0.21; Speech 0.03; Inside, small room 0.02",whoosh,0.54,0.5,2226,0.276,0.423,down,-11.5,,29.6
+16.080,5.3,impact,0.203,stamp,0.006,yes,"Music 0.21; Speech 0.03; Inside, small room 0.02",whoosh,0.44,0.41,2174,0.288,0.396,down,-12.2,,32.4
+16.161,4.7,impact,0.304,swoosh,0.077,,"Music 0.21; Speech 0.03; Inside, small room 0.02",whoosh,0.36,0.33,2070,0.315,0.358,down,-12.1,,34.8
+16.277,5.5,impact,0.296,swoosh,0.027,yes,"Music 0.23; Speech 0.07; Inside, small room 0.02",whoosh,0.25,0.19,1822,0.38,0.302,down,-11.8,,38.3
+16.370,34.6,swoosh,0.228,impact,0.046,,"Music 0.23; Speech 0.07; Inside, small room 0.01",impact,0.15,0.12,1193,0.549,0.201,down,-12.1,,41.1
+17.171,7.8,tick,0.216,swoosh,0.059,,"Music 0.27; Speech 0.15; Child speech, kid speaking 0.00",whoosh,0.52,0.31,2651,0.063,0.359,flat,-30.2,,65.1
+17.485,6.6,coin,0.304,tick,0.032,,Music 0.33; Speech 0.15; Animal 0.00,pop,0.1,0.0,2674,0.068,0.414,flat,-30.6,,74.5
+17.566,9.3,tick,0.249,coin,0.012,yes,Music 0.38; Speech 0.15; Animal 0.00,whoosh,0.16,0.05,3305,0.08,0.507,down,-34.4,,77.0
+17.903,8.7,coin,0.222,swoosh,0.004,yes,Music 0.38; Speech 0.11; Animal 0.00,whoosh,0.72,0.13,3067,0.13,0.567,down,-38.5,,87.1
+18.727,5.9,whoosh,0.266,swoosh,0.009,yes,"Music 0.34; Speech 0.07; Inside, large room or hall 0.02",whoosh,0.58,0.49,2466,0.203,0.442,down,-16.5,,111.8
+19.122,44.1,impact,0.196,whoosh,0.020,yes,Music 0.47; Speech 0.05; Thunk 0.02,whoosh,0.57,0.51,2216,0.233,0.375,down,-5.0,,123.6
+19.516,56.5,swoosh,0.243,impact,0.059,,Music 0.49; Speech 0.04; Thunk 0.02,impact,0.18,0.11,1195,0.608,0.206,down,-5.0,,135.5
+20.306,28.9,tick,0.273,whoosh,0.025,yes,"Music 0.45; Speech 0.02; Inside, small room 0.01",whoosh,0.52,0.45,4107,0.064,0.645,flat,-20.1,,-155.8
+20.677,28.5,coin,0.296,servo,0.092,,"Music 0.39; Speech 0.03; Inside, small room 0.01",whoosh,0.45,0.4,3148,0.014,0.463,down,-18.1,,-144.7
+20.910,4.4,coin,0.288,tick,0.058,,"Music 0.35; Speech 0.06; Inside, small room 0.01",other,0.21,0.16,1865,0.017,0.127,flat,-18.1,,-137.7
+21.002,7.6,coin,0.280,shutter,0.054,,"Music 0.35; Speech 0.06; Inside, small room 0.01",pop,0.12,0.07,1967,0.019,0.119,flat,-17.9,,-134.9
+21.119,6.2,coin,0.303,shutter,0.119,,"Music 0.35; Speech 0.07; Inside, small room 0.01",whoosh,0.3,0.05,2860,0.067,0.495,flat,-31.7,,-131.4
+22.059,13.8,coin,0.145,servo,0.017,yes,Music 0.20; Speech 0.07; Animal 0.01,other,0.38,0.33,1348,0.423,0.249,down,-15.0,,-103.2
+22.175,5.1,swoosh,0.184,whoosh,0.017,yes,"Music 0.20; Speech 0.07; Domestic animals, pets 0.01",impact,0.26,0.21,1047,0.626,0.193,down,-15.2,,-99.7
+22.303,6.4,servo,0.188,swoosh,0.059,,"Music 0.20; Speech 0.07; Domestic animals, pets 0.01",impact,0.14,0.08,905,0.661,0.164,up,-14.6,,-95.9
+22.883,8.1,swoosh,0.267,scratch,0.006,yes,Music 0.35; Speech 0.12; Animal 0.01,whoosh,0.71,0.62,2405,0.124,0.4,flat,-19.8,,-78.5
+23.452,42.6,swoosh,0.319,whoosh,0.031,,Music 0.51; Speech 0.05; Dubstep 0.03,whoosh,0.72,0.71,3878,0.057,0.566,down,-15.8,,-61.4
+23.835,30.5,swoosh,0.281,whoosh,0.085,,Music 0.53; Dubstep 0.03; Electronic music 0.03,whoosh,0.53,0.44,2284,0.127,0.379,down,-12.1,,-49.9
+24.218,39.2,swoosh,0.265,servo,0.003,yes,Music 0.57; Dubstep 0.03; Electronic music 0.03,whoosh,0.15,0.06,3226,0.043,0.523,down,-11.6,,-38.4
+24.346,8.2,swoosh,0.311,slash,0.046,,Music 0.59; Dubstep 0.03; Electronic music 0.03,whoosh,0.55,0.47,2166,0.155,0.338,down,-19.1,,-34.6
+24.648,11.6,swoosh,0.347,slash,0.056,,Music 0.63; Electronic music 0.02; Dubstep 0.02,whoosh,0.72,0.6,2129,0.134,0.352,down,-13.8,,-25.6
+25.008,11.2,swoosh,0.294,servo,0.054,,Music 0.65; Speech 0.01; Musical instrument 0.01,whoosh,0.72,0.7,2173,0.12,0.349,down,-13.4,,-14.8
+25.194,48.7,swoosh,0.278,servo,0.036,,Music 0.65; Speech 0.01; Musical instrument 0.01,other,0.72,0.71,1553,0.297,0.236,down,-6.9,,-9.2
+25.414,12.4,swoosh,0.256,servo,0.032,,Music 0.65; Speech 0.01; Musical instrument 0.01,other,0.52,0.49,1561,0.288,0.213,down,-6.5,fast move,-2.6
+25.623,8.6,servo,0.300,swoosh,0.010,yes,Music 0.65; Speech 0.01; Musical instrument 0.01,other,0.31,0.28,1494,0.326,0.215,down,-6.8,,3.7
+25.716,4.9,servo,0.302,swoosh,0.013,yes,Music 0.65; Speech 0.01; Musical instrument 0.01,other,0.22,0.18,1544,0.368,0.246,down,-7.0,,6.5
+25.809,19.4,swoosh,0.228,servo,0.016,yes,Music 0.65; Speech 0.01; Musical instrument 0.01,impact,0.11,0.09,1079,0.565,0.184,down,-6.9,,9.3
+26.146,6.8,swoosh,0.298,whoosh,0.005,yes,Music 0.60; Musical instrument 0.02; Speech 0.01,whoosh,0.72,0.7,2497,0.082,0.401,flat,-16.3,,19.4
+26.494,8.9,slash,0.195,whoosh,0.014,yes,Music 0.50; Speech 0.03; Musical instrument 0.02,other,0.4,0.37,2130,0.034,0.225,down,-16.0,,29.8
+26.645,5.9,whoosh,0.232,swoosh,0.021,yes,Music 0.41; Speech 0.03; Harmonica 0.02,other,0.25,0.22,2076,0.024,0.155,flat,-15.6,,34.3
+26.831,4.7,slash,0.257,tick,0.048,,Music 0.41; Speech 0.03; Harmonica 0.02,pop,0.06,0.03,2037,0.073,0.244,flat,-15.9,,39.9
+26.982,19.6,slash,0.314,tick,0.043,,Music 0.22; Speech 0.03; Singing bowl 0.01,whoosh,0.54,0.05,2493,0.183,0.45,down,-25.2,,44.4
+28.166,8.4,swoosh,0.294,whoosh,0.021,yes,Music 0.27; Thunk 0.02; Door 0.01,whoosh,0.54,0.48,2027,0.168,0.332,down,1.0,,80.0
+28.340,44.5,swoosh,0.288,whoosh,0.014,yes,Music 0.27; Thunk 0.02; Door 0.01,whoosh,0.36,0.32,2025,0.195,0.345,down,0.6,,85.2
+28.549,48.1,swoosh,0.236,whoosh,0.030,yes,Music 0.32; Thunk 0.02; Door 0.01,pop,0.15,0.11,1366,0.424,0.236,down,0.5,,-86.5
+28.735,4.7,impact,0.296,swoosh,0.038,,Music 0.42; Speech 0.07; Thunk 0.02,impact,0.25,0.0,1164,0.516,0.213,down,-17.9,,-80.9
+30.128,17.4,slash,0.356,swoosh,0.037,,"Speech 0.38; Music 0.17; Inside, small room 0.01",whoosh,0.72,0.06,3334,0.208,0.541,down,-26.1,,-39.2
+30.511,19.5,slash,0.339,swoosh,0.074,,"Music 0.23; Speech 0.21; Inside, small room 0.01",whoosh,0.72,0.71,4594,0.114,0.595,down,-16.2,,-27.7
+30.917,19.9,swoosh,0.204,whoosh,0.020,yes,"Music 0.26; Speech 0.05; Inside, small room 0.01",other,0.49,0.38,1443,0.195,0.229,down,-14.5,,-15.5
+31.300,11.4,swoosh,0.244,whoosh,0.008,yes,"Music 0.26; Speech 0.03; Inside, small room 0.01",pop,0.1,0.02,1864,0.118,0.263,flat,-14.5,,-4.0
+31.718,4.6,swoosh,0.248,servo,0.033,,"Music 0.19; Speech 0.03; Inside, small room 0.01",whoosh,0.72,0.51,2005,0.351,0.393,flat,-26.3,,8.6
+32.090,6.3,swoosh,0.256,whoosh,0.045,,"Music 0.31; Speech 0.03; Inside, small room 0.01",whoosh,0.4,0.14,1566,0.443,0.309,down,-26.0,,19.7
+32.554,4.2,servo,0.244,swoosh,0.025,yes,"Music 0.39; Speech 0.04; Inside, small room 0.00",whoosh,0.72,0.71,1492,0.397,0.274,down,-18.0,,33.6
+32.879,13.1,swoosh,0.253,whoosh,0.013,yes,Music 0.44; Speech 0.04; Thunk 0.00,whoosh,0.55,0.45,2396,0.265,0.396,down,-15.8,,43.4
+33.263,21.9,servo,0.218,swoosh,0.018,yes,Music 0.44; Speech 0.04; Single-lens reflex camera 0.00,whoosh,0.25,0.11,1912,0.409,0.33,down,-16.1,,54.9
+33.379,4.8,swoosh,0.214,servo,0.021,yes,Music 0.40; Speech 0.04; Single-lens reflex camera 0.00,other,0.2,0.01,1265,0.417,0.236,up,-18.1,,58.4
+33.657,31.3,whoosh,0.260,tick,0.001,yes,"Music 0.43; Speech 0.03; Chink, clink 0.01",whoosh,0.19,0.09,2359,0.335,0.438,down,-19.0,,66.7
+33.739,4.3,slash,0.356,swoosh,0.061,,"Music 0.43; Speech 0.03; Chink, clink 0.01",impact,0.13,0.03,1768,0.481,0.327,down,-19.1,,69.2
+33.994,8.3,swoosh,0.238,slash,0.012,yes,"Music 0.43; Speech 0.03; Chink, clink 0.01",whoosh,0.72,0.59,2441,0.197,0.425,down,-15.4,,76.8
+34.075,13.8,swoosh,0.262,whoosh,0.055,,"Music 0.43; Speech 0.03; Chink, clink 0.01",whoosh,0.64,0.51,2026,0.177,0.345,down,-15.5,,79.3
+34.180,5.6,slash,0.213,swoosh,0.004,yes,"Music 0.43; Speech 0.03; Inside, small room 0.01",whoosh,0.53,0.41,1856,0.159,0.29,flat,-14.9,,82.4
+34.447,33.4,swoosh,0.175,tick,0.043,,"Music 0.42; Speech 0.02; Inside, small room 0.01",other,0.31,0.12,1150,0.227,0.165,down,-15.6,,90.4
+34.633,6.2,swoosh,0.174,tick,0.026,yes,"Music 0.36; Speech 0.02; Inside, small room 0.01",whoosh,0.12,0.0,1991,0.286,0.31,down,-17.6,,96.0
+35.109,5.3,scratch,0.294,swoosh,0.029,yes,"Music 0.25; Speech 0.03; Inside, small room 0.01",other,0.58,0.43,1285,0.471,0.232,down,-19.3,,110.3
+35.236,4.3,scratch,0.271,swoosh,0.031,,"Music 0.25; Speech 0.03; Inside, small room 0.01",other,0.47,0.3,1363,0.408,0.236,down,-19.1,,114.1
+35.480,5.0,slash,0.237,servo,0.007,yes,"Music 0.35; Speech 0.03; Inside, small room 0.01",impact,0.23,0.06,1749,0.48,0.276,up,-19.4,,121.4
+36.061,5.3,swoosh,0.300,whoosh,0.081,,Music 0.37; Speech 0.03; Musical instrument 0.01,whoosh,0.72,0.51,3438,0.123,0.501,down,-18.2,,138.8
+36.409,21.9,swoosh,0.406,whoosh,0.153,,Music 0.37; Speech 0.03; Musical instrument 0.01,other,0.49,0.16,1652,0.264,0.246,down,-18.1,,149.3
+36.804,10.1,swoosh,0.407,pop,0.168,,Music 0.34; Speech 0.02; Musical instrument 0.01,whoosh,0.16,0.01,1848,0.216,0.279,down,-26.8,,161.1

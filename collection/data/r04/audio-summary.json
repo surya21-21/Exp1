@@ -1,0 +1,106 @@
+{
+ "reel": "r04",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 182,
+  "first_word_at": 0.0,
+  "last_word_at": 42.02,
+  "words_per_second": 4.33,
+  "pauses_over_0.25s": 3,
+  "longest_pause": 0.3,
+  "pause_time_share": 0.02,
+  "words_in_first_3s": 14,
+  "first_3s": "Claude can now post trial reels for you up to 10 times a day,"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 166.7,
+  "strength": 0.025
+ },
+ "bed_level_db_vs_voice": -22.9,
+ "onsets_labelled": 109,
+ "cuts": 17,
+ "cuts_with_sound_within_3_frames": 7,
+ "fast_moves": 5,
+ "fast_moves_with_sound_within_3_frames": 4,
+ "bed_tags": [
+  "Speech 0.03",
+  "Animal 0.02",
+  "Inside, small room 0.02",
+  "Domestic animals, pets 0.01",
+  "Dog 0.01",
+  "Heart sounds, heartbeat 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 30
+  },
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 11
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 7
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 5
+  },
+  {
+   "sound": "tick",
+   "on": "no cut or fast move",
+   "times": 4
+  },
+  {
+   "sound": "paper",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "swoosh",
+   "on": "cut",
+   "times": 2
+  },
+  {
+   "sound": "slash",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "whoosh",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "slash",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "servo",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "tick",
+   "on": "cut",
+   "times": 1
+  }
+ ]
+}

@@ -1,0 +1,86 @@
+{
+ "reel": "r10",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 116,
+  "first_word_at": 0.0,
+  "last_word_at": 36.22,
+  "words_per_second": 3.2,
+  "pauses_over_0.25s": 13,
+  "longest_pause": 0.4,
+  "pause_time_share": 0.111,
+  "words_in_first_3s": 8,
+  "first_3s": "Stop using Claude without these five MCPs. Here's"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 152.0,
+  "strength": 0.294
+ },
+ "bed_level_db_vs_voice": -23.7,
+ "onsets_labelled": 97,
+ "cuts": 0,
+ "cuts_with_sound_within_3_frames": 0,
+ "fast_moves": 4,
+ "fast_moves_with_sound_within_3_frames": 1,
+ "bed_tags": [
+  "Music 0.28",
+  "Speech 0.08",
+  "Animal 0.01",
+  "Flute 0.01",
+  "Inside, small room 0.01",
+  "Wind instrument, woodwind instrument 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 16
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 9
+  },
+  {
+   "sound": "tick",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 5
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "swoosh",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 1
+  }
+ ]
+}
