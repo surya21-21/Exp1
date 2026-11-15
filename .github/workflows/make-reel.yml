@@ -8,7 +8,12 @@ name: Make reel
 # Voice, in this order:
 #   1. reels/<name>/voiceover.mp3 if you put one there (timed with Whisper)
 #   2. ElevenLabs, if the repository secret ELEVENLABS_API_KEY is set
+#      with the channel's own voice in brand/voice/voice.json
 #   3. neither: a silent draft with estimated timing, marked BLOCKED in the checks
+#
+# Music: reels/<name>/music.mp3 or assets/music/ if present, otherwise ElevenLabs Music
+# makes an instrumental bed the length of the reel ("music" in reel.json sets the prompt,
+# "music": "none" turns it off).
 #
 # Results: an MP4 in a draft release (Releases tab), and the storyboard, a contact
 # sheet and the checks on the branch "reel-previews" under <name>/.
@@ -84,6 +89,20 @@ jobs:
             python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
           fi
 
+      - name: Music
+        if: env.MAKE == 'finished reel' && env.VOICE != 'none'
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
+          if ls assets/music/* >/dev/null 2>&1 || [ -f "reels/$REEL/music.mp3" ]; then
+            mkdir -p build/audio/music
+            if [ -f "reels/$REEL/music.mp3" ]; then cp "reels/$REEL/music.mp3" build/audio/music/; else cp "$(ls assets/music/* | head -1)" build/audio/music/; fi
+            echo "music: your own track"
+          else
+            python scripts/reel_music.py build/reel.timed.json --reel "reels/$REEL/reel.json" --out build/audio/music/bed.mp3
+          fi
+
       - name: Plan the timing
         run: python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
 
@@ -102,7 +121,7 @@ jobs:
         run: |
           python3 -c "import json; s=json.load(open('build/reel.timed.json')); json.dump({'durationInFrames': round(s['duration']*s['fps']), 'fps': s['fps']}, open('build/props.json','w'))"
           python scripts/make_sfx.py build/cues.json --props build/props.json --out build/sfx_track.wav
-          python scripts/mix_audio.py build/silent.mp4 build/final.mp4 --voice build/voiceover.mp3 --sfx build/sfx_track.wav
+          python scripts/mix_audio.py build/silent.mp4 build/final.mp4 --voice build/voiceover.mp3 --sfx build/sfx_track.wav --music-dir build/audio/music --music-volume 0.16
 
       - name: Quality checks
         if: env.MAKE == 'finished reel'
