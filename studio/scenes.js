@@ -239,7 +239,7 @@ export const SCENES = {
     const title = h('div', abs(100, 500, 860, null, `font:900 66px/1.05 ${DISPLAY};letter-spacing:-2px;color:${P.ink}`), p.title || '');
     const sub = h('div', abs(100, 500 + (p.titleLines || 1) * 72 + 8, 860, null, `font:italic 600 40px/1.2 ${SERIF};color:${P.muted}`), p.sub || '');
     const items = p.bars || [], CY = 500 + (p.titleLines || 1) * 72 + 96, c = card(100, CY, 850, 96 + items.length * 152); c.dataset.key = 'card';
-    const b = E.bars(items, { w: 770, dur: p.run || 1.5, rowH: 118, gap: 34, labelW: 236 }); b.el.style.cssText += 'position:absolute;left:112px;top:56px'; c.append(b.el);
+    const b = E.bars(items, { w: 700, dur: p.run || 1.5, rowH: 118, gap: 34, labelW: 236 }); b.el.style.cssText += 'position:absolute;left:112px;top:56px'; c.append(b.el);
     wrap.append(title, sub, c);
     const hero = Math.max(0, items.findIndex(i => i.hero));
     return {

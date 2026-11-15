@@ -136,7 +136,12 @@ jobs:
           mkdir -p "$REEL" && cp "$OUT"/* "$REEL/"
           git add "$REEL"
           git commit -qm "Previews for $REEL (run $GITHUB_RUN_NUMBER)" || echo "nothing new"
-          git push -q origin reel-previews
+          # two reels can finish at the same moment; take the other one's commit and try again
+          for i in 1 2 3 4; do
+            git push -q origin reel-previews && break
+            git pull -q --rebase origin reel-previews || true
+            sleep $((i * 3))
+          done
 
       - name: Draft release with the MP4
         if: env.MAKE == 'finished reel' && github.event_name == 'workflow_dispatch'
