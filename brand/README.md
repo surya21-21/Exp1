@@ -19,3 +19,7 @@ will be cut from it.
 ## Cursor heads
 
 `avatar/heads/` holds six simplified heads (neutral, talk, blink, wink, grin, curious), cut from `avatar/heads-sheet.png` (Seedream 5 Flash in invideo, from `avatar/avatar.png`). The engine uses them for the small cursor avatar: blinking, talking with the voice, and grinning at the outro. The full bust in `avatar/avatar.png` is unchanged.
+
+## Expression faces
+
+`avatar/expressions/` holds nine calm faces (neutral, three talking mouths, blink, wink, interested, thinking, grin), cut from the approved `avatar/expressions-subtle-sheet.png`. The engine uses them for the large avatar (hook and "Save this"): it blinks and talks with the voice. The small cursor uses `avatar/heads/`.

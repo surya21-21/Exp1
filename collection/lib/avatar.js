@@ -19,7 +19,18 @@ export function faceAt(t, speaking, forced) {
   return 'neutral';
 }
 
-export function avatar(layer, src, headsDir = null) {
+const BIG = ['neutral', 'talk-a', 'talk-o', 'talk-e', 'blink', 'wink', 'interested', 'thinking', 'grin'];
+const MOUTHS = ['talk-a', 'neutral', 'talk-e', 'talk-o', 'neutral', 'talk-a', 'talk-e'];
+
+// Face of the large avatar: calm blinks, three mouth shapes while speaking.
+export function bigFaceAt(t, speaking, forced) {
+  if (forced) return forced;
+  if ((t + 2.3) % 3.8 < 0.1) return 'blink';
+  if (speaking) return MOUTHS[Math.floor(t * 10) % MOUTHS.length];
+  return 'neutral';
+}
+
+export function avatar(layer, src, headsDir = null, exprDir = null) {
   const bust = h('img', 'position:absolute;left:0;top:0;transform-origin:0 0;filter:drop-shadow(10px 16px 16px rgba(70,52,25,.28));display:none');
   bust.src = src;
   const chip = h('div', 'position:absolute;left:0;top:0;width:200px;height:200px;border-radius:50%;overflow:hidden;background:#f6f1e6;border:8px solid #fffdf8;box-sizing:border-box;box-shadow:6px 10px 18px rgba(70,52,25,.4);transform-origin:0 0;display:none');
@@ -40,18 +51,31 @@ export function avatar(layer, src, headsDir = null) {
     chip.append(face);
   }
   const ring = h('div', 'position:absolute;left:0;top:0;width:200px;height:200px;border-radius:50%;border:7px solid var(--accent);box-sizing:border-box;transform-origin:0 0;display:none');
-  layer.append(ring, bust, chip);
+  // large avatar from the approved expression sheet (brand/avatar/expressions), one image per face
+  const big = h('div', 'position:absolute;left:0;top:0;width:500px;height:500px;transform-origin:0 0;filter:drop-shadow(10px 16px 16px rgba(70,52,25,.28));display:none');
+  const bigFaces = {};
+  if (exprDir) for (const n of BIG) { const im = h('img', 'position:absolute;inset:0;width:500px;display:none'); im.src = `${exprDir}/${n}.png`; big.append(im); bigFaces[n] = im; }
+  layer.append(ring, bust, big, chip);
   return {
-    ready: () => Promise.all([bust.decode(), face.decode(), ...Object.values(faces).map(f => f.decode())]),
+    ready: () => Promise.all([bust.decode(), face.decode(), ...Object.values(faces).map(f => f.decode()), ...Object.values(bigFaces).map(f => f.decode())]),
     // state: { bust: {x, y, w, o}, chip: {x, y, size, tilt, ring, o} }; x, y are centres. Either may be missing.
     update(state, t = 0, speaking = false) {
       const b = state && state.bust, c = state && state.chip;
-      if (b && (b.o ?? 1) > 0.01) {
+      if (b && (b.o ?? 1) > 0.01 && exprDir) {
+        bust.style.display = 'none';
+        const w = b.w * 0.92, s = w / 500;                  // the head alone, a little smaller than the bust was
+        big.style.display = 'block';
+        big.style.opacity = (b.o ?? 1).toFixed(3);
+        big.style.transform = `translate(${(b.x - w / 2).toFixed(1)}px,${(b.y - w / 2 - b.w * 0.12).toFixed(1)}px) scale(${s.toFixed(4)}) rotate(${(b.tilt || 0).toFixed(2)}deg)`;
+        const want = bigFaceAt(t, speaking, b.face);
+        for (const n of BIG) bigFaces[n].style.display = n === want ? 'block' : 'none';
+      } else if (b && (b.o ?? 1) > 0.01) {
+        big.style.display = 'none';
         const s = b.w / IMG_W;
         bust.style.display = 'block';
         bust.style.opacity = (b.o ?? 1).toFixed(3);
         bust.style.transform = `translate(${(b.x - b.w / 2).toFixed(1)}px,${(b.y - (IMG_H * s) / 2).toFixed(1)}px) scale(${s.toFixed(4)}) rotate(${(b.tilt || 0).toFixed(2)}deg)`;
-      } else bust.style.display = 'none';
+      } else { bust.style.display = 'none'; big.style.display = 'none'; }
       if (c && (c.o ?? 1) > 0.01) {
         const s = c.size / 200;
         chip.style.display = 'block';

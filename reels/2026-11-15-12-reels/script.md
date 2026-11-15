@@ -1,6 +1,6 @@
 # I made Claude study 12 viral reels, frame by frame
 
-**Status: storyboard, waiting for your approval.** Nothing is rendered in full or posted until you say so.
+**Status: approved by the owner on 15 Nov 2026.** Voice: the channel voice in `brand/voice/voice.json`, normal speed.
 
 ## Voiceover
 

@@ -51,7 +51,7 @@ export async function boot(specUrl) {
 
   const groups = spec.captions || groupWords(spec.words || []);
   const caps = captions(capLayer, groups, { accent });
-  const av = avatar(avLayer, spec.avatar || '../brand/avatar/avatar.png', spec.heads === false ? null : '../brand/avatar/heads');
+  const av = avatar(avLayer, spec.avatar || '../brand/avatar/avatar.png', spec.heads === false ? null : '../brand/avatar/heads', spec.expressions === false ? null : '../brand/avatar/expressions');
   const spoken = groups.flatMap(g => g.words);
   const speakingAt = t => spoken.some(w => t >= w.s - 0.02 && t < w.e);
   const bar = progress(scenes.length);
