@@ -43,6 +43,7 @@
 | Avatar, outro | As in `brand/` | Signature |
 | Accent | #c2381d (brick red) | 4.5 to 1 on the paper, so it can be used for text |
 | Structure | Numbered list (P03) with a number-already-running hook (H01) | Four findings, each one shown as a state change |
+| 3D hero scenes | The hook (twelve reel cards fanning open on the desk behind the frame counter) and "4 things" (index cards drop into a stack, then stand up in a grid) | Real depth for the two biggest moments; the rest stays flat and fast |
 | Transitions | Paper tear for the chapter changes, page scroll between the four points, ramp into "Save this" | One signature wipe, calm moves in between |
 | Captions | 2 to 4 words, top fifth, keyword in Lora italic on tape | Measured caption style C01, in our materials |
 | Sound | Paper tear, pencil, stamp, clicks and pops from `scripts/make_sfx.py` | Half the moves get a sound, one frame early |
