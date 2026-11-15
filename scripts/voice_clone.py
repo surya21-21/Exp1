@@ -50,9 +50,25 @@ def main():
     try:
         res = json.load(urllib.request.urlopen(req, timeout=300))
     except urllib.error.HTTPError as e:
-        sys.exit(f"ElevenLabs error {e.code}: {e.read().decode(errors='replace')[:600]}")
+        err = e.read().decode(errors='replace')
+        try:
+            match = json.loads(err)["detail"]["data"]["library_voice_match"]
+        except (ValueError, KeyError, TypeError):
+            sys.exit(f"ElevenLabs error {e.code}: {err[:600]}")
+        # the samples are a Voice Library voice: add that original voice instead of a copy
+        print(f"samples match library voice {match['library_voice_id']}; adding it to the account")
+        add = urllib.request.Request(
+            f"https://api.elevenlabs.io/v1/voices/add/{match['public_owner_id']}/{match['library_voice_id']}",
+            data=json.dumps({"new_name": args.name}).encode(), headers={"xi-api-key": key, "Content-Type": "application/json"})
+        try:
+            added = json.load(urllib.request.urlopen(add, timeout=120))
+        except urllib.error.HTTPError as e2:
+            sys.exit(f"ElevenLabs error {e2.code} adding the library voice: {e2.read().decode(errors='replace')[:600]}")
+        res = {"voice_id": added["voice_id"], "requires_verification": False, "library_voice_match": match}
+        args.method = "Voice Library voice (the samples' original)"
+
     info = {"voice_id": res["voice_id"], "name": args.name, "made": time.strftime("%Y-%m-%d"),
-            "method": "instant voice clone", "samples": len(files),
+            "method": getattr(args, "method", "instant voice clone"), "samples": len(files),
             "requires_verification": res.get("requires_verification"),
             "library_voice_match": res.get("library_voice_match"),
             "model": "eleven_multilingual_v2", "speed": 1.06}
