@@ -107,7 +107,17 @@ export async function boot(specUrl) {
     for (const c of sc.impl.cues || []) if (c.t >= -0.05 && sc.s.start + c.t < spec.duration) cues.push({ t: +(Math.max(0, sc.s.start + c.t - fr(1))).toFixed(3), sfx: c.sfx, gain: c.gain ?? 1 });
     if (sc.tr && sc.tr.sfx) cues.push({ t: +(Math.max(0, sc.s.start - fr(sc.tr.lead))).toFixed(3), sfx: sc.tr.sfx, gain: 0.9 });
   });
-  window.CUES = cues.sort((a, b) => a.t - b.t);
+  // never two effects on one frame: a quieter cue that collides moves 2 frames later, or is dropped
+  cues.sort((a, b) => a.t - b.t || b.gain - a.gain);
+  const taken = new Set(), kept = [];
+  for (const c of cues) {
+    let f = Math.round(c.t * FPS);
+    if (taken.has(f)) f += 2;
+    if (taken.has(f)) continue;
+    taken.add(f);
+    kept.push({ ...c, t: +(f / FPS).toFixed(3) });
+  }
+  window.CUES = kept.sort((a, b) => a.t - b.t);
   window.DURATION = spec.duration;
   window.FPS = spec.fps || FPS;
   window.INFO = { scenes: scenes.length, captionGroups: groups.length, wordsPerGroup: groups.map(g => g.words.length), accent, accentContrast: +contrast(accent, '#efeae0').toFixed(2), safe: SAFE,
