@@ -130,7 +130,7 @@ jobs:
           DEMO: ${{ steps.script.outputs.demo }}
           VOICE_ID: ${{ inputs.voice_id }}
           VOICEOVER: ${{ inputs.voiceover }}
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY || secrets.E }}
           ENGINE: ${{ inputs.engine }}
         run: |
           mkdir -p build
