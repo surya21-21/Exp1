@@ -1,0 +1,17 @@
+{
+ "animation_rate_while_moving_fps": 15.0,
+ "reel": "r09",
+ "duration": 83.6,
+ "frames": 2508,
+ "events": 18,
+ "small_changes": 49,
+ "small_changes_per_second": 0.59,
+ "small_change_zones": {
+  "top": 8,
+  "middle": 39,
+  "bottom": 2
+ },
+ "frames_with_no_change_share": 0.622,
+ "longest_still_seconds": 1.67,
+ "median_gap_between_changes_frames": 21.0
+}

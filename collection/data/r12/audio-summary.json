@@ -1,0 +1,106 @@
+{
+ "reel": "r12",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 251,
+  "first_word_at": 0.0,
+  "last_word_at": 68.46,
+  "words_per_second": 3.67,
+  "pauses_over_0.25s": 10,
+  "longest_pause": 0.34,
+  "pause_time_share": 0.044,
+  "words_in_first_3s": 12,
+  "first_3s": "Forget hashtag. If you want more views, you need these six settings."
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 152.0,
+  "strength": 0.271
+ },
+ "bed_level_db_vs_voice": -5.1,
+ "onsets_labelled": 200,
+ "cuts": 2,
+ "cuts_with_sound_within_3_frames": 0,
+ "fast_moves": 9,
+ "fast_moves_with_sound_within_3_frames": 3,
+ "bed_tags": [
+  "Music 0.46",
+  "Speech 0.02",
+  "Inside, small room 0.01",
+  "Crack 0.01",
+  "Thunk 0.01",
+  "Single-lens reflex camera 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 25
+  },
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 24
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 16
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 11
+  },
+  {
+   "sound": "tick",
+   "on": "no cut or fast move",
+   "times": 7
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "shutter",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "stamp",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "whoosh",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "pop",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "glitch",
+   "on": "no cut or fast move",
+   "times": 1
+  }
+ ]
+}

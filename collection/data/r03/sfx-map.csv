@@ -1,0 +1,97 @@
+time,strength,label,score,second,margin,unsure,panns_top3,shape_guess,dur,attack,centroid_hz,low_share,noisiness,sweep,db_vs_voice,visual_event,frames_from_event
+0.081,5.0,paper,0.219,scratch,0.027,yes,Music 0.27; Speech 0.01; Throbbing 0.00,other,0.72,0.29,585,0.758,0.102,down,-1.0,,-82.6
+2.914,4.6,whoosh,0.383,swoosh,0.110,,Music 0.49; Throbbing 0.07; Electronic music 0.06,whoosh,0.69,0.2,1834,0.235,0.334,down,-3.8,fast move,2.4
+3.379,4.6,whoosh,0.274,swoosh,0.012,yes,"Music 0.29; Speech 0.01; Whoosh, swoosh, swish 0.01",other,0.72,0.17,1084,0.515,0.202,down,-9.5,,4.4
+3.901,4.9,slash,0.417,swoosh,0.127,,Music 0.28; Shatter 0.01; Speech 0.01,riser,0.72,0.65,1957,0.409,0.387,up,-10.5,,20.0
+4.505,4.8,whoosh,0.348,scratch,0.053,,Music 0.23; Shatter 0.01; Scrape 0.01,whoosh,0.72,0.58,3935,0.349,0.438,flat,3.4,,38.2
+4.632,5.5,whoosh,0.450,scratch,0.079,,Music 0.15; Shatter 0.01; Scrape 0.01,whoosh,0.72,0.66,3674,0.298,0.504,flat,8.1,,42.0
+5.016,5.5,whoosh,0.416,swoosh,0.110,,"Music 0.22; Shatter 0.01; Whoosh, swoosh, swish 0.01",whoosh,0.72,0.48,3066,0.235,0.564,down,10.0,,53.5
+5.097,5.2,whoosh,0.355,swoosh,0.074,,"Music 0.33; Shatter 0.01; Whoosh, swoosh, swish 0.01",whoosh,0.72,0.45,2813,0.286,0.517,down,10.1,,55.9
+5.584,8.2,impact,0.282,whoosh,0.053,,Music 0.46; Shatter 0.01; Mechanisms 0.01,riser,0.72,0.15,2701,0.245,0.488,up,7.5,,-66.5
+5.782,11.7,whoosh,0.323,impact,0.055,,Music 0.50; Scratch 0.02; Electronic music 0.02,riser,0.72,0.54,3218,0.179,0.536,up,6.1,,-60.5
+5.933,9.1,whoosh,0.270,swoosh,0.023,yes,Music 0.50; Scratch 0.02; Electronic music 0.02,whoosh,0.72,0.39,2925,0.17,0.526,flat,6.7,,-56.0
+6.095,8.8,whoosh,0.259,stamp,0.025,yes,Music 0.53; Scratch 0.07; Electronic music 0.05,whoosh,0.72,0.23,2840,0.193,0.536,down,7.4,,-51.1
+6.177,4.5,glitch,0.332,whoosh,0.050,,Music 0.53; Scratch 0.07; Electronic music 0.05,whoosh,0.72,0.39,2702,0.204,0.515,flat,7.3,,-48.7
+6.269,5.2,glitch,0.299,whoosh,0.047,,Music 0.53; Scratch 0.07; Electronic music 0.05,whoosh,0.72,0.29,2556,0.2,0.492,flat,6.3,,-45.9
+6.502,4.5,whoosh,0.270,glitch,0.076,,Music 0.53; Scratch 0.12; Electronic music 0.07,riser,0.72,0.04,2568,0.154,0.479,up,6.6,,-39.0
+6.606,4.4,whoosh,0.254,impact,0.019,yes,Music 0.53; Scratch 0.12; Electronic music 0.07,whoosh,0.72,0.32,2945,0.133,0.533,flat,5.2,,-35.8
+7.210,6.1,impact,0.350,whoosh,0.144,,Music 0.48; Scratch 0.12; Scratching (performance technique) 0.07,whoosh,0.72,0.22,2491,0.259,0.493,down,6.7,,-17.7
+7.291,4.4,impact,0.289,paper,0.105,,Music 0.48; Scratch 0.12; Shatter 0.10,whoosh,0.72,0.67,2292,0.273,0.459,flat,7.7,,-15.3
+7.384,7.4,impact,0.288,whoosh,0.062,,Music 0.48; Scratch 0.12; Shatter 0.10,riser,0.72,0.57,2098,0.281,0.414,up,9.0,,-12.5
+7.558,6.2,impact,0.376,whoosh,0.098,,"Music 0.41; Shatter 0.10; Inside, large room or hall 0.03",whoosh,0.72,0.57,2250,0.342,0.442,flat,9.1,,-7.3
+7.895,6.9,impact,0.441,whoosh,0.118,,"Music 0.27; Shatter 0.22; Inside, large room or hall 0.04",impact,0.42,0.24,2300,0.47,0.421,down,9.8,fast move,2.8
+8.069,6.2,impact,0.409,whoosh,0.211,,"Music 0.25; Shatter 0.22; Inside, large room or hall 0.04",impact,0.25,0.06,2201,0.542,0.368,down,9.8,,8.1
+8.162,4.7,impact,0.399,stamp,0.116,,"Music 0.25; Shatter 0.22; Inside, large room or hall 0.04",impact,0.16,0.01,2317,0.534,0.374,down,8.3,,10.9
+8.278,6.0,impact,0.347,whoosh,0.187,,"Music 0.29; Shatter 0.22; Inside, large room or hall 0.04",pop,0.05,0.0,1870,0.613,0.31,down,4.6,,14.3
+8.452,6.3,whoosh,0.259,impact,0.035,,"Music 0.29; Shatter 0.19; Inside, large room or hall 0.02",impact,0.1,0.03,1032,0.743,0.183,flat,-2.8,,19.6
+8.661,5.0,whoosh,0.218,scratch,0.024,yes,"Music 0.37; Shatter 0.19; Inside, large room or hall 0.02",other,0.72,0.71,1248,0.562,0.234,up,-3.7,,25.8
+8.789,4.1,servo,0.256,scratch,0.026,yes,"Music 0.37; Shatter 0.09; Inside, large room or hall 0.01",whoosh,0.72,0.69,2068,0.476,0.279,flat,-2.5,,-23.3
+9.044,5.2,whoosh,0.314,riser,0.037,,Music 0.37; Shatter 0.02; Speech 0.01,riser,0.72,0.68,2925,0.274,0.4,up,7.4,,-15.7
+9.532,6.4,whoosh,0.337,glitch,0.068,,Music 0.36; Speech 0.02; Shatter 0.01,whoosh,0.28,0.23,2548,0.22,0.409,flat,7.6,fast move,-1.1
+9.683,9.7,scratch,0.315,glitch,0.037,,Music 0.33; Speech 0.02; Shatter 0.01,whoosh,0.13,0.04,2757,0.208,0.423,flat,7.4,,3.5
+11.169,8.0,whoosh,0.336,impact,0.049,,"Music 0.27; Smash, crash 0.07; Boom 0.02",whoosh,0.72,0.71,1994,0.293,0.399,down,8.9,cut,-0.9
+11.633,8.5,scratch,0.367,impact,0.086,,"Music 0.20; Smash, crash 0.08; Whack, thwack 0.02",whoosh,0.72,0.12,1649,0.375,0.309,down,9.5,cut,-1.0
+11.807,5.1,impact,0.305,glitch,0.042,,"Music 0.24; Smash, crash 0.08; Whoosh, swoosh, swish 0.03",whoosh,0.72,0.07,1823,0.297,0.348,flat,8.9,,4.2
+11.970,4.4,whoosh,0.258,scratch,0.032,,"Music 0.24; Smash, crash 0.08; Whoosh, swoosh, swish 0.03",riser,0.72,0.68,1811,0.356,0.354,up,10.2,,9.1
+12.283,4.0,glitch,0.284,whoosh,0.026,yes,"Music 0.29; Smash, crash 0.06; Whoosh, swoosh, swish 0.03",whoosh,0.72,0.42,3131,0.231,0.583,down,11.4,,-7.5
+12.469,8.5,whoosh,0.405,glitch,0.208,,"Music 0.39; Smash, crash 0.06; Whoosh, swoosh, swish 0.03",whoosh,0.57,0.24,2935,0.277,0.545,down,10.5,fast move,-1.9
+12.957,5.8,impact,0.272,whoosh,0.061,,"Music 0.42; Smash, crash 0.03; Shatter 0.02",riser,0.72,0.47,1446,0.536,0.271,up,9.2,,-6.3
+13.119,7.8,scratch,0.320,impact,0.048,,"Music 0.42; Shatter 0.18; Smash, crash 0.03",riser,0.59,0.3,1699,0.453,0.32,up,8.8,cut,-1.4
+13.282,8.7,impact,0.280,scratch,0.003,yes,"Music 0.42; Shatter 0.18; Smash, crash 0.03",impact,0.18,0.14,1139,0.539,0.209,down,9.7,,3.4
+13.444,6.0,whoosh,0.275,impact,0.046,,Music 0.42; Shatter 0.34; Breaking 0.03,whoosh,0.25,0.0,2086,0.312,0.345,flat,9.0,,-7.7
+13.584,10.2,impact,0.331,whoosh,0.074,,Music 0.40; Shatter 0.34; Breaking 0.03,whoosh,0.72,0.2,2103,0.267,0.416,flat,7.6,,-3.5
+13.769,10.5,impact,0.358,whoosh,0.117,,Music 0.40; Shatter 0.34; Breaking 0.04,whoosh,0.72,0.01,2040,0.301,0.409,down,7.7,fast move,2.1
+13.909,4.7,impact,0.308,whoosh,0.056,,Shatter 0.34; Music 0.28; Breaking 0.04,whoosh,0.61,0.53,2049,0.333,0.411,down,6.7,,6.3
+14.187,4.7,impact,0.392,stamp,0.095,,Shatter 0.34; Music 0.29; Breaking 0.04,impact,0.33,0.25,1966,0.452,0.367,down,6.9,fast move,0.6
+14.315,8.8,impact,0.361,stamp,0.005,yes,Shatter 0.34; Music 0.29; Breaking 0.04,impact,0.2,0.12,1782,0.574,0.288,down,6.9,,4.4
+14.420,7.7,whoosh,0.254,impact,0.006,yes,Shatter 0.34; Music 0.33; Breaking 0.04,impact,0.1,0.01,2300,0.539,0.33,down,6.4,,7.6
+14.733,6.0,whoosh,0.359,scratch,0.055,,"Music 0.33; Shatter 0.24; Inside, large room or hall 0.03",other,0.22,0.17,1216,0.411,0.226,down,-4.7,,-14.0
+15.348,5.2,whoosh,0.283,swoosh,0.085,,"Music 0.27; Animal 0.05; Domestic animals, pets 0.03",other,0.27,0.07,1227,0.357,0.193,down,-6.7,,4.5
+15.592,4.1,whoosh,0.199,scratch,0.067,,"Music 0.06; Animal 0.05; Domestic animals, pets 0.03",whoosh,0.18,0.04,1899,0.416,0.341,up,-7.4,,11.8
+15.662,4.5,servo,0.184,whoosh,0.012,yes,"Music 0.08; Animal 0.05; Domestic animals, pets 0.03",whoosh,0.72,0.67,2251,0.359,0.365,down,-5.7,,13.9
+15.778,4.2,whoosh,0.245,swoosh,0.034,,"Music 0.08; Animal 0.05; Domestic animals, pets 0.03",whoosh,0.68,0.57,2008,0.437,0.314,down,-6.0,,17.3
+16.544,5.9,whoosh,0.350,swoosh,0.034,,Music 0.51; Electronic music 0.06; Dubstep 0.03,impact,0.49,0.46,1257,0.454,0.212,down,6.0,,40.3
+16.707,5.0,whoosh,0.410,swoosh,0.054,,Music 0.53; Electronic music 0.08; Dubstep 0.05,whoosh,0.72,0.71,1413,0.401,0.257,down,6.3,,45.2
+16.869,18.4,whoosh,0.390,swoosh,0.136,,Music 0.53; Electronic music 0.08; Dubstep 0.05,riser,0.72,0.55,1959,0.313,0.37,up,6.8,,50.1
+17.032,12.8,whoosh,0.454,impact,0.102,,Music 0.53; Electronic music 0.08; Dubstep 0.05,whoosh,0.72,0.39,2399,0.282,0.442,flat,5.6,,55.0
+17.194,12.1,whoosh,0.476,impact,0.127,,Music 0.53; Electronic music 0.08; Dubstep 0.05,whoosh,0.72,0.22,2884,0.226,0.517,down,6.2,,59.8
+17.682,8.8,whoosh,0.257,impact,0.003,yes,Music 0.56; Electronic music 0.03; Dubstep 0.01,whoosh,0.72,0.71,2278,0.217,0.444,flat,3.8,,-61.5
+17.845,9.9,impact,0.291,glitch,0.056,,Music 0.61; Electronic music 0.03; Dubstep 0.01,whoosh,0.72,0.7,3002,0.169,0.57,flat,3.8,,-56.7
+17.926,11.9,impact,0.261,glitch,0.005,yes,Music 0.61; Electronic music 0.03; Dubstep 0.01,riser,0.72,0.62,3186,0.193,0.575,up,3.4,,-54.2
+18.007,5.3,glitch,0.276,whoosh,0.054,,Music 0.61; Electronic music 0.01; Scratching (performance technique) 0.01,whoosh,0.72,0.65,3246,0.223,0.552,flat,4.8,,-51.8
+18.077,10.0,glitch,0.322,whoosh,0.080,,Music 0.61; Electronic music 0.01; Scratching (performance technique) 0.01,whoosh,0.72,0.58,3207,0.244,0.516,down,4.8,,-49.7
+18.170,5.4,glitch,0.317,whoosh,0.107,,Music 0.66; Scratching (performance technique) 0.02; Electronic music 0.01,whoosh,0.72,0.49,3050,0.251,0.479,down,5.4,,-46.9
+18.274,4.2,glitch,0.296,whoosh,0.076,,Music 0.66; Scratching (performance technique) 0.02; Electronic music 0.01,whoosh,0.72,0.65,2883,0.25,0.458,down,5.6,,-43.8
+18.448,11.5,glitch,0.310,stamp,0.098,,Music 0.66; Scratching (performance technique) 0.02; Electronic music 0.01,whoosh,0.72,0.47,2511,0.311,0.451,down,5.5,,-38.5
+18.541,10.0,glitch,0.270,whoosh,0.002,yes,Music 0.66; Scratching (performance technique) 0.03; Drip 0.01,whoosh,0.72,0.38,2361,0.296,0.434,down,5.7,,-35.8
+18.669,8.9,whoosh,0.248,swoosh,0.018,yes,Music 0.66; Scratching (performance technique) 0.03; Drip 0.01,whoosh,0.72,0.25,2100,0.242,0.382,flat,5.8,,-31.9
+18.820,5.3,pop,0.270,swoosh,0.038,,Music 0.66; Scratching (performance technique) 0.03; Drip 0.01,whoosh,0.72,0.1,1893,0.197,0.355,down,5.8,,-27.4
+19.203,7.2,pop,0.299,swoosh,0.035,,Music 0.64; Scratching (performance technique) 0.03; Shatter 0.02,whoosh,0.72,0.6,1882,0.303,0.316,down,6.5,,-15.9
+19.284,11.1,swoosh,0.274,whoosh,0.091,,Music 0.61; Shatter 0.02; Speech 0.02,whoosh,0.63,0.52,1944,0.3,0.334,flat,6.6,,-13.5
+19.470,7.3,whoosh,0.180,glitch,0.015,yes,Music 0.61; Mechanisms 0.03; Shatter 0.03,whoosh,0.72,0.62,2082,0.326,0.397,down,6.1,,-7.9
+19.644,7.1,whoosh,0.255,impact,0.038,,Music 0.48; Mechanisms 0.03; Shatter 0.03,whoosh,0.72,0.55,1735,0.422,0.335,down,7.0,fast move,-2.7
+19.807,5.8,whoosh,0.280,impact,0.029,yes,Music 0.48; Shatter 0.04; Fusillade 0.04,whoosh,0.72,0.65,1679,0.404,0.332,flat,8.2,fast move,2.2
+19.911,11.7,whoosh,0.274,impact,0.010,yes,Music 0.38; Shatter 0.04; Fusillade 0.04,riser,0.72,0.47,2040,0.356,0.392,up,8.6,,5.3
+20.050,9.1,whoosh,0.257,impact,0.012,yes,Music 0.38; Shatter 0.04; Fusillade 0.04,riser,0.72,0.33,2447,0.339,0.447,up,8.5,,-4.5
+20.132,6.0,whoosh,0.278,scratch,0.050,,Music 0.38; Shatter 0.08; Fusillade 0.06,riser,0.71,0.25,2775,0.307,0.49,up,8.7,cut,-2.0
+20.201,8.5,whoosh,0.279,servo,0.081,,Music 0.38; Shatter 0.08; Fusillade 0.06,riser,0.72,0.18,3067,0.252,0.539,up,8.6,cut,0.0
+20.294,8.2,whoosh,0.317,glitch,0.095,,Music 0.24; Shatter 0.08; Fusillade 0.06,whoosh,0.67,0.16,3265,0.204,0.575,flat,8.2,cut,2.8
+20.376,5.2,whoosh,0.314,impact,0.053,,Music 0.24; Shatter 0.08; Fusillade 0.06,whoosh,0.59,0.08,3326,0.186,0.585,flat,8.2,,5.3
+20.561,5.0,whoosh,0.387,impact,0.119,,Music 0.12; Shatter 0.12; Fusillade 0.06,whoosh,0.39,0.09,3344,0.183,0.598,flat,7.3,,-5.2
+20.828,4.7,impact,0.324,shatter,0.085,,Music 0.12; Shatter 0.12; Fusillade 0.06,whoosh,0.3,0.02,3085,0.303,0.512,down,2.4,cut,2.9
+21.827,6.8,impact,0.242,scratch,0.019,yes,"Music 0.07; Shatter 0.06; Inside, large room or hall 0.01",impact,0.3,0.17,1288,0.645,0.228,down,-5.4,,-24.2
+21.966,5.0,whoosh,0.255,scratch,0.019,yes,"Music 0.07; Shatter 0.06; Inside, large room or hall 0.01",impact,0.16,0.03,1124,0.59,0.216,down,-5.0,,-20.0
+22.430,8.2,whoosh,0.331,impact,0.099,,Shatter 0.14; Music 0.07; Mechanisms 0.04,whoosh,0.72,0.17,1995,0.454,0.325,down,-7.4,,-6.1
+23.348,7.0,whoosh,0.214,impact,0.003,yes,"Shatter 0.15; Music 0.10; Inside, large room or hall 0.03",whoosh,0.72,0.46,1847,0.451,0.359,down,-2.9,,-15.6
+24.102,7.2,slash,0.284,swoosh,0.005,yes,"Music 0.22; Shatter 0.13; Inside, large room or hall 0.03",whoosh,0.72,0.71,2561,0.471,0.394,down,5.1,,7.1
+24.276,10.6,whoosh,0.379,swoosh,0.001,yes,Music 0.22; Animal 0.13; Shatter 0.13,whoosh,0.72,0.64,2517,0.401,0.43,flat,4.3,,12.3
+24.439,10.0,whoosh,0.388,swoosh,0.029,yes,"Music 0.22; Animal 0.13; Domestic animals, pets 0.07",whoosh,0.68,0.5,2161,0.389,0.373,down,5.3,,17.2
+24.590,15.1,impact,0.338,whoosh,0.065,,"Animal 0.22; Music 0.22; Domestic animals, pets 0.08",whoosh,0.53,0.35,2076,0.376,0.348,down,5.5,,-14.3
+24.764,11.2,whoosh,0.365,impact,0.016,yes,"Animal 0.22; Music 0.16; Domestic animals, pets 0.08",whoosh,0.32,0.18,2012,0.369,0.295,down,5.1,,-9.1
+24.927,9.4,whoosh,0.387,swoosh,0.195,,"Animal 0.22; Music 0.17; Domestic animals, pets 0.08",other,0.19,0.01,1788,0.419,0.21,down,4.9,,-4.2
+25.031,5.7,whoosh,0.323,swoosh,0.117,,"Animal 0.22; Music 0.17; Domestic animals, pets 0.08",other,0.72,0.0,1060,0.578,0.202,down,0.1,fast move,-1.1
+26.389,11.0,slash,0.196,scratch,0.028,yes,Music 0.41; Speech 0.01; Shatter 0.00,whoosh,0.72,0.55,1508,0.568,0.271,down,-2.0,,39.7
+26.552,7.9,impact,0.220,swoosh,0.018,yes,Music 0.41; Shatter 0.02; Speech 0.01,other,0.72,0.42,997,0.642,0.188,down,-1.9,,44.6
+26.715,8.0,impact,0.260,swoosh,0.005,yes,Music 0.40; Shatter 0.02; Speech 0.01,other,0.72,0.25,864,0.706,0.151,down,-1.5,,49.4
+27.202,5.7,swoosh,0.227,impact,0.007,yes,Music 0.29; Shatter 0.12; Glass 0.09,impact,0.34,0.27,552,0.795,0.093,down,-1.4,,64.1
+27.620,6.6,whoosh,0.386,swoosh,0.080,,"Shatter 0.13; Glass 0.09; Chink, clink 0.05",impact,0.3,0.0,2068,0.603,0.29,flat,-4.2,,76.6

@@ -1,0 +1,96 @@
+{
+ "reel": "r08",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 130,
+  "first_word_at": 0.0,
+  "last_word_at": 42.2,
+  "words_per_second": 3.08,
+  "pauses_over_0.25s": 16,
+  "longest_pause": 0.54,
+  "pause_time_share": 0.147,
+  "words_in_first_3s": 10,
+  "first_3s": "you can now build an entire YouTube channel without paying"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 92.3,
+  "strength": 0.087
+ },
+ "bed_level_db_vs_voice": -5.8,
+ "onsets_labelled": 115,
+ "cuts": 1,
+ "cuts_with_sound_within_3_frames": 1,
+ "fast_moves": 17,
+ "fast_moves_with_sound_within_3_frames": 6,
+ "bed_tags": [
+  "Music 0.51",
+  "Ding 0.05",
+  "Speech 0.03",
+  "Clang 0.02",
+  "Jingle, tinkle 0.01",
+  "Ding-dong 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 28
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 12
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 9
+  },
+  {
+   "sound": "glitch",
+   "on": "no cut or fast move",
+   "times": 9
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "glitch",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "coin",
+   "on": "fast move",
+   "times": 1
+  },
+  {
+   "sound": "swoosh",
+   "on": "fast move",
+   "times": 1
+  }
+ ]
+}

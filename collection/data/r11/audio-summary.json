@@ -1,0 +1,91 @@
+{
+ "reel": "r11",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 103,
+  "first_word_at": 0.0,
+  "last_word_at": 28.86,
+  "words_per_second": 3.57,
+  "pauses_over_0.25s": 11,
+  "longest_pause": 0.42,
+  "pause_time_share": 0.12,
+  "words_in_first_3s": 11,
+  "first_3s": "I turned Claude into my personal video editor, and honestly, I"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 76.0,
+  "strength": 0.156
+ },
+ "bed_level_db_vs_voice": -5.3,
+ "onsets_labelled": 115,
+ "cuts": 2,
+ "cuts_with_sound_within_3_frames": 1,
+ "fast_moves": 8,
+ "fast_moves_with_sound_within_3_frames": 3,
+ "bed_tags": [
+  "Music 0.34",
+  "Speech 0.02",
+  "Crack 0.01",
+  "Thunk 0.01",
+  "Whack, thwack 0.01",
+  "Inside, small room 0.00"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 40
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 5
+  },
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 4
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "whoosh",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "tick",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "stamp",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "glitch",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "chime",
+   "on": "no cut or fast move",
+   "times": 1
+  }
+ ]
+}

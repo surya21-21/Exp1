@@ -1,0 +1,96 @@
+{
+ "reel": "r02",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 124,
+  "first_word_at": 0.0,
+  "last_word_at": 42.44,
+  "words_per_second": 2.92,
+  "pauses_over_0.25s": 19,
+  "longest_pause": 0.7,
+  "pause_time_share": 0.217,
+  "words_in_first_3s": 10,
+  "first_3s": "This is a branding rule every entrepreneur needs to know."
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 161.5,
+  "strength": 0.093
+ },
+ "bed_level_db_vs_voice": -5.4,
+ "onsets_labelled": 96,
+ "cuts": 19,
+ "cuts_with_sound_within_3_frames": 10,
+ "fast_moves": 12,
+ "fast_moves_with_sound_within_3_frames": 7,
+ "bed_tags": [
+  "Music 0.46",
+  "Musical instrument 0.05",
+  "Marimba, xylophone 0.03",
+  "Vibraphone 0.03",
+  "Mallet percussion 0.02",
+  "Glockenspiel 0.02"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 15
+  },
+  {
+   "sound": "chime",
+   "on": "no cut or fast move",
+   "times": 5
+  },
+  {
+   "sound": "swoosh",
+   "on": "cut",
+   "times": 4
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "chime",
+   "on": "fast move",
+   "times": 2
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 2
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "whoosh",
+   "on": "cut",
+   "times": 1
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "fast move",
+   "times": 1
+  }
+ ]
+}

@@ -1,0 +1,91 @@
+{
+ "reel": "r06",
+ "separated": true,
+ "notes": [
+  "Onsets found on the music-and-effects stem (voice removed).",
+  "LAION-CLAP ran.",
+  "PANNs ran."
+ ],
+ "speech": {
+  "words": 235,
+  "first_word_at": 0.0,
+  "last_word_at": 55.3,
+  "words_per_second": 4.25,
+  "pauses_over_0.25s": 2,
+  "longest_pause": 0.32,
+  "pause_time_share": 0.011,
+  "words_in_first_3s": 11,
+  "first_3s": "The fastest way to hit $1 million ARR as a one"
+ },
+ "language": "en",
+ "tempo": {
+  "bpm": 123.0,
+  "strength": 0.068
+ },
+ "bed_level_db_vs_voice": -21.1,
+ "onsets_labelled": 157,
+ "cuts": 18,
+ "cuts_with_sound_within_3_frames": 9,
+ "fast_moves": 0,
+ "fast_moves_with_sound_within_3_frames": 0,
+ "bed_tags": [
+  "Music 0.36",
+  "Speech 0.02",
+  "Squish 0.01",
+  "Animal 0.01",
+  "Inside, small room 0.01",
+  "Drip 0.01"
+ ],
+ "sound_on_event": [
+  {
+   "sound": "swoosh",
+   "on": "no cut or fast move",
+   "times": 41
+  },
+  {
+   "sound": "slash",
+   "on": "no cut or fast move",
+   "times": 18
+  },
+  {
+   "sound": "scratch",
+   "on": "no cut or fast move",
+   "times": 8
+  },
+  {
+   "sound": "servo",
+   "on": "no cut or fast move",
+   "times": 6
+  },
+  {
+   "sound": "swoosh",
+   "on": "cut",
+   "times": 5
+  },
+  {
+   "sound": "whoosh",
+   "on": "no cut or fast move",
+   "times": 3
+  },
+  {
+   "sound": "paper",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "coin",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "impact",
+   "on": "no cut or fast move",
+   "times": 1
+  },
+  {
+   "sound": "scratch",
+   "on": "cut",
+   "times": 1
+  }
+ ]
+}

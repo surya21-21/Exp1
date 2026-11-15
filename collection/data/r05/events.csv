@@ -1,0 +1,15 @@
+reel,n,t0,t1,frames,kind,has_cut,peak_diff,changed_area,shift_x_pct,shift_y_pct,zoom,rotation_deg,speed_curve,flash,blur,bg_before,bg_after,bg_flip,lead_frames,settle_frames,profile_x1000,sound_onset_frames_from_peak,t_peak
+r05,0,5.2,5.6,12,"cut, then settle",1,0.463,0.66,0.4,0.9,1.034,-0.2,ease-in,,0,#eeeeef,#2d2d30,light to dark,0,11,463 8 21 46 31 27 24 31 37 39 44 48,-1.0,5.2
+r05,1,7.933,8.067,4,"cut, then settle",1,0.7328,0.997,0.0,0.0,1.0,0,,,1,#2d2d30,#f0f0f0,dark to light,0,3,733 34 24 16,-0.1,7.933
+r05,2,9.267,9.433,5,"lead-in, cut, settle",1,0.7302,0.995,0.0,0.0,1.0,0,,,1,#efeff0,#2d2d30,light to dark,2,2,27 18 730 23 19,0.0,9.333
+r05,3,11.233,11.467,7,"lead-in, cut, settle",1,0.7212,0.992,0.2,-0.2,0.998,-0.2,,,1,#2d2d30,#f0f0f0,dark to light,2,4,23 17 721 46 29 25 17,-5.0,11.3
+r05,4,12.767,12.967,6,"lead-in, cut, settle",1,0.7315,0.997,0.0,-0.1,1.004,0.0,,,1,#f0f0f0,#2d2d30,light to dark,2,3,21 20 731 27 20 17,-0.8,12.833
+r05,5,15.667,15.9,7,"lead-in, cut, settle",1,0.7142,0.994,0.0,-0.3,0.99,-0.1,,,0,#2d2d30,#efeff0,dark to light,2,4,28 22 714 48 34 34 18,3.4,15.733
+r05,6,19.433,19.833,12,"cut, then settle (small camera move)",1,0.3729,0.579,0.1,0.7,1.048,0.0,even,,0,#efeff0,#2d2d30,light to dark,0,11,373 4 17 46 29 24 24 27 33 38 45 51,-2.1,19.433
+r05,7,22.167,22.4,7,"lead-in, cut, settle",1,0.7292,0.995,0.1,-0.6,0.99,-0.3,,dip to dark,1,#2d2d30,#efefef,dark to light,2,4,99 103 729 32 20 15 16,0.4,22.233
+r05,8,24.933,25.2,8,"lead-in, cut, settle",1,0.739,0.998,-0.3,0.3,1.003,0.2,even,dip to dark,0,#efefef,#2d2d30,light to dark,2,5,25 32 739 33 50 63 31 17,-0.8,25.0
+r05,9,26.167,26.433,8,pull-out,0,0.0722,0.228,-7.4,3.4,0.884,2.2,ease-in,,0,#2d2d30,#2d2d30,,2,5,38 66 72 70 48 38 27 20,3.3,26.233
+r05,10,28.733,29.033,9,"lead-in, cut, settle",1,0.7138,0.983,0.0,0.0,1.0,0,,white flash,0,#2d2d30,#efefef,dark to light,2,6,16 19 714 61 73 51 57 32 23,5.4,28.8
+r05,11,29.833,30.367,16,"lead-in, cut, settle",1,0.2897,0.516,0.7,1.6,1.046,-0.3,ease-in,,1,#efefef,#2e2f3c,light to dark,9,6,20 31 45 55 61 59 54 46 2 290 16 23 48 42 45 47,0.9,30.133
+r05,12,30.367,30.633,8,small camera move,0,0.08,0.242,-0.4,0.0,0.998,0.4,ease-in,,0,#2e333f,#2d2d30,,5,2,53 54 66 68 66 80 36 20,-0.7,30.533
+r05,13,37.833,38.233,12,"lead-in, cut, settle (small camera move)",1,0.7211,0.988,-0.6,-1.9,0.967,-0.3,even,,1,#2d2d30,#f0f0f0,dark to light,2,9,35 44 721 26 22 22 25 26 23 20 19 16,-0.5,37.9

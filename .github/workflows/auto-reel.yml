@@ -1,0 +1,87 @@
+name: Auto reel (topic to storyboard)
+
+# One click from a topic: Claude writes the script and the reel file with the
+# reel-director skill, then the Make reel workflow renders the storyboard stills.
+# You approve, then run Make reel with "finished reel".
+#
+# NEEDS the repository secret CLAUDE_CODE_OAUTH_TOKEN (made with `claude setup-token`
+# on a computer where Claude Code is signed in to your subscription).
+# NOT YET TESTED: the secret has not been added, so this workflow has never run.
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "What the reel is about (one or two sentences)"
+        required: true
+      facts:
+        description: "True facts about you that it may use (optional)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  actions: write
+  id-token: write
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stop early if the secret is missing
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::BLOCKED: add the repository secret CLAUDE_CODE_OAUTH_TOKEN first (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - name: Name the reel folder
+        id: name
+        env:
+          TOPIC: ${{ inputs.topic }}
+        run: |
+          SLUG=$(printf '%s' "$TOPIC" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-//; s/-$//' | cut -c1-40)
+          echo "reel=$(date -u +%F)-$SLUG" >> "$GITHUB_OUTPUT"
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --max-turns 80
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Bash(python3:*),Bash(ls:*),Bash(git status:*)"
+          prompt: |
+            Follow the skill in .claude/skills/reel-director/SKILL.md. Work through Stages 0 to 5 only.
+
+            Topic: ${{ inputs.topic }}
+            True facts about the channel owner you may use: ${{ inputs.facts }}
+
+            Write two files and nothing else:
+            - reels/${{ steps.name.outputs.reel }}/reel.json in the format described in reels/README.md
+              (use only the scene types and transitions listed there; the last scene is "cta").
+            - reels/${{ steps.name.outputs.reel }}/script.md with the voiceover, a fact table (every number
+              with a named source and today's date), a "for you to confirm" list of every "I" statement,
+              the look card and the hooks you considered.
+
+            Read brand/brand-sheet.md and collection/README.md first. Take the structure, pace and hook
+            kind from collection/recipes/ and name the IDs you used. Do not invent facts or personal
+            stories: anything you could not source goes in the "for you to confirm" list.
+            Check your reel.json by running: python3 scripts/plan_reel.py reels/${{ steps.name.outputs.reel }}/reel.json --out /tmp/plan.json
+
+      - name: Save the reel files and ask for the storyboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REEL: ${{ steps.name.outputs.reel }}
+        run: |
+          test -f "reels/$REEL/reel.json" || { echo "::error::Claude did not write reels/$REEL/reel.json"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "reels/$REEL"
+          git commit -m "Reel draft: $REEL (script and storyboard file, waiting for approval)"
+          git push
+          gh workflow run make-reel.yml -f reel="$REEL" -f make="storyboard stills only"
+          echo "Script and reel file saved in reels/$REEL. Storyboard stills are being rendered by Make reel; see the reel-previews branch." >> "$GITHUB_STEP_SUMMARY"

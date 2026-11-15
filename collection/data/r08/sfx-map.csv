@@ -1,0 +1,116 @@
+time,strength,label,score,second,margin,unsure,panns_top3,shape_guess,dur,attack,centroid_hz,low_share,noisiness,sweep,db_vs_voice,visual_event,frames_from_event
+0.302,5.0,scratch,0.260,swoosh,0.005,yes,Music 0.49; Electronic music 0.03; Speech 0.01,other,0.26,0.02,1291,0.25,0.057,up,1.4,,-71.9
+2.519,6.4,swoosh,0.395,whoosh,0.136,,Music 0.58; Speech 0.07; Music for children 0.02,whoosh,0.39,0.21,4029,0.158,0.673,down,3.2,,-5.4
+2.926,4.4,swoosh,0.319,whoosh,0.073,,Music 0.58; Speech 0.12; Music for children 0.04,whoosh,0.72,0.71,2877,0.03,0.405,down,0.0,,6.8
+3.274,15.7,whoosh,0.316,swoosh,0.007,yes,Music 0.54; Speech 0.12; Music for children 0.05,other,0.72,0.68,1649,0.015,0.12,down,1.0,,17.2
+3.599,6.7,swoosh,0.225,servo,0.032,,Music 0.51; Speech 0.12; Music for children 0.09,whoosh,0.46,0.03,1947,0.016,0.261,down,1.7,,27.0
+3.924,21.1,swoosh,0.310,whoosh,0.063,,Music 0.51; Ding 0.11; Speech 0.10,whoosh,0.72,0.67,3277,0.014,0.472,down,2.2,,36.7
+4.238,25.0,coin,0.228,swoosh,0.004,yes,"Music 0.49; Ding 0.17; Jingle, tinkle 0.07",other,0.72,0.42,1453,0.196,0.056,down,2.3,,-36.9
+4.540,10.1,swoosh,0.275,sparkle,0.059,,"Music 0.49; Ding 0.17; Jingle, tinkle 0.06",other,0.72,0.6,1315,0.465,0.185,flat,3.6,,-27.8
+5.085,8.5,slash,0.351,swoosh,0.038,,"Music 0.62; Ding 0.13; Jingle, tinkle 0.03",whoosh,0.72,0.06,1656,0.556,0.271,down,3.8,,-11.5
+6.258,6.4,servo,0.222,swoosh,0.024,yes,Music 0.67; Electronic music 0.06; Synthesizer 0.01,whoosh,0.66,0.58,3177,0.009,0.558,down,0.2,,-5.3
+6.478,5.1,scratch,0.240,whoosh,0.085,,Music 0.64; Electronic music 0.06; Dubstep 0.01,other,0.44,0.25,1739,0.005,0.246,down,0.4,fast move,1.4
+6.896,4.9,whoosh,0.269,servo,0.026,yes,Music 0.67; Electronic music 0.06; Dubstep 0.01,whoosh,0.72,0.65,3956,0.063,0.681,flat,1.9,,13.9
+7.059,9.6,slash,0.295,scratch,0.024,yes,Music 0.68; Electronic music 0.06; Dubstep 0.01,whoosh,0.72,0.64,3518,0.255,0.625,down,1.3,,18.8
+7.163,6.7,slash,0.214,servo,0.010,yes,Music 0.68; Electronic music 0.05; Dubstep 0.01,whoosh,0.68,0.52,2459,0.452,0.451,down,1.7,,21.9
+7.245,5.6,scratch,0.219,slash,0.002,yes,Music 0.68; Electronic music 0.05; Dubstep 0.01,whoosh,0.61,0.3,1896,0.537,0.36,down,1.4,,24.3
+7.454,13.9,slash,0.133,scratch,0.001,yes,Music 0.68; Electronic music 0.05; Dubstep 0.02,impact,0.4,0.08,1515,0.612,0.276,down,1.3,,-30.4
+7.616,12.9,swoosh,0.269,whoosh,0.058,,Music 0.68; Electronic music 0.07; Dubstep 0.03,impact,0.25,0.08,1755,0.555,0.252,down,1.4,,-25.5
+7.686,8.7,swoosh,0.265,whoosh,0.041,,Music 0.68; Electronic music 0.07; Dubstep 0.03,impact,0.18,0.01,2451,0.47,0.294,down,1.3,,-23.4
+7.755,12.7,swoosh,0.273,slash,0.029,yes,Music 0.68; Electronic music 0.07; Dubstep 0.03,riser,0.59,0.27,3017,0.081,0.543,up,-2.3,,-21.3
+7.848,23.1,swoosh,0.318,whoosh,0.047,,Music 0.68; Electronic music 0.07; Dubstep 0.03,whoosh,0.48,0.23,3196,0.064,0.566,flat,-2.2,,-18.6
+7.941,13.6,servo,0.286,slash,0.023,yes,Music 0.68; Electronic music 0.07; Dubstep 0.03,whoosh,0.72,0.69,4529,0.036,0.732,down,-1.8,,-15.8
+8.046,4.7,swoosh,0.309,whoosh,0.035,,Music 0.68; Electronic music 0.07; Dubstep 0.03,whoosh,0.72,0.69,4267,0.027,0.699,down,0.6,,-12.6
+8.266,4.1,servo,0.357,scratch,0.087,,Music 0.68; Electronic music 0.07; Dubstep 0.03,whoosh,0.72,0.47,1587,0.022,0.255,down,0.3,,-6.0
+8.440,6.5,glitch,0.271,servo,0.051,,Music 0.66; Electronic music 0.06; Dubstep 0.03,other,0.72,0.29,1210,0.025,0.171,down,1.4,fast move,-0.8
+8.568,11.4,servo,0.264,glitch,0.059,,Music 0.66; Electronic music 0.06; Dubstep 0.03,other,0.61,0.16,1464,0.03,0.222,down,0.9,,3.0
+8.649,7.1,servo,0.224,glitch,0.029,yes,Music 0.66; Electronic music 0.06; Dubstep 0.03,whoosh,0.53,0.08,1768,0.034,0.279,down,1.3,,5.5
+8.870,4.7,swoosh,0.215,servo,0.015,yes,Music 0.63; Electronic music 0.02; Speech 0.01,whoosh,0.31,0.04,2400,0.019,0.371,down,-2.2,,12.1
+8.963,10.3,swoosh,0.288,whoosh,0.074,,Music 0.66; Electronic music 0.02; Speech 0.01,whoosh,0.22,0.18,2453,0.015,0.371,down,-3.6,,14.9
+9.056,14.1,swoosh,0.231,whoosh,0.031,,Music 0.66; Speech 0.01; Hip hop music 0.01,whoosh,0.72,0.7,4734,0.071,0.553,down,2.9,,17.7
+9.334,9.2,whoosh,0.417,scratch,0.065,,Music 0.71; Electronic music 0.01; Drum machine 0.01,whoosh,0.72,0.42,2618,0.393,0.491,down,3.0,,26.0
+9.706,8.5,whoosh,0.273,scratch,0.019,yes,Music 0.71; Electronic music 0.02; Drum machine 0.02,whoosh,0.46,0.12,3226,0.223,0.58,down,2.9,,37.2
+10.159,5.4,whoosh,0.189,pop,0.030,,Music 0.71; Ding 0.06; Ping 0.03,other,0.72,0.48,1658,0.2,0.224,down,1.6,,50.8
+10.228,7.1,swoosh,0.233,pop,0.036,,Music 0.71; Ding 0.06; Ping 0.03,other,0.65,0.41,1492,0.231,0.19,down,1.5,,52.8
+10.356,4.8,swoosh,0.206,whoosh,0.004,yes,Music 0.67; Ding 0.06; Ping 0.03,other,0.52,0.29,1342,0.279,0.165,down,1.7,,-53.3
+10.542,7.5,swoosh,0.302,whoosh,0.029,yes,Music 0.67; Ding 0.26; Clang 0.06,other,0.35,0.11,1022,0.367,0.14,down,1.7,,-47.7
+11.099,5.6,coin,0.263,servo,0.029,yes,Music 0.40; Ding 0.27; Clang 0.06,other,0.72,0.12,1383,0.036,0.072,up,-2.1,,-31.0
+11.714,4.7,swoosh,0.332,whoosh,0.158,,Music 0.47; Ding 0.25; Clang 0.06,whoosh,0.66,0.47,4383,0.072,0.745,flat,-9.0,,-12.6
+12.098,6.1,coin,0.325,shutter,0.138,,"Music 0.47; Ding 0.12; Jingle, tinkle 0.03",whoosh,0.72,0.71,3781,0.083,0.565,down,-5.8,fast move,-1.1
+12.225,10.0,coin,0.248,glitch,0.030,yes,Music 0.46; Ding 0.09; Clang 0.02,whoosh,0.72,0.6,3866,0.056,0.51,down,-4.7,fast move,2.8
+12.307,8.8,coin,0.258,servo,0.052,,Music 0.46; Ding 0.09; Clang 0.02,whoosh,0.72,0.57,3336,0.084,0.44,down,-4.5,,5.2
+12.458,14.6,coin,0.285,glitch,0.015,yes,Music 0.48; Ding 0.14; Clang 0.04,whoosh,0.72,0.66,2140,0.144,0.302,down,5.1,,9.7
+12.527,11.4,glitch,0.321,whoosh,0.095,,Music 0.48; Ding 0.14; Clang 0.04,whoosh,0.71,0.59,1776,0.123,0.291,down,5.1,,11.8
+12.608,8.5,glitch,0.324,whoosh,0.086,,Music 0.48; Ding 0.14; Clang 0.04,whoosh,0.63,0.51,1726,0.105,0.296,flat,4.6,,14.3
+12.701,12.5,whoosh,0.310,glitch,0.027,yes,Music 0.48; Ding 0.14; Clang 0.04,whoosh,0.57,0.42,1930,0.071,0.346,flat,3.6,,17.0
+12.794,8.2,swoosh,0.338,whoosh,0.033,,Music 0.48; Ding 0.14; Clang 0.04,riser,0.48,0.32,2059,0.054,0.373,up,4.3,,-19.2
+13.003,4.7,swoosh,0.320,whoosh,0.020,yes,Music 0.48; Ding 0.14; Clang 0.04,whoosh,0.27,0.11,2484,0.05,0.455,up,3.6,,-12.9
+13.073,4.4,whoosh,0.334,swoosh,0.017,yes,Music 0.50; Ding 0.14; Clang 0.04,whoosh,0.2,0.04,2767,0.045,0.502,up,3.6,,-10.8
+13.386,10.9,swoosh,0.265,whoosh,0.015,yes,Music 0.55; Ding 0.13; Clang 0.04,whoosh,0.2,0.04,2337,0.047,0.39,flat,-9.3,fast move,-1.4
+13.595,4.3,whoosh,0.290,riser,0.111,,Music 0.55; Ding 0.03; Speech 0.01,whoosh,0.45,0.2,5904,0.009,0.32,flat,-10.7,,4.9
+13.665,7.2,whoosh,0.241,riser,0.062,,Music 0.55; Ding 0.03; Speech 0.01,chime,0.38,0.13,5927,0.009,0.243,flat,-10.7,,7.0
+14.408,6.3,swoosh,0.310,whoosh,0.121,,Music 0.60; Speech 0.07; Music for children 0.02,whoosh,0.72,0.68,4409,0.079,0.715,down,1.0,,-5.8
+14.838,13.8,glitch,0.234,servo,0.038,,Music 0.58; Ding 0.10; Speech 0.07,whoosh,0.7,0.58,1964,0.126,0.299,down,3.2,,7.1
+14.965,8.8,glitch,0.216,servo,0.082,,Music 0.58; Ding 0.38; Clang 0.10,whoosh,0.58,0.45,1927,0.248,0.303,down,3.7,,11.0
+15.035,13.7,glitch,0.318,whoosh,0.162,,Music 0.58; Ding 0.38; Clang 0.10,whoosh,0.51,0.38,1813,0.391,0.289,down,3.7,,13.0
+15.116,13.3,glitch,0.291,servo,0.136,,Music 0.46; Ding 0.38; Clang 0.10,impact,0.43,0.3,1342,0.489,0.213,down,3.2,,15.5
+15.256,9.5,coin,0.241,glitch,0.078,,Music 0.46; Ding 0.38; Clang 0.10,impact,0.29,0.16,857,0.589,0.137,down,3.4,,19.7
+15.325,9.1,coin,0.231,servo,0.031,,Ding 0.49; Music 0.46; Clang 0.16,impact,0.22,0.09,635,0.658,0.099,down,3.5,,21.8
+15.406,6.2,servo,0.231,coin,0.034,,Ding 0.49; Music 0.46; Clang 0.16,impact,0.13,0.01,728,0.649,0.121,flat,3.3,,24.2
+15.557,8.5,coin,0.275,chime,0.011,yes,Ding 0.49; Music 0.29; Clang 0.16,riser,0.72,0.1,1912,0.139,0.254,up,0.7,,-20.3
+15.987,4.0,swoosh,0.356,servo,0.078,,Ding 0.49; Music 0.30; Clang 0.16,whoosh,0.72,0.67,4962,0.027,0.794,down,-0.1,,-7.4
+16.057,4.9,swoosh,0.362,whoosh,0.119,,Ding 0.43; Music 0.30; Clang 0.12,whoosh,0.67,0.6,4971,0.022,0.794,down,-0.1,,-5.3
+17.183,6.0,swoosh,0.304,whoosh,0.001,yes,Music 0.62; Speech 0.13; Music for children 0.01,other,0.3,0.21,822,0.103,0.057,down,1.9,,28.5
+17.531,11.5,swoosh,0.306,whoosh,0.050,,Music 0.64; Speech 0.13; Music for children 0.02,whoosh,0.72,0.64,4090,0.115,0.684,down,3.5,,38.9
+17.670,4.4,swoosh,0.305,slash,0.067,,Music 0.64; Speech 0.07; Music for children 0.02,whoosh,0.72,0.5,2426,0.178,0.43,down,3.5,,43.1
+17.961,6.4,swoosh,0.301,whoosh,0.089,,Music 0.64; Speech 0.07; Music for children 0.02,other,0.43,0.21,958,0.193,0.147,up,3.5,,51.8
+18.030,14.3,swoosh,0.299,whoosh,0.079,,Music 0.64; Speech 0.02; Music for children 0.02,other,0.36,0.14,1017,0.207,0.162,up,3.5,,53.9
+18.112,6.9,swoosh,0.349,whoosh,0.109,,Music 0.64; Speech 0.02; Music for children 0.02,other,0.28,0.06,1333,0.25,0.236,up,3.5,,56.4
+18.262,4.7,swoosh,0.320,whoosh,0.144,,Music 0.64; Speech 0.02; Music for children 0.02,whoosh,0.13,0.05,2528,0.269,0.462,up,-0.0,,60.9
+18.437,4.9,swoosh,0.287,scratch,0.082,,Music 0.62; Speech 0.02; Music for children 0.01,whoosh,0.27,0.06,4742,0.02,0.775,down,-12.8,,66.1
+19.528,4.4,servo,0.281,scratch,0.040,,Music 0.63; Speech 0.01; Sound effect 0.01,pop,0.08,0.05,1856,0.005,0.052,flat,-3.6,,-42.2
+19.865,5.9,whoosh,0.254,swoosh,0.004,yes,Music 0.68; Speech 0.01; Sound effect 0.01,whoosh,0.33,0.0,4586,0.045,0.777,up,-13.2,,-32.0
+20.573,5.8,scratch,0.311,swoosh,0.101,,Music 0.70; Sound effect 0.01; Speech 0.00,whoosh,0.72,0.63,4208,0.044,0.737,down,3.2,,-10.8
+21.885,5.6,swoosh,0.323,whoosh,0.004,yes,Music 0.64; Speech 0.09; Music for children 0.00,whoosh,0.69,0.3,1538,0.575,0.277,down,1.7,cut,2.5
+22.175,10.8,swoosh,0.374,whoosh,0.071,,"Music 0.66; Speech 0.06; Jingle, tinkle 0.00",impact,0.4,0.16,550,0.676,0.087,down,1.9,fast move,0.2
+22.709,5.8,whoosh,0.295,swoosh,0.015,yes,Music 0.66; Ding 0.05; Ding-dong 0.03,whoosh,0.67,0.3,3164,0.297,0.491,down,3.2,,16.3
+22.779,4.7,swoosh,0.311,whoosh,0.015,yes,Music 0.65; Ding 0.05; Ding-dong 0.03,whoosh,0.6,0.23,2930,0.332,0.441,down,3.2,,18.4
+22.860,4.5,pop,0.243,swoosh,0.004,yes,Music 0.65; Ding 0.05; Ding-dong 0.03,whoosh,0.52,0.15,2559,0.387,0.352,down,3.2,,20.8
+23.197,6.2,swoosh,0.189,pop,0.008,yes,Music 0.60; Ding 0.05; Speech 0.04,other,0.22,0.03,1731,0.331,0.199,up,0.8,,30.9
+23.359,13.5,swoosh,0.183,whoosh,0.017,yes,Music 0.60; Ding 0.05; Speech 0.04,riser,0.47,0.27,3432,0.047,0.326,up,-8.7,,35.8
+23.510,6.8,whoosh,0.220,swoosh,0.018,yes,Music 0.57; Speech 0.04; Ding 0.03,chime,0.38,0.12,3143,0.037,0.234,up,-8.6,,40.3
+24.694,6.7,servo,0.247,whoosh,0.018,yes,Ding 0.59; Clang 0.39; Music 0.15,whoosh,0.72,0.38,4148,0.047,0.625,down,0.8,,-32.2
+24.834,4.3,swoosh,0.273,whoosh,0.011,yes,Ding 0.59; Clang 0.39; Music 0.15,whoosh,0.72,0.69,3519,0.089,0.471,down,8.1,,-28.0
+25.252,4.3,swoosh,0.245,whoosh,0.028,yes,Ding 0.59; Clang 0.39; Music 0.19,whoosh,0.33,0.27,1706,0.369,0.281,up,8.1,,-15.5
+25.368,4.9,servo,0.205,whoosh,0.043,,Ding 0.55; Clang 0.34; Music 0.19,whoosh,0.22,0.15,2110,0.365,0.369,up,7.9,,-12.0
+27.516,5.0,scratch,0.262,swoosh,0.002,yes,Music 0.41; Speech 0.15; Animal 0.03,whoosh,0.63,0.55,3399,0.195,0.554,down,1.9,,-5.5
+28.305,8.1,whoosh,0.305,swoosh,0.068,,Music 0.64; Speech 0.05; Animal 0.01,impact,0.33,0.0,788,0.652,0.095,down,1.8,,18.2
+28.886,6.6,swoosh,0.386,whoosh,0.003,yes,Music 0.65; Speech 0.01; Shatter 0.01,whoosh,0.47,0.25,4970,0.024,0.801,flat,-9.6,,-5.4
+29.373,14.5,servo,0.309,tick,0.111,,Music 0.55; Speech 0.01; Shatter 0.01,whoosh,0.32,0.14,4599,0.013,0.652,flat,-13.5,,9.2
+29.466,19.4,servo,0.271,glitch,0.032,,Music 0.55; Speech 0.01; Shatter 0.01,whoosh,0.72,0.71,4326,0.027,0.622,down,-6.2,,12.0
+29.536,13.0,swoosh,0.255,slash,0.016,yes,Music 0.43; Speech 0.01; Sound effect 0.01,whoosh,0.72,0.71,3579,0.027,0.535,down,-4.0,,14.1
+29.605,12.1,whoosh,0.309,swoosh,0.026,yes,Music 0.43; Speech 0.01; Sound effect 0.01,whoosh,0.67,0.64,2665,0.024,0.391,down,-4.1,,16.2
+29.698,15.2,whoosh,0.324,swoosh,0.056,,Music 0.43; Speech 0.01; Sound effect 0.01,other,0.57,0.55,1875,0.022,0.22,down,-4.8,,18.9
+30.000,6.0,scratch,0.288,servo,0.033,,Music 0.53; Speech 0.01; Ding 0.01,other,0.69,0.65,1763,0.03,0.091,flat,-4.1,,28.0
+30.929,12.6,chime,0.196,servo,0.015,yes,Music 0.44; Ding 0.31; Clang 0.09,other,0.72,0.1,938,0.405,0.058,down,3.3,,-34.1
+31.858,4.9,whoosh,0.284,swoosh,0.033,,Music 0.47; Ding 0.21; Clang 0.04,whoosh,0.72,0.52,3118,0.136,0.557,down,-0.2,,-6.3
+31.974,4.1,whoosh,0.258,swoosh,0.028,yes,Music 0.50; Ding 0.21; Clang 0.04,whoosh,0.26,0.21,4508,0.008,0.732,down,-0.1,fast move,-2.8
+32.287,6.2,swoosh,0.169,whoosh,0.016,yes,Music 0.55; Speech 0.03; Ding 0.03,impact,0.3,0.09,539,0.78,0.088,down,-0.2,,6.6
+32.938,7.9,whoosh,0.204,servo,0.069,,Music 0.58; Speech 0.03; Thunk 0.01,pop,0.17,0.14,772,0.164,0.05,flat,2.4,,26.1
+33.588,4.3,whoosh,0.292,riser,0.049,,Music 0.58; Ding 0.03; Speech 0.02,other,0.72,0.71,1252,0.019,0.156,down,4.0,,45.6
+34.760,4.7,swoosh,0.228,glitch,0.005,yes,"Music 0.51; Ding 0.14; Jingle, tinkle 0.04",whoosh,0.59,0.31,3210,0.363,0.501,down,0.0,,-14.2
+34.853,4.2,swoosh,0.286,whoosh,0.058,,"Music 0.58; Ding 0.14; Jingle, tinkle 0.04",whoosh,0.5,0.24,3474,0.332,0.525,flat,0.1,,-11.4
+34.958,4.6,swoosh,0.325,whoosh,0.039,,Music 0.58; Ding 0.06; Speech 0.03,whoosh,0.38,0.11,3794,0.303,0.529,flat,-0.0,,-8.3
+35.027,4.0,swoosh,0.319,whoosh,0.071,,Music 0.58; Ding 0.06; Speech 0.03,whoosh,0.68,0.65,3809,0.186,0.654,down,0.9,,-6.2
+35.434,4.2,servo,0.256,whoosh,0.043,,Music 0.59; Speech 0.03; Electronic music 0.01,whoosh,0.27,0.25,3579,0.041,0.651,down,1.7,,6.0
+36.908,6.3,servo,0.239,scratch,0.046,,"Music 0.52; Jingle, tinkle 0.01; Music for children 0.01",riser,0.72,0.53,3081,0.009,0.361,up,0.9,,-45.7
+38.011,5.9,glitch,0.269,whoosh,0.126,,Music 0.53; Boing 0.05; Speech 0.03,impact,0.19,0.08,875,0.554,0.115,flat,5.6,,-12.7
+38.243,6.5,glitch,0.262,whoosh,0.034,,Music 0.53; Boing 0.05; Speech 0.03,other,0.45,0.23,1294,0.139,0.171,flat,2.7,,-5.7
+38.313,11.4,glitch,0.255,whoosh,0.036,,Music 0.53; Boing 0.05; Speech 0.03,other,0.38,0.16,1110,0.146,0.122,up,2.7,,-3.6
+38.580,4.9,glitch,0.195,whoosh,0.015,yes,"Music 0.51; Jingle, tinkle 0.03; Speech 0.03",pop,0.18,0.01,2985,0.286,0.19,flat,-1.4,,4.4
+39.253,6.8,whoosh,0.356,swoosh,0.126,,"Music 0.58; Ding-dong 0.04; Chink, clink 0.04",riser,0.46,0.13,4728,0.011,0.708,up,-9.2,,24.6
+39.335,4.1,whoosh,0.356,swoosh,0.140,,Music 0.61; Speech 0.05; Ding-dong 0.04,whoosh,0.37,0.05,4669,0.01,0.68,flat,-9.1,,27.0
+39.880,4.5,sparkle,0.223,swoosh,0.018,yes,Music 0.61; Speech 0.18; Ding-dong 0.03,other,0.33,0.07,1072,0.142,0.142,down,-11.0,,43.4
+40.693,6.1,whoosh,0.192,swoosh,0.008,yes,Music 0.56; Speech 0.24; Dog 0.04,other,0.56,0.54,1213,0.112,0.142,flat,0.7,,67.8
+41.181,5.6,whoosh,0.205,swoosh,0.039,,Music 0.56; Speech 0.16; Dog 0.04,other,0.7,0.59,1037,0.017,0.089,down,1.7,,82.4
+41.796,4.4,swoosh,0.255,whoosh,0.054,,Music 0.53; Speech 0.14; Ding-dong 0.03,pop,0.1,0.01,996,0.018,0.069,down,0.8,,100.9
