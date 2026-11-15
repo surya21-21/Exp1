@@ -83,8 +83,13 @@ jobs:
             echo "voice: none (asked for a silent draft)"
           elif [ -f "reels/$REEL/voiceover.mp3" ]; then
             cp "reels/$REEL/voiceover.mp3" build/voiceover.mp3
-            pip install -q faster-whisper
-            python scripts/reel_words.py build/voiceover.mp3 --out build/words.json
+            if [ -f "reels/$REEL/words.json" ]; then
+              cp "reels/$REEL/words.json" build/words.json      # a voice already made for this script: no new credits
+              echo "voice: reusing reels/$REEL/voiceover.mp3 with its saved word timings"
+            else
+              pip install -q faster-whisper
+              python scripts/reel_words.py build/voiceover.mp3 --out build/words.json
+            fi
           else
             python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
           fi
@@ -148,7 +153,8 @@ jobs:
         run: |
           OUT="$RUNNER_TEMP/previews"; mkdir -p "$OUT"
           cp build/storyboard.jpg build/reel.timed.json build/cues.json "$OUT/" 2>/dev/null || true
-          cp build/contact.jpg build/checks.md build/final.mp4 "$OUT/" 2>/dev/null || true
+          cp build/contact.jpg build/checks.md build/final.mp4 build/voiceover.mp3 build/words.json "$OUT/" 2>/dev/null || true
+          cp build/audio/music/*.mp3 "$OUT/music.mp3" 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch -q origin reel-previews:reel-previews 2>/dev/null && git checkout -q reel-previews || { git checkout -q --orphan reel-previews; git rm -rfq . ; }
