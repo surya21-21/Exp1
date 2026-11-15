@@ -1,0 +1,61 @@
+{
+  "source": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30.0,
+    "duration": 37.014,
+    "analysis_fps": 30,
+    "frames": 1109
+  },
+  "cuts": [],
+  "motion_peaks": [
+    0.2,
+    15.0,
+    25.5,
+    31.433
+  ],
+  "shot_lengths": [
+    36.967
+  ],
+  "still_share": 0.56,
+  "sound_onsets": 138,
+  "bursts": [
+    {
+      "file": "burst_000_t000.000.jpg",
+      "start": 0.0,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_001_t001.333.jpg",
+      "start": 1.333,
+      "frames": 40,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_002_t002.667.jpg",
+      "start": 2.667,
+      "frames": 10,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_003_t014.500.jpg",
+      "start": 14.5,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_004_t025.000.jpg",
+      "start": 25.0,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    },
+    {
+      "file": "burst_005_t030.933.jpg",
+      "start": 30.933,
+      "frames": 30,
+      "seconds_per_frame": 0.0333
+    }
+  ],
+  "limits": "Nothing shorter than one source frame can be seen; compression smears fast motion."
+}
