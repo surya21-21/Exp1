@@ -1,0 +1,892 @@
+{
+ "title": "Engine test: every scene type and transition once",
+ "accent": "#c2381d",
+ "fps": 30,
+ "duration": 31.5333,
+ "voice": false,
+ "voiceExactMatch": true,
+ "keyword": "STUDY",
+ "scenes": [
+  {
+   "type": "hookCounter",
+   "props": {
+    "from": 12950,
+    "to": 18271,
+    "label": "frames studied",
+    "sub": "12 reference reels, every frame",
+    "chips": [
+     "12 reels",
+     "210 moves",
+     "25 kinds"
+    ]
+   },
+   "start": 0.0,
+   "end": 3.5,
+   "beats": [
+    1.231,
+    2.32,
+    2.945
+   ]
+  },
+  {
+   "type": "bigWord",
+   "props": {
+    "over": "Our own transition",
+    "word": "PAPER<br>TEAR",
+    "sub": "8 frames, in two steps",
+    "font": 150
+   },
+   "start": 3.5,
+   "end": 5.467,
+   "beats": [
+    0.834
+   ],
+   "in": "tear"
+  },
+  {
+   "type": "uiCard",
+   "props": {
+    "kicker": "The collection",
+    "title": "collection / lib",
+    "rows": [
+     {
+      "label": "Paper tear",
+      "kind": "toggle"
+     },
+     {
+      "label": "Avatar cursor",
+      "kind": "tick"
+     },
+     {
+      "label": "Moves catalogued",
+      "kind": "value",
+      "value": 210
+     }
+    ],
+    "stamp": {
+     "text": "TESTED"
+    }
+   },
+   "start": 5.467,
+   "end": 9.0,
+   "beats": [
+    0.386,
+    1.011,
+    1.528
+   ],
+   "in": "shuffle"
+  },
+  {
+   "type": "network",
+   "props": {
+    "title": "What did the measuring",
+    "hub": {
+     "name": "Claude"
+    },
+    "tiles": [
+     {
+      "name": "Whisper",
+      "sub": "words"
+     },
+     {
+      "name": "CLAP",
+      "sub": "sounds"
+     },
+     {
+      "name": "OpenCV",
+      "sub": "motion"
+     },
+     {
+      "name": "ffmpeg",
+      "sub": "frames"
+     },
+     {
+      "name": "Playwright",
+      "sub": "render"
+     }
+    ]
+   },
+   "start": 9.0,
+   "end": 12.367,
+   "beats": [
+    0.408,
+    1.256,
+    1.727,
+    2.281,
+    2.575
+   ],
+   "in": "iris",
+   "at": [
+    540,
+    1010
+   ]
+  },
+  {
+   "type": "steps",
+   "props": {
+    "n": 2,
+    "of": 5,
+    "name": "Label every sound",
+    "underline": 610,
+    "lines": [
+     "Split the voice from the music",
+     "Find where each sound starts",
+     "Match it to the picture"
+    ],
+    "prompt": "Label the sounds in my 12 reference reels"
+   },
+   "start": 12.367,
+   "end": 18.6,
+   "beats": [
+    0.38,
+    1.622,
+    2.271,
+    2.942,
+    4.208
+   ],
+   "in": "railScroll"
+  },
+  {
+   "type": "compare",
+   "props": {
+    "a": {
+     "tag": "Before",
+     "title": "A frame every half second",
+     "lines": [
+      "Misses anything faster"
+     ]
+    },
+    "b": {
+     "tag": "Now",
+     "title": "Every single frame",
+     "lines": [
+      "18,271 of them"
+     ]
+    },
+    "strikeW": 720
+   },
+   "start": 18.6,
+   "end": 22.1,
+   "beats": [
+    0.829,
+    2.636
+   ],
+   "in": "whip"
+  },
+  {
+   "type": "chart",
+   "props": {
+    "title": "Moves in one reel",
+    "sub": "transitions and fast moves, measured",
+    "bars": [
+     {
+      "label": "Reel 07",
+      "v": 37,
+      "hero": true
+     },
+     {
+      "label": "Reel 02",
+      "v": 26
+     },
+     {
+      "label": "Reel 01",
+      "v": 20
+     },
+     {
+      "label": "Reel 06",
+      "v": 18
+     }
+    ]
+   },
+   "start": 22.1,
+   "end": 24.967,
+   "beats": [
+    0.608
+   ],
+   "in": "flicker"
+  },
+  {
+   "type": "save",
+   "props": {
+    "title": "Save this.",
+    "sub": "Every effect is in the collection folder."
+   },
+   "start": 24.967,
+   "end": 26.4,
+   "beats": [
+    0.101
+   ],
+   "in": "rampCut"
+  },
+  {
+   "type": "cta",
+   "props": {
+    "keyword": "STUDY",
+    "send": "the links"
+   },
+   "start": 26.4,
+   "end": 31.5333,
+   "beats": [
+    0.434,
+    2.488
+   ],
+   "in": "tear"
+  }
+ ],
+ "captions": [
+  {
+   "s": 0.0,
+   "e": 1.043,
+   "words": [
+    {
+     "w": "Eighteen",
+     "s": 0.0,
+     "e": 0.336,
+     "kw": false
+    },
+    {
+     "w": "thousand",
+     "s": 0.365,
+     "e": 0.7,
+     "kw": false
+    },
+    {
+     "w": "frames.",
+     "s": 0.729,
+     "e": 1.043,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 1.231,
+   "e": 2.135,
+   "words": [
+    {
+     "w": "Twelve",
+     "s": 1.231,
+     "e": 1.523,
+     "kw": true
+    },
+    {
+     "w": "viral",
+     "s": 1.548,
+     "e": 1.819,
+     "kw": false
+    },
+    {
+     "w": "reels.",
+     "s": 1.842,
+     "e": 2.135,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 2.32,
+   "e": 3.302,
+   "words": [
+    {
+     "w": "Every",
+     "s": 2.32,
+     "e": 2.591,
+     "kw": true
+    },
+    {
+     "w": "cut,",
+     "s": 2.614,
+     "e": 2.863,
+     "kw": false
+    },
+    {
+     "w": "measured.",
+     "s": 2.945,
+     "e": 3.302,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 3.593,
+   "e": 4.314,
+   "words": [
+    {
+     "w": "This",
+     "s": 3.593,
+     "e": 3.842,
+     "kw": false
+    },
+    {
+     "w": "is",
+     "s": 3.864,
+     "e": 4.069,
+     "kw": false
+    },
+    {
+     "w": "the",
+     "s": 4.087,
+     "e": 4.314,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 4.334,
+   "e": 4.899,
+   "words": [
+    {
+     "w": "paper",
+     "s": 4.334,
+     "e": 4.605,
+     "kw": true
+    },
+    {
+     "w": "tear.",
+     "s": 4.628,
+     "e": 4.899,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 5.582,
+   "e": 6.398,
+   "words": [
+    {
+     "w": "Rows",
+     "s": 5.582,
+     "e": 5.831,
+     "kw": false
+    },
+    {
+     "w": "switch",
+     "s": 5.853,
+     "e": 6.145,
+     "kw": true
+    },
+    {
+     "w": "on,",
+     "s": 6.171,
+     "e": 6.398,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 6.478,
+   "e": 7.266,
+   "words": [
+    {
+     "w": "tick",
+     "s": 6.478,
+     "e": 6.727,
+     "kw": true
+    },
+    {
+     "w": "and",
+     "s": 6.748,
+     "e": 6.976,
+     "kw": false
+    },
+    {
+     "w": "count",
+     "s": 6.995,
+     "e": 7.266,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 7.289,
+   "e": 8.031,
+   "words": [
+    {
+     "w": "on",
+     "s": 7.289,
+     "e": 7.495,
+     "kw": false
+    },
+    {
+     "w": "the",
+     "s": 7.513,
+     "e": 7.74,
+     "kw": false
+    },
+    {
+     "w": "word.",
+     "s": 7.76,
+     "e": 8.031,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 9.114,
+   "e": 10.175,
+   "words": [
+    {
+     "w": "Tools",
+     "s": 9.114,
+     "e": 9.385,
+     "kw": false
+    },
+    {
+     "w": "join",
+     "s": 9.408,
+     "e": 9.657,
+     "kw": true
+    },
+    {
+     "w": "the",
+     "s": 9.679,
+     "e": 9.906,
+     "kw": false
+    },
+    {
+     "w": "hub,",
+     "s": 9.926,
+     "e": 10.175,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 10.256,
+   "e": 10.976,
+   "words": [
+    {
+     "w": "one",
+     "s": 10.256,
+     "e": 10.484,
+     "kw": true
+    },
+    {
+     "w": "by",
+     "s": 10.504,
+     "e": 10.709,
+     "kw": false
+    },
+    {
+     "w": "one,",
+     "s": 10.727,
+     "e": 10.976,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 11.058,
+   "e": 11.868,
+   "words": [
+    {
+     "w": "on",
+     "s": 11.058,
+     "e": 11.263,
+     "kw": false
+    },
+    {
+     "w": "drawn",
+     "s": 11.281,
+     "e": 11.552,
+     "kw": true
+    },
+    {
+     "w": "lines.",
+     "s": 11.575,
+     "e": 11.868,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 12.453,
+   "e": 13.314,
+   "words": [
+    {
+     "w": "Steps",
+     "s": 12.453,
+     "e": 12.724,
+     "kw": false
+    },
+    {
+     "w": "scroll",
+     "s": 12.747,
+     "e": 13.039,
+     "kw": true
+    },
+    {
+     "w": "like",
+     "s": 13.065,
+     "e": 13.314,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 13.335,
+   "e": 13.806,
+   "words": [
+    {
+     "w": "a",
+     "s": 13.335,
+     "e": 13.519,
+     "kw": false
+    },
+    {
+     "w": "page.",
+     "s": 13.535,
+     "e": 13.806,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 13.989,
+   "e": 14.554,
+   "words": [
+    {
+     "w": "First",
+     "s": 13.989,
+     "e": 14.26,
+     "kw": true
+    },
+    {
+     "w": "line,",
+     "s": 14.284,
+     "e": 14.554,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 14.638,
+   "e": 15.874,
+   "words": [
+    {
+     "w": "second",
+     "s": 14.638,
+     "e": 14.93,
+     "kw": true
+    },
+    {
+     "w": "line,",
+     "s": 14.955,
+     "e": 15.226,
+     "kw": false
+    },
+    {
+     "w": "third",
+     "s": 15.309,
+     "e": 15.58,
+     "kw": true
+    },
+    {
+     "w": "line.",
+     "s": 15.604,
+     "e": 15.874,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 16.058,
+   "e": 16.868,
+   "words": [
+    {
+     "w": "Then",
+     "s": 16.058,
+     "e": 16.307,
+     "kw": false
+    },
+    {
+     "w": "the",
+     "s": 16.328,
+     "e": 16.556,
+     "kw": false
+    },
+    {
+     "w": "prompt",
+     "s": 16.575,
+     "e": 16.868,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 16.893,
+   "e": 17.501,
+   "words": [
+    {
+     "w": "types",
+     "s": 16.893,
+     "e": 17.164,
+     "kw": false
+    },
+    {
+     "w": "itself.",
+     "s": 17.187,
+     "e": 17.501,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 18.688,
+   "e": 19.412,
+   "words": [
+    {
+     "w": "One",
+     "s": 18.688,
+     "e": 18.916,
+     "kw": false
+    },
+    {
+     "w": "card",
+     "s": 18.935,
+     "e": 19.184,
+     "kw": false
+    },
+    {
+     "w": "is",
+     "s": 19.206,
+     "e": 19.412,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 19.429,
+   "e": 19.996,
+   "words": [
+    {
+     "w": "struck",
+     "s": 19.429,
+     "e": 19.722,
+     "kw": true
+    },
+    {
+     "w": "out.",
+     "s": 19.747,
+     "e": 19.996,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 20.178,
+   "e": 20.968,
+   "words": [
+    {
+     "w": "The",
+     "s": 20.178,
+     "e": 20.405,
+     "kw": false
+    },
+    {
+     "w": "other",
+     "s": 20.425,
+     "e": 20.695,
+     "kw": false
+    },
+    {
+     "w": "gets",
+     "s": 20.719,
+     "e": 20.968,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 20.989,
+   "e": 21.507,
+   "words": [
+    {
+     "w": "the",
+     "s": 20.989,
+     "e": 21.217,
+     "kw": false
+    },
+    {
+     "w": "tick.",
+     "s": 21.236,
+     "e": 21.507,
+     "kw": true
+    }
+   ]
+  },
+  {
+   "s": 22.191,
+   "e": 23.232,
+   "words": [
+    {
+     "w": "Bars",
+     "s": 22.191,
+     "e": 22.44,
+     "kw": false
+    },
+    {
+     "w": "are",
+     "s": 22.461,
+     "e": 22.688,
+     "kw": false
+    },
+    {
+     "w": "racing",
+     "s": 22.708,
+     "e": 23.0,
+     "kw": true
+    },
+    {
+     "w": "on",
+     "s": 23.026,
+     "e": 23.232,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 23.249,
+   "e": 24.083,
+   "words": [
+    {
+     "w": "the",
+     "s": 23.249,
+     "e": 23.477,
+     "kw": false
+    },
+    {
+     "w": "first",
+     "s": 23.496,
+     "e": 23.767,
+     "kw": false
+    },
+    {
+     "w": "frame.",
+     "s": 23.791,
+     "e": 24.083,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 25.068,
+   "e": 25.609,
+   "words": [
+    {
+     "w": "Save",
+     "s": 25.068,
+     "e": 25.317,
+     "kw": true
+    },
+    {
+     "w": "this.",
+     "s": 25.339,
+     "e": 25.609,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 26.493,
+   "e": 27.624,
+   "words": [
+    {
+     "w": "Comment",
+     "s": 26.493,
+     "e": 26.807,
+     "kw": false
+    },
+    {
+     "w": "STUDY",
+     "s": 26.834,
+     "e": 27.105,
+     "kw": true
+    },
+    {
+     "w": "and",
+     "s": 27.128,
+     "e": 27.356,
+     "kw": false
+    },
+    {
+     "w": "I'll",
+     "s": 27.375,
+     "e": 27.624,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 27.646,
+   "e": 28.703,
+   "words": [
+    {
+     "w": "send",
+     "s": 27.646,
+     "e": 27.895,
+     "kw": false
+    },
+    {
+     "w": "you",
+     "s": 27.916,
+     "e": 28.144,
+     "kw": false
+    },
+    {
+     "w": "the",
+     "s": 28.164,
+     "e": 28.391,
+     "kw": false
+    },
+    {
+     "w": "links.",
+     "s": 28.411,
+     "e": 28.703,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 28.888,
+   "e": 29.631,
+   "words": [
+    {
+     "w": "This",
+     "s": 28.888,
+     "e": 29.137,
+     "kw": true
+    },
+    {
+     "w": "is",
+     "s": 29.159,
+     "e": 29.364,
+     "kw": false
+    },
+    {
+     "w": "your",
+     "s": 29.382,
+     "e": 29.631,
+     "kw": false
+    }
+   ]
+  },
+  {
+   "s": 29.653,
+   "e": 30.125,
+   "words": [
+    {
+     "w": "AI",
+     "s": 29.653,
+     "e": 29.859,
+     "kw": false
+    },
+    {
+     "w": "guy.",
+     "s": 29.876,
+     "e": 30.125,
+     "kw": false
+    }
+   ]
+  }
+ ]
+}
