@@ -111,7 +111,7 @@ export const SCENES = {
       } else {
         ctl = h('div', `font:900 58px ${DISPLAY};letter-spacing:-1px;color:${P.ink};white-space:nowrap`);
         const num = typeof r.value === 'number';
-        upd = t => { const q = prog(t, at(i), fr(num ? 12 : 5)); ctl.style.opacity = clamp(q * 4 + (num ? 0.35 : 0)); ctl.textContent = num ? Math.round(r.value * outCubic(q)).toLocaleString('en-US') + (r.unit || '') : r.value; ctl.style.color = t >= at(i) && t < at(i) + 0.5 ? 'var(--accent)' : P.ink; };
+        upd = t => { const q = prog(t, at(i), fr(num ? 12 : 5)); ctl.style.opacity = clamp(q * 4 + (num ? 0.35 : 0)); ctl.textContent = num ? (q <= 0 ? '–' : Math.round(r.value * outCubic(q)).toLocaleString('en-US') + (r.unit || '')) : r.value; ctl.style.color = t >= at(i) && t < at(i) + 0.5 ? 'var(--accent)' : P.ink; };
       }
       row.append(ctl); c.append(row);
       return { row, upd };

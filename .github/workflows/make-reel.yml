@@ -148,7 +148,7 @@ jobs:
         run: |
           OUT="$RUNNER_TEMP/previews"; mkdir -p "$OUT"
           cp build/storyboard.jpg build/reel.timed.json build/cues.json "$OUT/" 2>/dev/null || true
-          cp build/contact.jpg build/checks.md "$OUT/" 2>/dev/null || true
+          cp build/contact.jpg build/checks.md build/final.mp4 "$OUT/" 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch -q origin reel-previews:reel-previews 2>/dev/null && git checkout -q reel-previews || { git checkout -q --orphan reel-previews; git rm -rfq . ; }

@@ -134,7 +134,9 @@ export const SCENES3D = {
         const open = spring(prog(t, -0.45, 1.25), 0.9, 5.5);
         cards.forEach((k, i) => {
           const rz = -k.k * 1.75 * open, lean = -0.16 - 0.05 * Math.abs(k.k) * open;
-          const lift = 0.04 * Math.sin(t * 2.4 + i * 0.7) * open;
+          // after the counter lands, a wave runs through the fan: each card lifts and settles in turn
+          const wave = Math.sin(Math.PI * clamp((t - (p.run || 1.3) - 0.1 - i * 0.09) / 0.45));
+          const lift = 0.04 * Math.sin(t * 2.4 + i * 0.7) * open + 0.22 * wave;
           const px = 0, py = 0.02, pz = -i * 0.035;
           // centre = pivot + (rotate the card's half-height up-vector by lean, then by rz)
           const ux = -Math.sin(rz) * Math.cos(lean), uy = Math.cos(rz) * Math.cos(lean), uz = Math.sin(lean) * -1;
@@ -143,7 +145,7 @@ export const SCENES3D = {
           k.c.rotation.set(lean, 0.25 * k.k * open, rz);
         });
         const m = inOutCubic(prog(t, 0, Math.max(2.4, ctx.dur)));
-        const ang = lerp(-0.32, 0.22, m), rad = lerp(11.6, 10.6, m), hgt = lerp(1.9, 3.0, m);
+        const ang = lerp(-0.32, 0.22, m), rad = lerp(11.8, 9.2, m), hgt = lerp(1.9, 3.2, m);
         st.camera.position.set(Math.sin(ang) * rad, hgt, Math.cos(ang) * rad);
         st.camera.lookAt(0, 1.55, 0);
         st.render();

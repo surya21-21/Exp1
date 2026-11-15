@@ -38,16 +38,16 @@
     {
       "type": "steps",
       "in": "shuffle",
-      "say": "*One*. All twelve start talking on the very *first* frame. No intro. No *logo*.",
+      "say": "*One*. All twelve start *talking* on the very first frame. *No intro*. *No logo*.",
       "props": {
         "n": 1,
         "of": 4,
         "name": "Talk from frame zero",
         "underline": 700,
         "lines": [
-          "12 of 12 start speaking at 0.0 seconds",
-          "6 to 14 words by second three",
-          "No intro and no logo in any of them"
+          "12 of 12 start talking at 0.0 s",
+          "No intro",
+          "No logo"
         ]
       },
       "hold": 0.3
