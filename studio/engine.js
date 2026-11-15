@@ -10,7 +10,9 @@ import { TRANSITIONS } from '../collection/lib/transitions.js';
 import { captions, groupWords } from '../collection/lib/captions.js';
 import { avatar, mixState } from '../collection/lib/avatar.js';
 import { progress } from '../collection/lib/elements.js';
-import { SCENES } from './scenes.js';
+import { SCENES as FLAT } from './scenes.js';
+import { SCENES3D } from './scenes3d.js';
+const SCENES = { ...FLAT, ...SCENES3D };
 
 export async function boot(specUrl) {
   const spec = await (await fetch(specUrl)).json();

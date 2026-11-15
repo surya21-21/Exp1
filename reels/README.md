@@ -61,6 +61,10 @@ Music: the first file in `assets/music/`, if there is one.
 | `chart` | `title`, `sub`, `bars` (each `label`, `v`, `text`, `hero`), `run` | none (racing from the first frame) |
 | `save` | `title`, `sub` | the bookmark fills |
 | `cta` | `keyword`, `send`, `signoff` | the keyword types; the sign-off card |
+| `hook3d` (3D hero) | same as `hookCounter`, plus `count` (cards in the fan, default 12) | avatar shrinks to the cursor; then one per chip |
+| `cards3d` (3D hero) | `title`, `sub`, `items` (up to 4 short lines, one per card) | the cards fan out from the stack into a grid |
+
+3D hero scenes use real depth (three.js): paper cards with thickness, the key light from the top-left casting soft shadows on the desk, and a moving camera. Use one or two a reel, for the hook and the main reveal.
 
 `logo` is a path to an official logo file in `logos/`. Without one the tile shows the name's first letter; logos are never redrawn.
 

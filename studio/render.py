@@ -51,7 +51,8 @@ def main():
     srv = serve()
     url = f"http://127.0.0.1:{srv.server_address[1]}/studio/index.html?spec=/{spec_rel}"
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(args=["--font-render-hinting=none", "--disable-lcd-text", "--force-color-profile=srgb"])
+        browser = pw.chromium.launch(args=["--font-render-hinting=none", "--disable-lcd-text", "--force-color-profile=srgb",
+                                          "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"])
         page = browser.new_page(viewport={"width": 1080, "height": 1920}, device_scale_factor=1)
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
