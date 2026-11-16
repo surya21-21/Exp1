@@ -101,16 +101,16 @@ export function morpher(slot, ctx, { lead = 6, settle = 10, stagger = 2, bend = 
     },
     draw(p) {
       box.style.display = pairs.length ? 'block' : 'none';
-      const n = pairs.length, D = Math.max(6, N - (n - 1) * stagger);
+      // many pairs: the stagger shrinks so every flight still lasts 8 frames and lands by p = 1
+      const n = pairs.length, sg = n > 1 ? Math.min(stagger, (N - 8) / (n - 1)) : 0, D = N - (n - 1) * sg;
       pairs.forEach((pr, i) => {
-        const F = flyer(i), x = clamp((p * N - i * stagger) / D), xp = clamp((p * N - i * stagger - 1) / D);
+        const F = flyer(i), x = clamp((p * N - i * sg) / D), xp = clamp((p * N - i * sg - 1) / D);
         const u = heroTravel(x, D), up = heroTravel(xp, D);
         const ca = [pr.A.x + pr.A.w / 2, pr.A.y + pr.A.h / 2], cb = [pr.B.x + pr.B.w / 2, pr.B.y + pr.B.h / 2];
         const [cx, cy] = arc(ca[0], ca[1], cb[0], cb[1], u, bend), [px, py] = arc(ca[0], ca[1], cb[0], cb[1], up, bend);
         const w = Math.max(2, lerp(pr.A.w, pr.B.w, u)), hh = Math.max(2, lerp(pr.A.h, pr.B.h, u));
         const r = lerp(radiusPx(pr.pa.radius, pr.A.w, pr.A.h), radiusPx(pr.pb.radius, pr.B.w, pr.B.h), clamp(u));
         const c = outCubic(prog(x, 0.3, 0.45));           // paint and content cross over in the middle of the move
-        F.f.style.display = 'block';
         F.f.style.cssText = `position:absolute;left:0;top:0;width:${w.toFixed(1)}px;height:${hh.toFixed(1)}px;transform:translate(${(cx - w / 2).toFixed(1)}px,${(cy - hh / 2).toFixed(1)}px);filter:${dropLift(Math.sin(Math.PI * x) * 0.9)}`;
         for (const [bg, pa, o] of [[F.bgA, pr.pa, 1 - c], [F.bgB, pr.pb, c]]) {
           bg.style.cssText = `position:absolute;inset:0;border-radius:${r.toFixed(1)}px;background-color:${pa.bg};background-image:${pa.img};box-shadow:${pa.shadow};border:${pa.border};opacity:${o.toFixed(3)}`;
