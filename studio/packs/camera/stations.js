@@ -46,6 +46,52 @@ function hinge(child, hgt) {
 
 const ticks = (times, gain = 0.3) => times.map(t => ({ t, sfx: 'tick', gain }));
 
+// Painters shared by the stations.
+function wrapLines(g, text, maxW) {
+  const out = []; let line = '';
+  for (const w of String(text).split(' ')) { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; }
+  if (line) out.push(line);
+  return out;
+}
+// A chapter card: the finding's number in the accent, its title in ink, a line under it.
+export function titleFace(n, title, sub, accent) {
+  return (g, Wd, Ht) => {
+    const grd = g.createLinearGradient(0, 0, Wd, Ht); grd.addColorStop(0, '#fffdf8'); grd.addColorStop(1, '#f1ebdf');
+    g.fillStyle = grd; g.fillRect(0, 0, Wd, Ht);
+    g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+    const nx = Ht * 0.12;
+    if (n != null) { g.fillStyle = accent; g.font = `900 ${Math.round(Ht * 0.86)}px ${B.DISPLAY}`; g.fillText(String(n), nx, Ht * 0.83); }
+    const x0 = n != null ? nx + g.measureText(String(n)).width + Ht * 0.12 : Ht * 0.14, maxW = Wd - x0 - Ht * 0.1;
+    g.fillStyle = B.INK; g.font = `900 ${Math.round(Ht * 0.25)}px ${B.DISPLAY}`;
+    const lines = wrapLines(g, title, maxW).slice(0, 2), lh = Ht * 0.27;
+    const y0 = sub ? Ht * 0.42 - (lines.length - 1) * lh * 0.5 : Ht * 0.5 - (lines.length - 2) * lh * 0.5;
+    lines.forEach((l, i) => g.fillText(l, x0, y0 + i * lh));
+    if (sub) { g.fillStyle = B.MUTED; g.font = `italic 600 ${Math.round(Ht * 0.15)}px ${B.SERIF}`; g.fillText(wrapLines(g, sub, maxW)[0], x0, y0 + (lines.length - 1) * lh + Ht * 0.25); }
+  };
+}
+// A tent label: big text, optional small line, optional accent fill.
+export function tagFace(text, small = '', { fill = '#fffdf8', ink = B.INK, size = 0.5, accent = '#c2381d' } = {}) {
+  return (g, Wd, Ht) => {
+    g.fillStyle = fill; g.fillRect(0, 0, Wd, Ht);
+    if (fill === '#fffdf8') { g.fillStyle = 'rgba(70,52,25,.06)'; g.fillRect(0, Ht * 0.86, Wd, Ht * 0.14); }
+    g.fillStyle = ink; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `900 ${Math.round(Ht * size)}px ${B.DISPLAY}`;
+    let f = Ht * size; while (g.measureText(text).width > Wd * 0.9 && f > 10) { f -= 2; g.font = `900 ${Math.round(f)}px ${B.DISPLAY}`; }
+    g.fillText(text, Wd / 2, small ? Ht * 0.4 : Ht * 0.5);
+    if (small) { g.globalAlpha = 0.8; g.font = `700 ${Math.round(Ht * 0.2)}px ${B.SANS}`; g.fillText(small, Wd / 2, Ht * 0.76); g.globalAlpha = 1; }
+  };
+}
+// A card that leans back on the desk like a place card, with a hidden back leg.
+export function tent(w, hgt, face, lean = 0.32) {
+  const g = new THREE.Group(), c = B.card(w, hgt, 0.012, { front: face, res: 512, radius: hgt * 0.08 });
+  const hgf = hinge(c, hgt); hgf.rotation.x = -lean; g.add(hgf);
+  const leg = B.card(w * 0.9, hgt, 0.01, { front: B.CARD2 }); const hgl = hinge(leg, hgt); hgl.rotation.x = lean; hgl.position.z = -2 * hgt * Math.sin(lean); g.add(hgl);
+  g.userData.face = hgf;
+  return g;
+}
+// The station's marker point (where the map puts its number).
+const setVis = (o, v) => { o.visible = v; };
+
 export const SCENES = {
   // K02 Hook at the odometer. A paper odometer is already rolling on frame 0 and lands on the
   // number on the second beat; on the first beat twelve reel cards stand up behind it, one
