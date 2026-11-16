@@ -13,6 +13,7 @@ Output: a timed spec with scene start/end, beats, and captions in groups of
 2 to 4 words. Standard library only.
 """
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -123,9 +124,26 @@ def main():
     ap.add_argument("--words", help="words.json from the voice (optional)")
     ap.add_argument("--out", default="build/reel.timed.json")
     ap.add_argument("--print-text", action="store_true", help="print the spoken text and exit")
+    ap.add_argument("--approve", action="store_true", help="record the owner's approval of this exact script (run only after they said yes)")
+    ap.add_argument("--check-approval", action="store_true", help="exit 1 unless the script is the one the owner approved")
+    ap.add_argument("--table", help="also write a timing table (Markdown) here")
     args = ap.parse_args()
 
     reel = json.load(open(args.reel, encoding="utf-8"))
+    sha = hashlib.sha1(spoken_text(reel).encode("utf-8")).hexdigest()
+    if args.approve:
+        import datetime
+        reel["approved"] = {"date": datetime.date.today().isoformat(), "say_sha1": sha}
+        json.dump(reel, open(args.reel, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+        print(f"approval recorded for script {sha[:10]}")
+        return
+    if args.check_approval:
+        ap_ = reel.get("approved")
+        if ap_ == "fixture" or (isinstance(ap_, dict) and ap_.get("say_sha1") == sha):
+            print("script approved")
+            return
+        sys.exit("BLOCKED: this script is not the one the owner approved. Show them the storyboard and animatic, "
+                 "then record their yes with: python scripts/plan_reel.py REEL --approve")
     if args.print_text:
         print(spoken_text(reel))
         return
@@ -178,6 +196,14 @@ def main():
         json.dump(spec, f, ensure_ascii=False, indent=1)
     n = sum(len(r) for r in timed)
     span = end_of_speech or 1
+    if args.table:
+        with open(args.table, "w", encoding="utf-8") as f:
+            f.write("| # | Scene | In | Start | Length | Words | Words a second | Beats |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n")
+            for i, (sc, rows) in enumerate(zip(out_scenes, timed)):
+                d = sc["end"] - sc["start"]
+                f.write(f'| {i + 1} | {sc["type"]} | {sc.get("in", "cut" if i else "-")} | {sc["start"]:.2f} s | {d:.2f} s | {len(rows)} | '
+                        f'{len(rows) / d:.2f} | {", ".join(f"{b:.2f}" for b in sc["beats"]) or "-"} |\n')
+            f.write(f"\n{n} words, {duration:.2f} s, {n / span:.2f} words a second, voice: {'yes' if voice else 'estimated'}.\n")
     sizes = [len(g["words"]) for g in captions]
     print(f"{len(scenes)} scenes, {n} words, {duration:.2f}s, {n / span:.2f} words/s, "
           f"voice={'yes' if voice else 'no (estimated timing)'}, caption groups {len(captions)} "

@@ -45,6 +45,7 @@ def main():
     ap.add_argument("--start", type=float, default=0.0)
     ap.add_argument("--end", type=float, default=None)
     ap.add_argument("--crf", type=int, default=15)
+    ap.add_argument("--step", type=int, default=1, help="draw every Nth frame (3 = a 10 fps animatic)")
     args = ap.parse_args()
 
     spec_rel = os.path.relpath(os.path.abspath(args.spec), ROOT).replace(os.sep, "/")
@@ -87,24 +88,28 @@ def main():
         if args.audit:
             boxes = []
             n = int(duration * 5)
+            min_text = []
             for i in range(n):
                 t = i / 5
                 page.evaluate("t => window.renderAt(t)", t)
                 for b in page.evaluate("window.AUDIT()"):
                     boxes.append({"t": t, **b})
-            json.dump({"info": info, "duration": duration, "fps": fps, "boxes": boxes}, open(args.audit, "w"))
+                m = page.evaluate("window.TEXTMIN()")
+                if m:
+                    min_text.append({"t": t, **m})
+            json.dump({"info": info, "duration": duration, "fps": fps, "boxes": boxes, "minText": min_text}, open(args.audit, "w"))
 
         if args.out:
             os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
             first = int(round(args.start * fps))
             last = int(round((args.end if args.end is not None else duration) * fps))
             ff = subprocess.Popen(
-                ["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", str(fps), "-c:v", "mjpeg", "-i", "-",
+                ["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", f"{fps}/{args.step}", "-c:v", "mjpeg", "-i", "-",
                  "-c:v", "libx264", "-preset", "medium", "-crf", str(args.crf), "-pix_fmt", "yuv420p",
                  "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-movflags", "+faststart", args.out],
                 stdin=subprocess.PIPE)
             t0 = time.time()
-            for f in range(first, last):
+            for f in range(first, last, args.step):
                 page.evaluate("t => window.renderAt(t)", f / fps)
                 ff.stdin.write(page.screenshot(type="jpeg", quality=97, clip=clip))
                 if (f - first) % 150 == 0 and f > first:

@@ -4,7 +4,7 @@ import { fr, clamp, prog, outCubic } from './ease.js';
 import { P, h, tint } from './paper.js';
 
 // groups: [{ s, e, words: [{ w, s, e, kw }] }], times in seconds.
-export function captions(layer, groups, { accent = '#c2381d', top = 250, size = 68 } = {}) {
+export function captions(layer, groups, { accent = '#c2381d', top = 290, size = 68 } = {}) {
   const tape = tint(accent, 0.3);
   const built = groups.map((g, gi) => {
     const el = h('div', `position:absolute;left:70px;right:70px;top:${top}px;text-align:center;font:800 ${size}px/1.16 "Inter",sans-serif;letter-spacing:-1px;color:${P.ink};display:none`);

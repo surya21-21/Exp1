@@ -33,7 +33,8 @@ def loudness(path):
 
 def motion(path):
     cap = cv2.VideoCapture(path)
-    prev, diffs, first = None, [], None
+    prev, diffs, first, body, fills, i = None, [], None, [], [], 0
+    paper = np.array([224, 234, 239], np.float32)
     while True:
         ok, f = cap.read()
         if not ok:
@@ -42,9 +43,18 @@ def motion(path):
         if first is None:
             first = f
         if prev is not None:
-            diffs.append(float(np.mean(np.abs(g - prev))))
+            d = np.abs(g - prev)
+            diffs.append(float(np.mean(d)))
+            d[30:62, :] = 0                                   # the caption band (about 225 to 465 px) does not count
+            body.append(float(d.sum() / (144 * (256 - 32))))
+        if i % 6 == 0:                                        # how much of the usable height is in use
+            small = cv2.resize(f, (270, 480), interpolation=cv2.INTER_AREA).astype(np.float32)
+            rows = (np.abs(small - paper).max(axis=2) > 70)[116:372].mean(axis=1) > 0.03   # 465 to 1490 px
+            ys = np.where(rows)[0]
+            fills.append((ys.max() - ys.min() + 1) / 256 if len(ys) else 0.0)
+        i += 1
         prev = g
-    return np.array(diffs), first
+    return np.array(diffs), first, np.array(body), np.array(fills)
 
 
 def main():
@@ -72,7 +82,7 @@ def main():
     add("Frame rate", abs(num / den - fps) < 0.01, f"{num / den:.2f} fps")
     add("Length", abs(dur - spec["duration"]) <= 2.5 / fps, f'{dur:.2f} s (planned {spec["duration"]:.2f} s)')
 
-    diffs, first = motion(args.video)
+    diffs, first, body, fills = motion(args.video)
     paper = np.array([224, 234, 239], np.float32)                 # #efeae0 in BGR
     ink = float(np.mean(np.abs(first.astype(np.float32) - paper).max(axis=2) > 60))
     add("Frame zero is not empty", ink > 0.015, f"{ink * 100:.1f}% of the first frame is ink or objects",
@@ -83,6 +93,15 @@ def main():
         run = run + 1 if s else 0
         longest = max(longest, run)
     add("Stillness", longest / fps <= 1.5, f"longest stretch with nothing changing: {longest / fps:.2f} s", "limit 1.5 s")
+    longest_b, run = 0, 0
+    for st in body < 0.0006:
+        run = run + 1 if st else 0
+        longest_b = max(longest_b, run)
+    add("Stillness outside the captions", longest_b / fps <= 2.0,
+        f"longest stretch where only the captions change: {longest_b / fps:.2f} s", "limit 2.0 s; caption words alone do not count as motion")
+    share = float((fills >= 0.6).mean()) if len(fills) else 0
+    add("Frame in use", share >= 0.8, f"content spans 60% or more of the usable height in {share * 100:.0f}% of frames",
+        "needs 80%; usable height is under the captions and above the app's buttons")
     th = max(2.5 * float(np.median(diffs)), 0.004)
     peaks = [i for i in range(1, len(diffs) - 1) if diffs[i] >= th and diffs[i] >= diffs[i - 1] and diffs[i] >= diffs[i + 1]]
     merged = [p for k, p in enumerate(peaks) if k == 0 or p - peaks[k - 1] >= 4]
@@ -113,6 +132,18 @@ def main():
             "key elements and captions, 5 times a second, outside transitions")
         c = audit["info"]["accentContrast"]
         add("Accent contrast on paper", c >= 4.5, f'{c} to 1 for {audit["info"]["accent"]}', "needs 4.5 to 1")
+        caps = [b for b in audit["boxes"] if b["name"] == "caption"]
+        high = [b for b in caps if b["y0"] < 268]
+        add("Captions below the top 14%", not high, f"{len(caps)} caption boxes, {len(high)} above 268 px",
+            "Meta's published safe zone for 9:16")
+        low = [b for b in audit["boxes"] if b["name"] != "caption" and b["y1"] > 1250 and not any(w[0] <= b["t"] <= w[1] for w in wins)]
+        add("Key elements in the lower 35%", None, f"{len({b['name'] for b in low})} kinds reach below 1250 px: {', '.join(sorted({b['name'] for b in low})) or 'none'}",
+            "information: Meta's stricter ad zone; our limit is 1490 px")
+        small_text = audit.get("minText") or []
+        if small_text:
+            worst = min(small_text, key=lambda x: x["px"])
+            add("Smallest text", worst["px"] >= 30, f'{worst["px"]:.0f} px ("{worst["text"]}" at {worst["t"]:.1f} s)',
+                "30 px of 1080 is 11 points on a phone, Apple's stated minimum")
         zero = [b for b in audit["boxes"] if b["t"] == 0 and b["name"] != "caption"]
         add("Something on screen at frame zero", bool(zero), ", ".join(sorted({b["name"] for b in zero})) or "nothing marked")
 
@@ -133,8 +164,33 @@ def main():
         else:
             add("Loudness", None, f"{lufs} LUFS (effects only)", "BLOCKED: no voice yet, so the mix cannot be judged")
         add("Peak", peak is not None and peak <= -1.0, f"{peak} dBFS", "limit -1")
+    if spec.get("voice"):
+        add("Voice matches the script", bool(spec.get("voiceExactMatch")), "word for word" if spec.get("voiceExactMatch") else "word counts differ",
+            "captions and beats are only exact when the voice speaks the script as written")
+        words = [w for g in spec.get("captions", []) for w in g["words"]]
+        if len(words) > 1:
+            gaps = [words[k + 1]["s"] - words[k]["e"] for k in range(len(words) - 1)]
+            pace = len(words) / max(1e-6, words[-1]["e"] - words[0]["s"])
+            add("Voice pace", max(gaps) <= 0.8, f"{pace:.2f} words a second, longest silence {max(gaps):.2f} s",
+                "limit 0.8 s of silence; references speak at 2.5 to 4.3 words a second")
     add("Voice", True if spec.get("voice") else None, "present" if spec.get("voice") else "none",
         "" if spec.get("voice") else "BLOCKED: ELEVENLABS_API_KEY is not set and no voiceover.mp3 was supplied")
+
+    # Variety: a reel that repeats itself reads as a slideshow.
+    types = [sc["type"] for sc in spec["scenes"]]
+    trans = [sc.get("in", "cut") for sc in spec["scenes"][1:]]
+    n = len(types)
+    need_types = min(6, max(3, n - 2))
+    add("Scene variety", len(set(types)) >= need_types,
+        f"{len(set(types))} different scene types in {n} scenes", f"needs at least {need_types}")
+    twice = [types[i] for i in range(1, n) if types[i] == types[i - 1]]
+    add("No scene type twice in a row", not twice, ", ".join(twice) or "none repeated")
+    moving = [t for t in trans if t != "cut"]
+    need_tr = 3 if n >= 6 else 2
+    add("Transition variety", len(set(trans)) >= need_tr, f"{len(set(trans))} different transitions: {', '.join(sorted(set(trans)))}",
+        f"needs at least {need_tr}")
+    rep = [trans[i] for i in range(1, len(trans)) if trans[i] == trans[i - 1] and trans[i] != "cut"]
+    add("No transition twice in a row", not rep, ", ".join(rep) or "none repeated", "plain cuts may repeat")
 
     last = spec["scenes"][-1]
     add("Signature outro", last["type"] == "cta", f'last scene: {last["type"]}', '"Comment KEYWORD ... This is your AI guy."')

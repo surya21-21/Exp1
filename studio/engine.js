@@ -123,6 +123,21 @@ export async function boot(specUrl) {
   window.INFO = { scenes: scenes.length, captionGroups: groups.length, wordsPerGroup: groups.map(g => g.words.length), accent, accentContrast: +contrast(accent, '#efeae0').toFixed(2), safe: SAFE,
     windows: scenes.filter(sc => sc.tr).map(sc => [+(sc.s.start - fr(sc.tr.lead) - 0.01).toFixed(3), +(sc.s.start + fr(sc.tr.settle) + 0.3).toFixed(3)]) };
   // Boxes of everything marked data-key that is on screen now, plus the caption line.
+  // Smallest text on screen now (scenes and furniture; captions are checked separately).
+  window.TEXTMIN = () => {
+    let best = null;
+    const walk = document.createTreeWalker(sceneLayer, NodeFilter.SHOW_TEXT);
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      const tx = n.nodeValue.trim(), el = n.parentElement;
+      if (tx.length < 2 || !el || el.offsetParent === null) continue;
+      let o = 1;
+      for (let e = el; e && e !== sceneLayer; e = e.parentElement) o *= parseFloat(getComputedStyle(e).opacity);
+      if (o < 0.5) continue;
+      const px = parseFloat(getComputedStyle(el).fontSize);
+      if (!best || px < best.px) best = { px, text: tx.slice(0, 24) };
+    }
+    return best;
+  };
   window.AUDIT = () => {
     const out = [];
     // the tight box of what is drawn inside the element, not of its layout container

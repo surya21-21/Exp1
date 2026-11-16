@@ -61,6 +61,13 @@ jobs:
         run: |
           test -f "reels/$REEL/reel.json" || { echo "::error::reels/$REEL/reel.json not found"; exit 1; }
           python3 -c "import json,sys; r=json.load(open('reels/$REEL/reel.json')); print(len(r['scenes']), 'scenes:', ', '.join(s['type'] for s in r['scenes']))"
+          # Gate 1: a finished reel is only rendered from the script the owner approved, and with a ledger.
+          if [ "$MAKE" = "finished reel" ]; then
+            python3 scripts/plan_reel.py "reels/$REEL/reel.json" --check-approval
+            if [ "$REEL" != "engine-test" ] && [ ! -f "reels/$REEL/ledger.md" ]; then
+              echo "::error::BLOCKED: reels/$REEL/ledger.md is missing. Every stage leaves its evidence there before a finished render."; exit 1
+            fi
+          fi
 
       - uses: actions/setup-python@v5
         with:
@@ -109,13 +116,28 @@ jobs:
           fi
 
       - name: Plan the timing
-        run: python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json
+        run: python scripts/plan_reel.py "reels/$REEL/reel.json" --words build/words.json --out build/reel.timed.json --table build/timing.md
 
       - name: Storyboard stills
         run: |
           TIMES=$(python3 -c "import json; s=json.load(open('build/reel.timed.json')); print(','.join(['0']+[str(round(max(sc['start'],sc['end']-0.2),3)) for sc in s['scenes']]))")
           python studio/render.py build/reel.timed.json --stills build/storyboard --times "$TIMES" --cues build/cues.json --audit build/audit.json
           python scripts/reel_sheet.py --stills build/storyboard --out build/storyboard.jpg --cols 5 --width 324
+          # every transition as a strip of 8 frames, so its motion can be judged
+          TT=$(python3 -c "import json; s=json.load(open('build/reel.timed.json')); f=1/s['fps']; print(','.join(str(round(sc['start']+k*f,4)) for sc in s['scenes'][1:] if sc.get('in','cut')!='cut' for k in (-6,-4,-2,-1,0,1,3,5)))")
+          if [ -n "$TT" ]; then
+            python studio/render.py build/reel.timed.json --stills build/transitions --times "$TT"
+            python scripts/reel_sheet.py --stills build/transitions --out build/transitions.jpg --cols 8 --width 200
+          fi
+
+      - name: Animatic (timing pass at 10 frames a second, with the voice)
+        run: |
+          python studio/render.py build/reel.timed.json --out build/animatic_silent.mp4 --step 3 --crf 24
+          if [ -f build/voiceover.mp3 ]; then
+            ffmpeg -v error -y -i build/animatic_silent.mp4 -i build/voiceover.mp3 -vf scale=540:960 -c:v libx264 -crf 27 -pix_fmt yuv420p -c:a aac -b:a 96k -shortest build/animatic.mp4
+          else
+            ffmpeg -v error -y -i build/animatic_silent.mp4 -vf scale=540:960 -c:v libx264 -crf 27 -pix_fmt yuv420p build/animatic.mp4
+          fi
 
       - name: Render every frame
         if: env.MAKE == 'finished reel'
@@ -155,6 +177,7 @@ jobs:
           cp build/storyboard.jpg build/reel.timed.json build/cues.json "$OUT/" 2>/dev/null || true
           cp build/contact.jpg build/checks.md build/final.mp4 build/voiceover.mp3 build/words.json "$OUT/" 2>/dev/null || true
           cp build/audio/music/*.mp3 "$OUT/music.mp3" 2>/dev/null || true
+          cp build/transitions.jpg build/animatic.mp4 build/timing.md "$OUT/" 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch -q origin reel-previews:reel-previews 2>/dev/null && git checkout -q reel-previews || { git checkout -q --orphan reel-previews; git rm -rfq . ; }
