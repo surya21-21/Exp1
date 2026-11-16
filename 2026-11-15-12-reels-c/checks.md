@@ -1,6 +1,6 @@
 # Checks: I made Claude study 12 viral reels, frame by frame
 
-27 of 28 lines are pass or not applicable; **1 fail**.
+28 of 28 lines are pass or not applicable; **0 fail**.
 
 | Check | Result | Measured | Note |
 | --- | --- | --- | --- |
@@ -8,10 +8,10 @@
 | Frame rate | pass | 30.00 fps |  |
 | Length | pass | 41.80 s (planned 41.77 s) |  |
 | Frame zero is not empty | pass | 4.5% of the first frame is ink or objects | readability of the promise: look yourself |
-| Stillness | pass | longest stretch with nothing changing: 0.93 s | limit 1.5 s |
-| Stillness outside the captions | FAIL | longest stretch where only the captions change: 2.13 s | limit 2.0 s; caption words alone do not count as motion |
+| Stillness | pass | longest stretch with nothing changing: 0.90 s | limit 1.5 s |
+| Stillness outside the captions | pass | longest stretch where only the captions change: 1.80 s | limit 2.0 s; caption words alone do not count as motion |
 | Frame in use | pass | content spans 60% or more of the usable height in 98% of frames | needs 80%; usable height is under the captions and above the app's buttons |
-| Rhythm | pass | 1.67 picture changes a second | the 12 reference reels: 0.5 to 2.2 |
+| Rhythm | pass | 1.65 picture changes a second | the 12 reference reels: 0.5 to 2.2 |
 | Transitions present | pass | largest frame-to-frame change 0.141 | a hard change means a cut or wipe was drawn |
 | Caption size | pass | 37 groups, largest 4 words, one-word groups: 5 | one-word groups are whole one-word sentences |
 | Words from the first frame | pass | first caption at 0.0 s |  |
