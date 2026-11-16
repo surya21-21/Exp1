@@ -83,21 +83,35 @@ Read `brand/brand-sheet.md` first and copy its Locked, Signature and Avoid lists
 Evidence: the brief at the top of `ledger.md`.
 
 ### Stage 1 - Trend and topic research
-- Check the journal's "Post ideas" first: the user's own work is the channel's subject.
+- Read the journal: yesterday's entry first, then earlier days when a topic needs more. Pull post ideas from what the user actually did, tried, got wrong and learned. The channel covers using Claude Code for edits and motion, how to use other AI apps such as Higgsfield, the user's mistakes, and their journey. A script may combine several days into one story; every personal claim must come from a journal entry or from the user.
 - Pull what is rising in the niche this week and 3 to 5 outlier videos (views far above the channel's average). Record the date of the data and its source.
 - For each outlier: hook line, first-frame visual, structure, length, on-screen text, CTA.
 - Extract the mechanism, never the script. Write an original angle.
-Evidence: `research.md` with links and dates. If only web search was available, say so at the top. If the topic came from the user and no trend pass was run, write that instead of pretending.
+Evidence: `research.md` with links and dates, and the journal entries used, by date. If only web search was available, say so at the top. If the topic came from the user and no trend pass was run, write that instead of pretending. If there is no journal entry for recent days, say so and ask the user what they did.
 
 ### Stage 2 - Reference study
 Only when the user supplies new reference reels. A link is fetched by the yt-dlp step in `reference.yml`; if the platform blocks it, ask the user to upload the file. Reference videos are for study only and never re-uploaded, committed or reused as footage.
 
-- **Sample by motion, not by the clock.** Decode every frame. Compute the frame-to-frame difference curve; grow each cut and motion peak into an event with its lead and settle frames (`collection/tools/catalogue_events.py`). Keep every frame of the first 3 seconds.
-- **View at least half of the events** as strips of 8 to 12 consecutive frames, and at least one of every kind in every reel. Write the count viewed and the count measured.
-- For each viewed event record: kind, length in frames, direction, how it speeds up and slows down, overshoot or bounce, blur, what carries across, the sound on it. For text: frames per word, pop size, settle time.
-- **Label the sounds** with LAION-CLAP and PANNs on the track with the voice removed. Keep only sounds that land within 3 frames of a picture event. Model labels are a first pass: only the user's ear confirms them, so mark them "not checked by ear" until the user has listened to at least 10 per reel.
+- **Sample by motion, not by the clock.** A frame every 0.5 s misses anything shorter than half a second, which is most transitions, text pops and effects.
+  1. Decode every frame of the source at its own frame rate. Compute the frame-to-frame difference curve and detect cuts on all frames.
+  2. Keep every frame of the first 3 seconds.
+  3. Grow each cut and each peak in the difference curve into an event with its lead and settle frames (`collection/tools/catalogue_events.py`).
+  4. View events as strips of 8 to 12 consecutive frames in order, never as single frames, so the motion can be read. View at least half of all events, and at least one of every kind in every reel. Write the count viewed and the count measured.
+  5. For each viewed event record: what kind of transition or effect it is, its length in frames, direction of travel, how it speeds up and slows down, overshoot or bounce, blur or smear, what element carries across, and the sound that lands on it.
+  6. For text: frames per word entry, pop size and settle time, measured the same way.
+- Limits to state in the notes: nothing shorter than one source frame can be seen, and compression smears fast motion, so very fast effects are described as best estimates.
+- **Label the sounds.**
+  1. Separate the voice from the music and effects (Demucs, in the `study-audio` workflow).
+  2. Find sound onsets in the music-and-effects track.
+  3. Cut a clip from 0.1 s before to 0.6 s after each onset.
+  4. Label each clip with LAION-CLAP against the user's own word list: whoosh, swoosh, pop, click, tick, impact, riser, glitch, stamp, slash, chime, typing, shatter, servo. Add a word to the list when a sound fits none of them. Tag the same clip with PANNs.
+  5. Keep the top label and its score. When it is less than 0.03 above the second label, mark it "unsure".
+  6. Match each labelled sound to the picture event within 3 frames of it, and keep only those: the rest are mostly beats of the music.
+  7. Write `sfx-map.csv`: time, label, score, visual event, loudness relative to the voice. Summarise as "which sound on which event, how often".
+  8. Model labels are a first pass, not truth. Only the user's ear confirms them: mark the map "not checked by ear" until the user has listened to at least 10 per reel.
 - Transcribe the voice for pace and structure. Keep transcripts private.
-- Add what is new to `collection/recipes/` with its numbers, and build anything reusable.
+- Also measure: caption position and words per group, words per second, pauses.
+- Add what is new to `collection/recipes/` with its numbers, build anything reusable, and note it in the user's editing notes.
 Evidence: `collection/data/<reel>/events.csv` and `sfx-map.csv`, the viewed and measured counts, new recipe IDs. With no new reference: "no new reference; using the collection of <date>".
 
 ### Stage 3 - Hooks
@@ -190,6 +204,7 @@ Evidence: `checks.md` with zero fails, the Part 2 table filled in the ledger, th
 
 ### Stage 10 - Deliver and learn
 - Send the MP4, the caption, a cover frame (1080 x 1920 with 3 to 5 words inside the centre 3:4; Instagram's profile grid has shown posts at 3:4 since January 2025), hashtags and the pinned comment.
+- Write the day's journal entry (see "Journal").
 - After posting, record what the user reports: views past 3 seconds, average watch time, saves, sends, comments on the keyword. Compare with earlier reels and write one line on what to change next time.
 Evidence: the files sent and a `results.md` once numbers exist.
 
@@ -258,6 +273,7 @@ Every rule carries its source in brackets. A rule with no source does not belong
 - [measured: layouts-and-ui.md] One highlight at a time (an outline, a switch, the avatar). Every claim is shown as a state change: a switch turns on, a bar fills, a counter lands.
 - [measured: transitions.md] Carry, do not replace: something on screen survives each boundary (in the references a brand chip, a caption bar, the avatar).
 - [measured: transitions.md] Most creators own one signature transition and repeat it. Ours is the paper tear.
+- [owner: brand sheet] Restraint: one background, one accent colour, two typefaces, one set of sounds.
 
 ### Motion
 What makes code-made video look alive. Frame counts are at 30 frames a second.
