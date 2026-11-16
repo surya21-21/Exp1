@@ -63,12 +63,12 @@
         "line": "12 of 12 start talking at 0.0 s",
         "a": "INTRO",
         "b": "LOGO",
-        "ledgeY": 760,
+        "ledgeY": 800,
         "cardRect": [
           90,
-          760,
-          900,
-          680
+          800,
+          890,
+          500
         ]
       },
       "hold": 0.3

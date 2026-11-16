@@ -156,7 +156,7 @@ export const SCENES = {
         cards.forEach((k, i) => {
           const at = L[i + 1], on = t >= at;
           const d = on ? (i === 11 ? 26 : 12) * Math.sin(Math.PI * clamp((t - at) / fr(7))) * (1 - 0.3 * prog(t, at, fr(7))) : 0;
-          const enter = ctx.pre ? 1 : outBack(prog(t, -fr(3) + i * fr(1), fr(7)), 1.6);
+          const enter = ctx.pre ? 1 : outBack(prog(t, -fr(14) + i * fr(1), fr(7)), 1.6);
           k.c.style.transform = `translateY(${(d + (1 - enter) * 40).toFixed(1)}px)`;
           k.c.style.opacity = clamp(enter * 2).toFixed(3);
           k.dot.style.opacity = on ? '1' : '0';
@@ -171,75 +171,65 @@ export const SCENES = {
     };
   },
 
-  // R03 Deal: cards fly from his hand to the wall, one per flick, 3 frames apart; the last
-  // (card 1) stays in his hand, goes up high, and is thrown into the next scene (charThrow).
+  // R03 Deal: one flick of the wrist per card, 3 frames apart, each card flying on an arc to
+  // its place on the wall and landing with an overshoot; the last (card 1) stays in his hand,
+  // and he winds up and throws it into the next scene (charThrow).
   charDeal(wrap, p, ctx) {
-    const S = 250, X = 230, Y = 1440, items = p.items || [];
-    const slots = [[400, 520], [690, 520], [400, 755], [690, 755]], CW = 260, CH = 210;
+    const S = 250, X = 215, Y = 1440, items = p.items || [];
+    const slots = [[400, 700], [690, 700], [400, 935], [690, 935]], CW = 260, CH = 210;
+    const wrapLines = (tx, n = 15) => { const out = []; let l = ''; for (const w of tx.split(' ')) { if (l && (l + ' ' + w).length > n) { out.push(l); l = w; } else l = l ? l + ' ' + w : w; } out.push(l); return out; };
     const mkCard = (i, tx) => {
       const c = h('div', abs(0, 0, CW, CH, `${cardCss(26)}padding:22px 24px;transform-origin:50% 50%`));
       c.append(h('div', `font:900 58px/1 ${DISPLAY};color:var(--accent)`, String(i + 1)), h('div', `margin-top:10px;font:800 34px/1.12 ${SANS};letter-spacing:-.5px;color:${P.ink}`, tx));
       return c;
     };
-    const title = h('div', abs(400, 1000, 600, null, `font:900 112px/0.95 ${DISPLAY};letter-spacing:-4px;color:${P.ink}`), p.title || '4 things');
-    const sub = h('div', abs(404, 1118, 600, null, `font:italic 600 42px/1.2 ${SERIF};color:${P.muted}`), p.sub || '');
+    const title = h('div', abs(100, 486, 900, null, `font:900 118px/0.95 ${DISPLAY};letter-spacing:-4px;color:${P.ink}`), p.title || '4 things');
+    const sub = h('div', abs(104, 604, 900, null, `font:italic 600 42px/1.2 ${SERIF};color:${P.muted}`), p.sub || '');
     title.dataset.key = 'title';
     const hole = h('div', abs(slots[0][0], slots[0][1], CW, CH, `border-radius:26px;border:5px dashed ${P.track};display:flex;align-items:center;justify-content:center;font:900 90px ${DISPLAY};color:${P.track}`), '1');
-    const cards = items.map((tx, i) => { const c = mkCard(i, tx); wrap.append(c); return c; });
-    wrap.prepend(hole, title, sub);
+    const cards = items.map((tx, i) => (i ? mkCard(i, tx) : null));
+    wrap.append(hole, title, sub, ...cards.filter(Boolean));
     const B0 = beat(ctx, 0, 0.49);
     const rel = [B0, B0 + fr(3), B0 + fr(6)];          // cards 2, 3, 4 leave the hand
-    const FL = fr(8), UP = B0 + fr(10);
-    const end = ctx.dur;
-    const handArm = t => {
-      let a = 72;                                        // forward-right, ready to deal
-      for (const r of rel) a += -26 * pulse(t, r - fr(2), fr(2), fr(0.01)) * (t < r ? 1 : 0) + 64 * pulse(t, r, fr(1), fr(4));
-      return a;
-    };
+    const FL = fr(9), UP = B0 + fr(11), end = ctx.dur;
+    const held = { kind: 'card', key: 'held', hand: 1, n: '1', lines: wrapLines(items[0] || ''), dx: 118, dy: -40, rot: -6 };
     const character = t => {
       const Q = stand(X, Y, S);
       idle(Q, t, 0.7);
-      armsTo(Q, t, { t0: -fr(4), t1: UP - fr(2), in: fr(4), out: fr(4), arms: [null, [handArm(t), -18]] });
-      // card 1 goes up high, then the arm cocks back for the throw
-      const cock = inOutCubic(prog(t, end - fr(9), fr(6)));
-      armsTo(Q, t, { t0: UP, t1: 9, in: fr(5), arms: [[-30, 20], [lerp(168, 128, cock), lerp(4, 35, cock)]] });
-      look(Q, t, { t0: B0 - fr(3), t1: UP, tilt: 6, dx: 0.02 });
-      look(Q, t, { t0: UP + fr(3), t1: 9, tilt: -4 });
-      face(Q, t, { t0: UP + fr(4), t1: end - fr(6), face: 'grin' });
-      Q.lean += -3 * cock;
+      // dealing: a short pull back, then a flick up and out, for each card
+      let a = 62;
+      for (const r of rel) a += -22 * pulse(t, r - fr(2), fr(2), 0.0001) * (t < r ? 1 : 0) + 70 * pulse(t, r, fr(1), fr(4));
+      armsTo(Q, t, { t0: -fr(4), t1: UP - fr(2), in: fr(4), out: fr(4), arms: [[-22, 30], [a, -14]] });
+      // card 1 comes out and is shown at his side; then the arm winds back behind him for the throw
+      const cock = inOutCubic(prog(t, end - fr(10), fr(7)));
+      armsTo(Q, t, { t0: UP, t1: 9, in: fr(5), arms: [[-24, 26], [lerp(58, -40, cock), lerp(-20, -30, cock)]] });
+      look(Q, t, { t0: B0 - fr(3), t1: UP, tilt: 7, dx: 0.02 });
+      look(Q, t, { t0: UP + fr(3), t1: 9, tilt: -3 });
+      face(Q, t, { t0: UP + fr(4), t1: end + 1, face: 'grin' });
+      Q.lean += -5 * cock;
+      if (t >= UP - fr(2)) Q.props = [{ ...held, scale: outBack(prog(t, UP - fr(2), fr(6)), 2), rot: -6 + 30 * cock }];
       return Q;
     };
-    const cardInHand = t => {
-      const J = joints(character(t)), a = J.arms[1];
-      const w = 210, hh = 170, ang = a.ang - 180;          // stands up out of the fist
-      return { x: a.hand[0] - w / 2 + Math.sin(ang * Math.PI / 180) * 60, y: a.hand[1] - hh - 18, w, h: hh, rot: -ang * 0.35 };
-    };
-    if (ctx.shared.puppet) ctx.shared.puppet.throwFrom[ctx.index] = { rect: cardInHand, text: items[0] || '', n: 1 };
     return {
       character,
       update(t) {
-        rise(title, outCubic(prog(t, fr(2), fr(8))), 30);
+        rise(title, ctx.pre ? 1 : outCubic(prog(t, fr(2), fr(8))), 30);
         rise(sub, outCubic(prog(t, fr(6), fr(8))), 24);
         hole.style.opacity = outCubic(prog(t, 0, fr(6))).toFixed(3);
         cards.forEach((c, i) => {
-          if (i === 0) {                                   // card 1 rides in his hand
-            const r = cardInHand(t), on = t >= UP - fr(3);
-            c.style.display = on ? 'block' : 'none';
-            if (on) { const g = outBack(prog(t, UP - fr(3), fr(5)), 2); c.style.width = `${r.w}px`; c.style.height = `${r.h}px`; c.style.padding = '16px 18px'; c.style.transform = `translate(${r.x.toFixed(1)}px,${r.y.toFixed(1)}px) rotate(${r.rot.toFixed(2)}deg) scale(${g.toFixed(3)})`; }
-            return;
-          }
+          if (!c) return;
           const r = rel[i - 1], q = prog(t, r, FL), on = t >= r;
           c.style.display = on ? 'block' : 'none';
           if (!on) return;
           const from = joints(character(r)).arms[1].hand, [sx, sy] = slots[i];
-          const e = outCubic(q), x = lerp(from[0] - CW / 2, sx, e), y = lerp(from[1] - CH / 2, sy, e) - 120 * Math.sin(Math.PI * q);
-          const s = lerp(0.35, 1, outBack(q, 1.6)), rot = lerp(-40, 0, outBack(q, 2)) + 3 * (i % 2 ? 1 : -1) * (1 - e);
+          const e = outCubic(q), x = lerp(from[0] - CW / 2, sx, e), y = lerp(from[1] - CH / 2, sy, e) - 140 * Math.sin(Math.PI * q);
+          const s = lerp(0.3, 1, outBack(q, 1.7)), rot = lerp(-50, 0, outBack(q, 2)) + 3 * (i % 2 ? 1 : -1) * (1 - e);
           c.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${rot.toFixed(2)}deg) scale(${s.toFixed(4)})`;
-          ctx.blur(c, q < 0.6 ? 6 * (1 - q) : 0, 0);
+          ctx.blur(c, q < 0.6 ? 7 * (1 - q) : 0, 0);
         });
       },
-      lamp: () => ({ x: 640, y: 800, k: 1 }),
-      cues: [{ t: rel[0], sfx: 'swoosh', gain: 0.45 }, { t: rel[2] + fr(8), sfx: 'pop', gain: 0.5 }],
+      lamp: () => ({ x: 600, y: 900, k: 1 }),
+      cues: [{ t: rel[0], sfx: 'swoosh', gain: 0.45 }, { t: rel[2] + FL, sfx: 'pop', gain: 0.5 }],
     };
   },
 
@@ -247,11 +237,11 @@ export const SCENES = {
   // himself, and its tip draws the underline. Then he bats the INTRO card off the ledge and
   // stomps the LOGO card flat.
   charUnderline(wrap, p, ctx) {
-    const S = 165, LEDGE = 760, LEN = 2.2, X0 = 130, X1 = 870, LY = 922;
-    const c = card(90, LEDGE, 900, 680); c.dataset.key = 'card';
+    const S = 165, LEDGE = 800, LEN = 2.2, X0 = 130, X1 = 870, LY = 962;
+    const c = card(90, LEDGE, 890, 500); c.dataset.key = 'card';
     const kickr = h('div', abs(40, 34, 820, null, `font:800 30px/1 ${SANS};letter-spacing:5px;color:var(--accent)`), p.kicker || 'STEP 01 / 04');
     const title = h('div', abs(40, 74, 840, null, `font:900 ${p.font || 66}px/1.02 ${DISPLAY};letter-spacing:-2px;color:${P.ink};white-space:nowrap`), p.name || '');
-    const numeral = E.ledgerNumeral('01', 360); numeral.style.left = '470px'; numeral.style.top = '390px';
+    const numeral = E.ledgerNumeral('01', 300); numeral.style.left = '560px'; numeral.style.top = '240px';
     const bubbles = h('div', abs(40, 236, 820, 60, 'display:flex;gap:16px'));
     const bs = Array.from({ length: 12 }, () => { const b = bubble(52); bubbles.append(b); return b; });
     const line = h('div', abs(40, 312, 820, null, `font:700 46px/1.15 ${SANS};letter-spacing:-.5px;color:${P.ink}`), p.line || '');
@@ -260,21 +250,22 @@ export const SCENES = {
     // INTRO and LOGO pop up from behind the ledge
     const stageBox = h('div', abs(0, 0, 1080, LEDGE, 'overflow:hidden'));
     const tcard = (tx, cx) => { const e = h('div', abs(cx - 90, LEDGE - 112, 180, 112, `${cardCss(18)}display:flex;align-items:center;justify-content:center;gap:10px;font:900 40px/1 ${DISPLAY};letter-spacing:1px;color:${P.graphite};transform-origin:50% 100%`), `<i style="width:16px;height:16px;border-radius:50%;background:${P.track};display:block"></i>${tx}`); stageBox.append(e); return e; };
-    const intro = tcard(p.a || 'INTRO', 770), logo = tcard(p.b || 'LOGO', 560);
+    const intro = tcard(p.a || 'INTRO', 520), logo = tcard(p.b || 'LOGO', 300);
     const pencilMarkA = h('div', abs(0, 0, 0, 0));
     wrap.append(c, ul.el, stageBox, pencilMarkA);
     const B = [beat(ctx, 0, 0.09), beat(ctx, 1, 1.65), beat(ctx, 2, 3.71), beat(ctx, 3, 4.74)];
     const RUN = walkPlan({ t0: B[1], t1: B[1] + 1.3, x0: 175, x1: 915, y0: LEDGE, S, step: 0.62, lift: 0.12, antic: fr(4) });
-    const swat = B[2], upA = swat - 0.36, introUp = swat - 0.45;
-    const HOP = { t0: B[3] - 0.4, dur: 0.4, x0: 915, y0: LEDGE, x1: 560, y1: LEDGE, h: 95, antic: fr(4), settle: fr(9), squash: 0.08 };
+    const swat = B[2], upA = swat - 0.3, introUp = swat - 0.5;
+    const BACK = walkPlan({ t0: B[1] + 1.36, t1: B[1] + 1.72, x0: 915, x1: 740, y0: LEDGE, S, step: 0.5, arms: 0.4 });
+    const HOP = { t0: B[3] - 0.4, dur: 0.4, x0: 740, y0: LEDGE, x1: 300, y1: LEDGE, h: 38, antic: fr(4), settle: fr(9), squash: 0.08 };
     const logoUp = HOP.t0 - 0.45;
     const pencilAng = t => {
-      if (t < B[1] - fr(6)) return 4;
-      if (t < upA) return lerp(4, -18, inOutCubic(prog(t, B[1] - fr(6), fr(6))));
-      if (t < swat - fr(2)) return angLerp(-18, 165, inOutCubic(prog(t, upA, 0.26)));
-      if (t < swat + fr(4)) return angLerp(165, -100, inCubic(prog(t, swat - fr(2), fr(3))));   // the bat swing
+      if (t < B[1] - fr(8)) return 132 + 3 * Math.sin(t * 2.2);                       // on his shoulder
+      if (t < upA) return angLerp(132, -18, inOutCubic(prog(t, B[1] - fr(8), fr(8))));
+      if (t < swat - fr(2)) return angLerp(-18, 118, inOutCubic(prog(t, upA, 0.22)));
+      if (t < swat + fr(4)) return lerp(118, -100, inCubic(prog(t, swat - fr(2), fr(3))));      // a golf swing, low through the bottom
       if (t < HOP.t0) return angLerp(-100, -60, outCubic(prog(t, swat + fr(1), fr(8))));
-      return angLerp(-60, 170, outCubic(prog(t, HOP.t0 - fr(4), fr(8))));
+      return angLerp(-60, -52, outCubic(prog(t, HOP.t0 - fr(4), fr(8))));
     };
     const drawing = t => t >= B[1] - fr(6) && t < upA;
     const character = t => {
@@ -282,6 +273,7 @@ export const SCENES = {
       idle(Q, t, 0.6);
       point(Q, t, { t0: B[0], t1: B[0] + 0.85, hand: 0, at: [140, 300], look: false });
       walk(Q, t, RUN);
+      walk(Q, t, BACK);
       hop(Q, t, HOP);
       // hold the pencil: while drawing, the hand goes where the tip touches the line
       const ang = pencilAng(t);
@@ -290,7 +282,7 @@ export const SCENES = {
         reach(Q, t, { t0: B[1] - fr(6), t1: upA - fr(3), in: fr(5), out: fr(4), hand: 1, at: [tx - v[0] * back, LY - v[1] * back], pref: [1, 0.4] });
       } else if (t >= upA - fr(3)) {
         const sw = t >= swat - fr(2) && t < swat + fr(6);
-        armsTo(Q, t, { t0: upA, t1: 99, in: fr(4), arms: [null, sw ? [-70, -20] : [140, 10]] });
+        armsTo(Q, t, { t0: upA, t1: 99, in: fr(4), arms: [null, sw ? [-70, -20] : t < HOP.t0 - fr(4) ? [125, 10] : [-40, -10]] });
       }
       Q.props = [{ kind: 'pencil', hand: 1, ang, len: LEN }];
       if (t > B[1] - fr(6) && t < upA) Q.head.face = null;
@@ -311,7 +303,7 @@ export const SCENES = {
         ul.update(t < B[1] ? 0 : clamp((reachX - X0) / (X1 - X0)));
         void tip;
         const done = B[1] + 1.25;
-        bs.forEach((b, i) => pop(b, prog(t, done + i * fr(2), fr(6)), 0.3));
+        bs.forEach((b, i) => pop(b, t < B[1] ? 0 : clamp((reachX - (X0 + 26 + i * 68)) / 60), 0.3));   // each pops as the tip passes it
         rise(line, outCubic(prog(t, done + fr(10), fr(8))), 20);
         // INTRO: up from behind the ledge, batted off to the left, spinning
         const iu = outBack(prog(t, introUp, fr(7)), 1.8), hit = prog(t, swat, 0.5);
@@ -376,42 +368,45 @@ export const SCENES = {
   // the desk. Then he runs along it muting every other channel; the counter rolls from 210 down
   // to 103. Last, a strip shows the sound landing half a frame before the picture.
   charMute(wrap, p, ctx) {
-    const S = 220, GROUND = 1400, DESK = 1290, N = 10;
-    const CH = k => 120 + k * (770 / 9);
+    const S = 290, GROUND = 1452, DESK = 1335, N = 10, MID = 540, X0 = 200;
+    const CH = k => 120 + k * (740 / 9);
     const title = h('div', abs(80, 482, 920, null, `text-align:center;font:900 64px/1.05 ${DISPLAY};letter-spacing:-2px;color:${P.ink}`), p.title || '');
     const cnt = tally(3, { w: 104, hh: 150, comma: false });
     const cbox = h('div', abs(0, 590, 1080, 160, 'display:flex;justify-content:center')); cbox.append(cnt.el); cnt.el.dataset.key = 'counter';
     const clabel = h('div', abs(80, 758, 920, null, `text-align:center;font:700 40px/1.2 ${SANS};color:${P.graphite}`), p.label || 'of 210 moves get a sound');
     // the strip: frames of a picture event, the sound blip half a frame before it
-    const strip = h('div', abs(130, 846, 820, 150, `${cardCss(22)}`));
-    const fw = 92, frames = Array.from({ length: 7 }, (_, i) => { const f = h('div', abs(36 + i * (fw + 14), 26, fw, 60, `border-radius:10px;background:${i === 4 ? 'color-mix(in srgb,var(--accent) 16%,#fff)' : P.card2};border:4px solid ${i === 4 ? 'var(--accent)' : P.line}`)); strip.append(f); return f; });
-    const blip = h('div', abs(0, 98, 20, 20, 'border-radius:50%;background:var(--accent)'));
-    const blipLab = h('div', abs(0, 100, 380, null, `font:800 34px/1 ${SANS};color:${P.ink};white-space:nowrap`), p.early || 'half a frame early');
+    const strip = h('div', abs(130, 812, 820, 132, `${cardCss(22)}`));
+    const fw = 92, frames = Array.from({ length: 7 }, (_, i) => { const f = h('div', abs(36 + i * (fw + 14), 18, fw, 56, `border-radius:10px;background:${i === 4 ? 'color-mix(in srgb,var(--accent) 16%,#fff)' : P.card2};border:4px solid ${i === 4 ? 'var(--accent)' : P.line}`)); strip.append(f); return f; });
+    const blip = h('div', abs(0, 86, 20, 20, 'border-radius:50%;background:var(--accent)'));
+    const blipLab = h('div', abs(0, 80, 380, null, `font:800 34px/1 ${SANS};color:${P.ink};white-space:nowrap`), p.early || 'half a frame early');
     strip.append(blip, blipLab);
     wrap.append(title, cbox, clabel, strip);
     // the desk is in front of him: the foreground layer of the puppet
     const fgEl = ctx.shared.puppet ? ctx.shared.puppet.fg(ctx.index) : wrap;
-    const desk = h('div', abs(64, DESK, 930, 170, `border-radius:22px 22px 14px 14px;background:linear-gradient(170deg,#f6efe2,#e6dccb 70%);box-shadow:inset 2px 3px 0 #fff,inset 0 -8px 0 rgba(70,52,25,.12),6px 10px 18px rgba(70,52,25,.3),18px 40px 70px -20px ${P.shadowDeep}`));
+    const desk = h('div', abs(64, DESK, 930, 140, `border-radius:22px 22px 14px 14px;background:linear-gradient(170deg,#f6efe2,#e6dccb 70%);box-shadow:inset 2px 3px 0 #fff,inset 0 -8px 0 rgba(70,52,25,.12),6px 10px 18px rgba(70,52,25,.3),18px 40px 70px -20px ${P.shadowDeep}`));
     const lip = h('div', abs(64, DESK - 8, 930, 22, `border-radius:12px;background:linear-gradient(#fffdf8,#ece4d4);box-shadow:0 3px 6px rgba(70,52,25,.25)`));
-    const sps = Array.from({ length: N }, (_, k) => { const s = speaker(70); s.el.style.left = `${CH(k) - 64 - 35}px`; s.el.style.top = '40px'; desk.append(s.el); return s; });
+    const sps = Array.from({ length: N }, (_, k) => { const s = speaker(74); s.el.style.left = `${CH(k) - 64 - 37}px`; s.el.style.top = '38px'; desk.append(s.el); return s; });
     const keys = Array.from({ length: N }, (_, k) => { const e = h('div', abs(CH(k) - 64 - 26, -6, 52, 22, `border-radius:8px;background:${P.graphite};box-shadow:0 4px 0 #2a2723`)); desk.append(e); return e; });
     fgEl.append(lip, desk);
     const B = [beat(ctx, 0, 1.54), beat(ctx, 1, 2.5), beat(ctx, 2, 3.6), beat(ctx, 3, 5.5)];
     // the run along the desk and the five slaps (channels 2, 4, 6, 8, 10)
-    const RUN = walkPlan({ t0: B[2] - 0.2, t1: B[2] + 1.35, x0: 170, x1: 880, y0: GROUND, S, step: 0.7, lift: 0.1, arms: 0.5 });
+    const HOPL = { t0: B[2] - 0.5, dur: 0.26, x0: MID, y0: GROUND, x1: X0, y1: GROUND, h: 60, antic: fr(3), settle: fr(4), squash: 0.05, arms: 0.4 };
+    const RUN = walkPlan({ t0: B[2] - 0.15, t1: B[2] + 1.3, x0: X0, x1: 845, y0: GROUND, S, step: 0.62, lift: 0.1, arms: 0.5 });
     const slapK = [1, 3, 5, 7, 9];
-    const xAt = t => (t < RUN.t0 ? 170 : t >= RUN.t1 ? 880 : walkX(RUN, t));
+    const xAt = t => (t < RUN.t0 ? X0 : t >= RUN.t1 ? 845 : walkX(RUN, t));
     const slapT = slapK.map(k => {                     // the moment his body passes each channel
       let lo = RUN.t0, hi = RUN.t1; for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2; if (xAt(m) < CH(k) - 30) lo = m; else hi = m; } return lo;
     });
-    const slam = B[1] + fr(1), JUMP = { t0: B[1] - 0.3, dur: 0.3, x0: 170, y0: GROUND, x1: 170, y1: GROUND, h: 70, antic: fr(4), settle: fr(10), squash: 0.08, arms: 0 };
+    const slam = B[1] + fr(1), JUMP = { t0: B[1] - 0.3, dur: 0.3, x0: MID, y0: GROUND, x1: MID, y1: GROUND, h: 80, antic: fr(4), settle: fr(10), squash: 0.08, arms: 0 };
     const v = t => { let n = 0; slapT.forEach(s => { n += outCubic(prog(t, s + fr(1), fr(5))); }); return lerp(210, 103, n / 5); };
     const character = t => {
-      const Q = stand(170, GROUND, S);
+      const Q = stand(MID, GROUND, S);
       idle(Q, t, 0.8);
       Q.clipY = DESK;
       // every speaker blares: hands over the ears, a wince
-      armsTo(Q, t, { t0: B[0], t1: B[1] - 0.32, in: fr(4), out: fr(4), arms: [[-150, 128], [150, -128]] });
+      const ears = [MID - 0.36 * S, GROUND - 1.04 * S];
+      reach(Q, t, { t0: B[0], t1: B[1] - 0.32, in: fr(4), out: fr(4), hand: 0, at: ears, pref: [-1, 0.2] });
+      reach(Q, t, { t0: B[0], t1: B[1] - 0.32, in: fr(4), out: fr(4), hand: 1, at: [2 * MID - ears[0], ears[1]], pref: [1, 0.2] });
       face(Q, t, { t0: B[0] + fr(2), t1: B[1] - 0.3, face: 'wink' });
       look(Q, t, { t0: B[0], t1: B[1] - 0.32, tilt: 0, dy: 0.03, lean: 0 });
       Q.bob += 0.012 * S * Math.sin(2 * Math.PI * t * 6) * env(t, B[0], B[1] - 0.32, fr(2), fr(3));
@@ -419,14 +414,15 @@ export const SCENES = {
       hop(Q, t, JUMP);
       armsTo(Q, t, { t0: B[1] - 0.25, t1: slam - fr(1), in: fr(3), out: fr(1), arms: [[-165, 10], [165, -10]] });
       armsTo(Q, t, { t0: slam, t1: slam + 0.35, in: fr(1), out: fr(6), arms: [[-25, 40], [25, -40]] });
-      react(Q, t, { t0: slam + 0.2, kind: 'shake', dur: 0.6, times: 1.5 });
+      react(Q, t, { t0: slam + 0.12, kind: 'shake', dur: 0.55, times: 1.5 });
+      hop(Q, t, HOPL);
       face(Q, t, { t0: slam - fr(2), t1: slam + 0.7, face: 'thinking' });
       // run and mute every other channel: a slap is 3 frames down, 4 up
       walk(Q, t, RUN);
       slapT.forEach(s => { const w = pulse(t, s - fr(3), fr(3), fr(4)); if (w > 0) Q.arms[1] = [angLerp(Q.arms[1][0], 20, w), lerp(Q.arms[1][1], 40, w)]; });
       face(Q, t, { t0: slapT[0], t1: slapT[4] + 0.2, face: 'grin' });
       // "before": point up at the strip
-      point(Q, t, { t0: B[3], t1: B[3] + 0.9, hand: 0, at: [560, 930], face: 'curious' });
+      point(Q, t, { t0: B[3], t1: B[3] + 0.9, hand: 0, at: [520, 880], face: 'curious' });
       return Q;
     };
     return {
@@ -458,60 +454,62 @@ export const SCENES = {
     };
   },
 
-  // R07 Sort into piles: he holds the twelve endings and deals them into three trays — nine in
-  // a quick stream, one flicked high, two just dropped (they land dead, no bounce).
+  // R07 Sort into piles: he holds the twelve endings and deals them into three trays: nine in a
+  // quick stream (3 frames apart), one flicked high, two just dropped (they land dead, no bounce).
   charSort(wrap, p, ctx) {
-    const S = 230, X = 205, Y = 1450, TRAY = 1385;
-    const piles = (p.piles || []).map((d, i) => ({ ...d, x: [505, 715, 900][i], w: [200, 170, 160][i] }));
+    const S = 220, X = 200, Y = 1450, TRAY = 1392, CWp = 150, CHp = 92;
+    const piles = (p.piles || []).map((d, i) => ({ ...d, x: [425, 680, 895][i], w: [230, 200, 170][i] }));
     const kick_ = kick(p.kicker || 'How the 12 reels end', 104, 486, 900);
-    const title = h('div', abs(100, 528, 900, null, `font:900 96px/1 ${DISPLAY};letter-spacing:-3px;color:${P.ink}`), p.title || 'The ending');
+    const title = h('div', abs(100, 528, 900, null, `font:900 104px/1 ${DISPLAY};letter-spacing:-3px;color:${P.ink}`), p.title || 'The ending');
     title.dataset.key = 'title';
-    wrap.append(kick_, title);
+    const numeral = E.ledgerNumeral('04', 420); numeral.style.left = '420px'; numeral.style.top = '600px';
+    wrap.append(numeral, kick_, title);
+    const marks = [
+      `<svg viewBox="0 0 100 80" width="46" height="37"><path d="M12 6 H88 Q96 6 96 14 V46 Q96 54 88 54 H40 L22 72 L26 54 H12 Q4 54 4 46 V14 Q4 6 12 6 Z" fill="var(--accent)"/></svg>`,
+      `<div style="padding:4px 12px;border-radius:20px;background:var(--accent);color:#fffdf8;font:800 22px/1 Inter,sans-serif">+</div>`,
+      `<div style="width:30px;height:30px;border-radius:5px;background:${P.ink}"></div>`];
     const trays = piles.map(pl => {
-      const tr = h('div', abs(pl.x - pl.w / 2 - 10, TRAY - 6, pl.w + 20, 46, `border-radius:12px;background:linear-gradient(#e2d8c5,#d3c7b0);box-shadow:inset 0 6px 8px rgba(70,52,25,.3),4px 8px 14px ${P.shadowSoft}`));
-      const lab = h('div', abs(pl.x - 120, 1100, 240, null, `text-align:center;font:800 34px/1.12 ${SANS};letter-spacing:-.5px;color:${P.graphite}`), pl.label);
-      const num = h('div', abs(pl.x - 120, 990, 240, null, `text-align:center;font:900 82px/1 ${DISPLAY};letter-spacing:-2px;color:${P.ink};transform-origin:50% 80%`), `${pl.n}<span style="font:800 34px ${SANS};letter-spacing:0;color:${P.muted}"> of 12</span>`);
+      const tr = h('div', abs(pl.x - pl.w / 2, TRAY - 6, pl.w, 44, `border-radius:12px;background:linear-gradient(#e2d8c5,#d3c7b0);box-shadow:inset 0 6px 8px rgba(70,52,25,.3),4px 8px 14px ${P.shadowSoft}`));
+      const lab = h('div', abs(pl.x - pl.w / 2 - 10, 1108, pl.w + 20, null, `text-align:center;font:800 34px/1.12 ${SANS};letter-spacing:-.5px;color:${P.graphite}`), pl.label);
+      const num = h('div', abs(pl.x - 110, 950, 220, null, `text-align:center;font:900 104px/0.9 ${DISPLAY};letter-spacing:-3px;color:${P.ink};transform-origin:50% 80%`), `${pl.n}<div style='font:800 34px/1.2 Inter,sans-serif;letter-spacing:0;color:${P.muted}'>of 12</div>`);
       wrap.append(tr, lab, num);
       return { tr, lab, num };
     });
     const B = [beat(ctx, 0, 1.08), beat(ctx, 1, 1.87), beat(ctx, 2, 4.98), beat(ctx, 3, 6.4)];
-    // which pile each of the twelve goes to, and when it leaves the hand
     const plan = [];
-    for (let i = 0; i < (piles[0] ? piles[0].n : 9); i++) plan.push({ pile: 0, t: B[1] + i * fr(3), fl: fr(9), arc: 90 });
-    plan.push({ pile: 1, t: B[2], fl: fr(14), arc: 260 });
-    plan.push({ pile: 2, t: B[3], fl: fr(10), arc: 40, dead: true }, { pile: 2, t: B[3] + fr(3), fl: fr(10), arc: 30, dead: true });
-    const slotOf = (pi, j) => [piles[pi].x, TRAY - 40 - j * 7];
+    for (let i = 0; i < (piles[0] ? piles[0].n : 9); i++) plan.push({ pile: 0, t: B[1] + i * fr(3), fl: fr(9), arc: 110 });
+    plan.push({ pile: 1, t: B[2], fl: fr(15), arc: 300 });
+    plan.push({ pile: 2, t: B[3], fl: fr(10), arc: 50, dead: true }, { pile: 2, t: B[3] + fr(3), fl: fr(10), arc: 40, dead: true });
     plan.forEach((c, i) => { c.j = plan.slice(0, i).filter(o => o.pile === c.pile).length; });
-    const R = rng(23), jit = plan.map(() => (R() - 0.5) * 10);
+    const slotOf = (pi, j) => [piles[pi].x, TRAY - CHp / 2 + 2 - j * 7];
+    const R = rng(23), jit = plan.map(() => (R() - 0.5) * 12);
     const flick = t => plan.reduce((m, c) => Math.max(m, pulse(t, c.t - fr(2), fr(2), fr(4))), 0);
     const character = t => {
       const Q = stand(X, Y, S);
       idle(Q, t, 0.7);
-      // the stack in the left hand, held up on "the ending"
-      armsTo(Q, t, { t0: -1, t1: 99, in: 0.01, arms: [[-8, 108], null], hands: ['grip', null] });
-      armsTo(Q, t, { t0: B[0], t1: B[1] - fr(4), in: fr(5), out: fr(5), arms: [[-150, 40], null] });
+      armsTo(Q, t, { t0: -1, t1: 99, in: 0.01, arms: [[-34, 52], null], hands: ['grip', null] });
+      armsTo(Q, t, { t0: B[0], t1: B[1] - fr(4), in: fr(5), out: fr(5), arms: [[-172, 14], null] });     // the stack held up: "the ending"
       look(Q, t, { t0: B[0], t1: B[1] - fr(4), tilt: -6, dx: -0.02 });
-      // the throwing arm: back 2 frames, out, back again
-      const f = flick(t), base = [40, -60];
-      Q.arms[1] = [angLerp(lerp(Q.arms[1][0], base[0], env(t, B[1] - fr(5), B[3] + 0.2, fr(5), fr(8))), 110, f), lerp(Q.arms[1][1], 10, f)];
+      const f = flick(t);
+      Q.arms[1] = [angLerp(lerp(Q.arms[1][0], 42, env(t, B[1] - fr(5), B[3] + 0.2, fr(5), fr(8))), 112, f), lerp(Q.arms[1][1], 12, f)];
       const big = pulse(t, B[2] - fr(5), fr(5), fr(8));
-      Q.arms[1] = [angLerp(Q.arms[1][0], 165, big), Q.arms[1][1]];
-      point(Q, t, { t0: B[1] + 1.2, t1: B[2] - 0.5, hand: 1, at: [505, 1250], face: 'interested' });
-      // "just stop": a shrug
-      armsTo(Q, t, { t0: B[3] + 0.35, t1: B[3] + 1.2, in: fr(5), out: fr(6), arms: [[-62, 70], [62, -70]] });
+      Q.arms[1] = [angLerp(Q.arms[1][0], 168, big), Q.arms[1][1]];
+      point(Q, t, { t0: B[1] + 1.25, t1: B[2] - 0.5, hand: 1, at: [425, 1250], face: 'interested' });
+      armsTo(Q, t, { t0: B[3] + 0.35, t1: B[3] + 1.2, in: fr(5), out: fr(6), arms: [[-62, 70], [62, -70]] });   // "just stop": a shrug
       face(Q, t, { t0: B[3] + 0.35, t1: B[3] + 1.2, face: 'grin' });
       look(Q, t, { t0: B[3] + 0.35, t1: B[3] + 1.2, tilt: 7 });
+      const left = plan.filter(c => t < c.t).length;
+      if (left > 0) Q.props = [{ kind: 'stack', hand: 0, n: left, rot: -6 }];
       return Q;
     };
-    const stack = h('div', abs(0, 0, 130, 120));
-    const sc = Array.from({ length: 12 }, (_, i) => { const e = h('div', abs(0, 60 - i * 5, 130, 80, `${cardCss(12)}`)); stack.append(e); return e; });
-    const flying = plan.map(() => { const e = h('div', abs(0, 0, 150, 90, `${cardCss(14)}display:none;transform-origin:50% 50%`)); return e; });
-    wrap.append(stack, ...flying);
+    const flying = plan.map(c => { const e = h('div', abs(0, 0, CWp, CHp, `${cardCss(14)}display:none;align-items:center;justify-content:center;transform-origin:50% 50%`), marks[c.pile]); return e; });
+    wrap.append(...flying);
     return {
       character,
       update(t) {
         rise(kick_, ctx.pre ? 1 : outCubic(prog(t, -fr(2), fr(7))), 16);
         rise(title, ctx.pre ? 1 : outCubic(prog(t, 0, fr(8))), 24);
+        numeral.style.opacity = outCubic(prog(t, 0, fr(10))).toFixed(3);
         trays.forEach((tr, i) => {
           rise(tr.tr, outBack(prog(t, fr(2) + i * fr(2), fr(7)), 1.6), 30);
           rise(tr.lab, outCubic(prog(t, fr(5) + i * fr(2), fr(7))), 20);
@@ -519,24 +517,20 @@ export const SCENES = {
           pop(tr.num, prog(t, last + fr(1), fr(7)), 0.4);
           tr.tr.style.outline = t >= last ? '4px solid var(--accent)' : 'none';
         });
-        const J = joints(character(t)), hand0 = J.arms[0].hand;
-        const left = plan.filter(c => t < c.t).length;
-        stack.style.transform = `translate(${(hand0[0] - 65).toFixed(1)}px,${(hand0[1] - 108).toFixed(1)}px) rotate(-6deg)`;
-        sc.forEach((e, i) => { e.style.display = i < left ? 'block' : 'none'; });
         plan.forEach((c, i) => {
           const el = flying[i];
           if (t < c.t) { el.style.display = 'none'; return; }
-          el.style.display = 'block';
+          el.style.display = 'flex';
           const from = joints(character(c.t)).arms[1].hand, [sx, sy] = slotOf(c.pile, c.j);
           const q = prog(t, c.t, c.fl), x = lerp(from[0], sx, q), y = lerp(from[1], sy, q) - c.arc * Math.sin(Math.PI * q);
-          const settle = c.dead ? 0 : -8 * Math.sin(Math.PI * clamp((t - c.t - c.fl) / fr(5))) * (t > c.t + c.fl ? 1 : 0);
-          const rot = lerp(-200 * (c.pile === 1 ? 2 : 1), jit[i], outCubic(q));
-          el.style.transform = `translate(${(x - 75).toFixed(1)}px,${(y - 45 + settle).toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
+          const settle = c.dead ? 0 : -9 * Math.sin(Math.PI * clamp((t - c.t - c.fl) / fr(5))) * (t > c.t + c.fl ? 1 : 0);
+          const rot = lerp(c.pile === 1 ? -400 : -200, jit[i], outCubic(q));
+          el.style.transform = `translate(${(x - CWp / 2).toFixed(1)}px,${(y - CHp / 2 + settle).toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
           ctx.blur(el, q < 0.7 ? 5 : 0, 0);
         });
       },
       lamp: t => ({ x: t < B[1] ? 300 : 650, y: 1200, k: 1 }),
-      cues: [{ t: B[1], sfx: 'swoosh', gain: 0.5 }, { t: B[1] + 8 * fr(3) + fr(9), sfx: 'pop', gain: 0.5 }, { t: B[2], sfx: 'whoosh', gain: 0.5 }, { t: B[2] + fr(14), sfx: 'pop', gain: 0.6 }, { t: B[3] + fr(10), sfx: 'tick', gain: 0.5 }],
+      cues: [{ t: B[1], sfx: 'swoosh', gain: 0.5 }, { t: B[1] + 8 * fr(3) + fr(9), sfx: 'pop', gain: 0.5 }, { t: B[2], sfx: 'whoosh', gain: 0.5 }, { t: B[2] + fr(15), sfx: 'pop', gain: 0.6 }, { t: B[3] + fr(10), sfx: 'tick', gain: 0.5 }],
     };
   },
 

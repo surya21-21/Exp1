@@ -23,7 +23,38 @@ export const tipOf = (hand, ang, S, len = PENCIL.len) => { const v = dir(ang); r
 export const faceOf = (hand, ang, S) => { const v = dir(ang); return [hand[0] + v[0] * STAMP.len * S, hand[1] + v[1] * STAMP.len * S]; };
 export const lensOf = (hand, ang, S, r = LENS.r) => { const v = dir(ang); const d = (LENS.handle + r) * S; return [hand[0] + v[0] * d, hand[1] + v[1] * d]; };
 
+// A held card's box on screen, from the hand: centre offset (dx, dy) px, size (w, h), turn rot (deg).
+export const cardRect = (hand, pr) => ({ x: hand[0] + (pr.dx ?? 110) - (pr.w || 210) / 2, y: hand[1] + (pr.dy ?? -30) - (pr.h || 170) / 2, w: pr.w || 210, h: pr.h || 170, rot: pr.rot || 0 });
+
 export const PROPS = {
+  // A paper card held at the side of the hand: a number in the accent and one to three short lines.
+  card: {
+    build(g) {
+      return { g, shadow: sv('rect', { fill: 'rgba(70,52,25,.22)' }, g), face: sv('rect', { fill: PAPER.card, stroke: 'rgba(70,52,25,.18)', 'stroke-width': 2 }, g),
+        num: sv('text', { 'font-family': '"Inter Display","Inter",sans-serif', 'font-weight': 900, fill: 'var(--accent)' }, g),
+        lines: [0, 1, 2].map(() => sv('text', { 'font-family': 'Inter,sans-serif', 'font-weight': 800, fill: PAPER.ink }, g)) };
+    },
+    update(st, pr, arm) {
+      const r = cardRect(arm.hand, pr), s = pr.scale ?? 1;
+      st.g.setAttribute('transform', `translate(${f1(r.x + r.w / 2)},${f1(r.y + r.h / 2)}) rotate(${f1(r.rot)}) scale(${s.toFixed(3)})`);
+      set(st.shadow, { x: -r.w / 2 + 6, y: -r.h / 2 + 9, width: r.w, height: r.h, rx: 22 });
+      set(st.face, { x: -r.w / 2, y: -r.h / 2, width: r.w, height: r.h, rx: 22 });
+      st.num.textContent = pr.n || ''; set(st.num, { x: -r.w / 2 + 18, y: -r.h / 2 + 62, 'font-size': 56 });
+      (pr.lines || []).concat(['', '', '']).slice(0, 3).forEach((l, i) => { st.lines[i].textContent = l; set(st.lines[i], { x: -r.w / 2 + 18, y: -r.h / 2 + 104 + i * 36, 'font-size': 32 }); });
+      return [[r.x + r.w / 2, r.y + r.h / 2, Math.max(r.w, r.h) / 2]];
+    },
+  },
+  // A stack of small cards held flat in the hand: pr.n of them.
+  stack: {
+    build(g) { return { g, cards: Array.from({ length: 12 }, () => sv('rect', { fill: PAPER.card, stroke: 'rgba(70,52,25,.35)', 'stroke-width': 2 }, g)) }; },
+    update(st, pr, arm) {
+      const n = pr.n ?? 12, w = pr.w || 116, hh = pr.h || 66;
+      st.g.setAttribute('transform', `translate(${f1(arm.hand[0])},${f1(arm.hand[1] - 8)}) rotate(${f1(pr.rot ?? -6)})`);
+      st.cards.forEach((c, i) => { c.style.display = i < n ? 'inline' : 'none'; set(c, { x: -w / 2, y: -hh - i * 3.5, width: w, height: hh, rx: 10 }); });
+      return [[arm.hand[0], arm.hand[1] - hh / 2 - n * 2.5, w / 2]];
+    },
+  },
+
   // A long red pencil (N10's pencil, in the accent): grip near the back, the graphite tip draws.
   pencil: {
     build(g) {

@@ -7,6 +7,7 @@ import { fr, clamp, lerp, prog, inCubic, outCubic, inOutCubic, outBack, pulse } 
 import { P, h, tornLine, pts, W, H, cardCss } from '../../../collection/lib/paper.js';
 import { solve, HIP_H, D } from './rig.js';
 import { stand, hop, sit, armsTo, reach, resolve, look, face, env, angLerp } from './act.js';
+import { cardRect } from './props.js';
 
 const joints = Q => solve(resolve(Q));
 const move = (el, x, y, extra = '') => { el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) ${extra}`; };
@@ -72,7 +73,9 @@ export const TRANSITIONS = {
         lastX = Math.min(W + 60, joints(pose(tl, qa2, qb2)).arms[1].hand[0] + 6);
         const x = xAt(win.t, pose(win.t, QA, QB));
         const edge = rel.map(([dx, y]) => [x + dx, y]);
-        inn.style.clipPath = `polygon(${[...edge, [W + 400, H + 80], [W + 400, -80]].map(q => `${q[0].toFixed(1)}px ${q[1].toFixed(1)}px`).join(',')})`;
+        const poly = a => `polygon(${a.map(q => `${q[0].toFixed(1)}px ${q[1].toFixed(1)}px`).join(',')})`;
+        inn.style.clipPath = poly([...edge, [W + 400, H + 80], [W + 400, -80]]);
+        out.style.clipPath = poly([...edge, [-400, H + 80], [-400, -80]]);
         curl.style.display = x < W + 40 && x > -120 ? 'block' : 'none';
         curl.style.transform = `translateX(${(x - 30).toFixed(1)}px) rotate(3.4deg)`;
       },
@@ -94,9 +97,11 @@ export const TRANSITIONS = {
     return reg(ctx, info, {
       lead, settle, both: false, sfx: 'swoosh', gain: 0.8,
       apply(p, out, inn, at, win) {
-        const src = ctx.shared.puppet && ctx.shared.puppet.throwFrom[info.index - 1];
-        const r0 = src ? src.rect(T.a) : { x: 400, y: 900, w: 210, h: 170, rot: 0 };
-        num.textContent = src ? String(src.n) : '1'; txt.textContent = src ? src.text : '';
+        // the card leaves his hand where it was on the first frame of the throw
+        const QA0 = win.A && win.A.character ? win.A.character(T.a - info.from.start) : null;
+        const pr = QA0 && (QA0.props || []).find(q => q.kind === 'card');
+        const r0 = pr ? cardRect(joints(QA0).arms[pr.hand ?? 1].hand, pr) : { x: 400, y: 900, w: 210, h: 170, rot: 0 };
+        num.textContent = pr ? String(pr.n) : '1'; txt.innerHTML = pr ? pr.lines.join('<br>') : '';
         el.style.display = 'block';
         el.style.width = `${r0.w}px`; el.style.height = `${r0.h}px`;
         const pb = lead / (lead + settle);
@@ -127,6 +132,7 @@ export const TRANSITIONS = {
         if (t < info.to.start || !QB) {                      // the throw: the arm whips forward and follows through
           if (!QA) return QB;
           const k = outCubic(prog(t, T.a, fr(3)));
+          QA.props = (QA.props || []).filter(q => q.kind !== 'card');
           QA.arms[1] = [angLerp(QA.arms[1][0], 40, k), lerp(QA.arms[1][1], -30, k)];
           QA.lean += 6 * k; QA.head.face = 'grin';
           return QA;

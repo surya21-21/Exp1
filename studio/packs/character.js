@@ -51,7 +51,7 @@ export const LAYERS = [{
         let Q;
         if (tr && tr.character) {
           const A = frame.scenes[w.from], B = frame.scenes[w.to];
-          Q = tr.character(w.p, w, poseOf(A, frame.t - A.start), poseOf(B, Math.max(0, frame.t - B.start)), frame);
+          Q = tr.character(w.p, { ...w, t: frame.t, A: A.impl, B: B.impl }, poseOf(A, frame.t - A.start), poseOf(B, Math.max(0, frame.t - B.start)), frame);
         } else Q = poseOf(frame.main, frame.local);
         const drawn = Q ? rig.draw(resolve(Q), frame.t, frame.speaking) : rig.draw(null);
         if (Q && Q.blur) ctx.blur(rig.el, Q.blur[0], Q.blur[1]); else rig.el.style.filter = '';
