@@ -179,7 +179,8 @@ export function hop(Q, t, H) {
     const a = outCubic(prog(t, H.t0 - antic, antic));
     Q.x = H.x0; Q.y = H.y0; Q.feet = null;
     Q.bob += 0.075 * S * a; Q.lean += dn * 5 * a;
-    Q.arms = Q.arms.map((r, i) => [angLerp(r[0], (i ? 1 : -1) * 35 - dn * 25, a), lerp(r[1], (i ? -1 : 1) * 20, a)]);
+    const ak = H.arms ?? 1;
+    if (ak > 0) Q.arms = Q.arms.map((r, i) => [angLerp(r[0], (i ? 1 : -1) * 35 - dn * 25, a * ak), lerp(r[1], (i ? -1 : 1) * 20, a * ak)]);
     Q.head.dy += 0.02 * a;
     return Q;
   }
@@ -192,8 +193,8 @@ export function hop(Q, t, H) {
     Q.ground = H.ground != null ? H.ground : (s < 0.5 ? H.y0 : H.y1);
     Q.tuck = 0.11 * S * Math.sin(Math.PI * clamp(s * 1.2 - 0.1));
     Q.squash += -0.05 * Math.sin(Math.PI * clamp(s * 2.5)) * (s < 0.4 ? 1 : 0);   // stretch on the way up
-    const up = Math.sin(Math.PI * clamp(s * 1.3));
-    Q.arms = Q.arms.map((r, i) => [(i ? 1 : -1) * lerp(40, 150, up) + dn * 10, (i ? 1 : -1) * 15]);
+    const up = Math.sin(Math.PI * clamp(s * 1.3)), ak = H.arms ?? 1;
+    if (ak > 0) Q.arms = Q.arms.map((r, i) => [angLerp(r[0], (i ? 1 : -1) * lerp(40, 150, up) + dn * 10, ak), lerp(r[1], (i ? 1 : -1) * 15, ak)]);
     Q.lean += dn * 6 * (1 - s) - dn * 3 * s;
     Q.head.tilt += dn * 4 * Math.sin(Math.PI * s);
     void base;
@@ -205,9 +206,10 @@ export function hop(Q, t, H) {
   if (t < t1 + fr(1)) Q.squash += sqz;                                // one frame of squash
   if (s < 1) {
     const k = Math.sin(Math.PI * Math.min(1, s * 1.15)) * (1 - s * 0.5);
-    Q.bob += 0.07 * S * k;
+    Q.bob += 0.07 * S * k * (H.absorb ?? 1);
     Q.lean += dn * 4 * k;
-    Q.arms = Q.arms.map((r, i) => [angLerp((i ? 1 : -1) * 40, r[0], outCubic(s)), lerp((i ? 1 : -1) * 15, r[1], outCubic(s))]);
+    const ak = H.arms ?? 1;
+    if (ak > 0) Q.arms = Q.arms.map((r, i) => [angLerp(r[0], angLerp((i ? 1 : -1) * 40, r[0], outCubic(s)), ak), lerp(r[1], lerp((i ? 1 : -1) * 15, r[1], outCubic(s)), ak)]);
     Q.head.dy += 0.025 * k;
   }
   return Q;

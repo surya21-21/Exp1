@@ -32,9 +32,15 @@ export const LAYERS = [{
     const proxy = h('div', 'position:absolute;left:0;top:0;width:0;height:0;display:none');
     proxy.dataset.key = 'avatar'; proxy.dataset.proxy = 'puppet';
     el.append(proxy);
-    const shared = ctx.shared.puppet = { rig, under, over, transitions: {}, el };
+    // fg(index): a layer in front of the puppet for one scene's foreground (a desk he stands behind).
+    // It shows and moves exactly as that scene's own layer does, transitions included.
+    const fgs = [];
+    const fg = index => { const d = h('div', 'position:absolute;inset:0;display:none'); over.append(d); fgs.push({ index, d }); return d; };
+    const shared = ctx.shared.puppet = { rig, under, over, transitions: {}, el, fg, throwFrom: {}, rect: {} };
+    const COPY = ['display', 'transform', 'transformOrigin', 'opacity', 'clipPath', 'webkitMaskImage', 'filter', 'zIndex'];
     return {
       update(frame) {
+        for (const f of fgs) { const ws = frame.scenes[f.index].wrap.style; for (const k of COPY) f.d.style[k] = ws[k]; }
         const w = frame.win, tr = w ? shared.transitions[w.to] : null;
         const poseOf = (sc, local) => {
           if (!sc) return null;
@@ -48,6 +54,7 @@ export const LAYERS = [{
           Q = tr.character(w.p, w, poseOf(A, frame.t - A.start), poseOf(B, Math.max(0, frame.t - B.start)), frame);
         } else Q = poseOf(frame.main, frame.local);
         const drawn = Q ? rig.draw(resolve(Q), frame.t, frame.speaking) : rig.draw(null);
+        if (Q && Q.blur) ctx.blur(rig.el, Q.blur[0], Q.blur[1]); else rig.el.style.filter = '';
         if (drawn && (Q.o ?? 1) > 0.01) {
           frame.state = null;                         // hide the engine's avatar: he is already here
           const b = drawn.box;

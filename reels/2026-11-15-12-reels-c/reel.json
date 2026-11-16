@@ -1,27 +1,45 @@
 {
   "title": "I made Claude study 12 viral reels, frame by frame",
-  "status": "approved 15 Nov 2026",
+  "status": "approved 15 Nov 2026 (script); director C remake of the picture, not yet approved",
   "accent": "#c2381d",
   "keyword": "STUDY",
   "wps": 3.5,
+  "layers": [
+    "puppet"
+  ],
+  "options": {
+    "puppet": {}
+  },
   "scenes": [
     {
-      "type": "hook3d",
+      "type": "charHook",
       "say": "I made Claude study *twelve* viral reels, frame by frame. All *eighteen thousand* frames.",
       "props": {
-        "from": 11900,
-        "to": 18271,
         "label": "frames studied",
         "sub": "12 viral reels, every single frame",
         "chips": [
           "210 moves",
           "1,621 sounds"
+        ],
+        "frames": [
+          1184,
+          1303,
+          859,
+          1286,
+          1197,
+          1682,
+          2712,
+          1272,
+          2508,
+          1109,
+          981,
+          2178
         ]
       }
     },
     {
-      "type": "cards3d",
-      "in": "tear",
+      "type": "charDeal",
+      "in": "charTear",
       "say": "Here are *four* things it found.",
       "props": {
         "title": "4 things",
@@ -36,36 +54,51 @@
       "hold": 0.5
     },
     {
-      "type": "steps",
-      "in": "shuffle",
+      "type": "charUnderline",
+      "in": "charThrow",
       "say": "*One*. All twelve start *talking* on the very first frame. *No intro*. *No logo*.",
       "props": {
-        "n": 1,
-        "of": 4,
+        "kicker": "STEP 01 / 04",
         "name": "Talk from frame zero",
-        "underline": 700,
-        "lines": [
-          "12 of 12 start talking at 0.0 s",
-          "No intro",
-          "No logo"
+        "line": "12 of 12 start talking at 0.0 s",
+        "a": "INTRO",
+        "b": "LOGO",
+        "ledgeY": 760,
+        "cardRect": [
+          90,
+          760,
+          900,
+          680
         ]
       },
       "hold": 0.3
     },
     {
-      "type": "chart",
-      "in": "railScroll",
-      "say": "Two. Nothing sits *still*. The longest pause in any of them is one point seven seconds.",
+      "type": "charMeasure",
+      "in": "charLift",
+      "say": "Two. Nothing sits *still*. The *longest* pause in any of them is one point *seven* seconds.",
       "props": {
-        "title": "Longest still moment",
+        "title": "Longest<br>still moment",
         "sub": "seconds with nothing changing, by reel",
+        "seatY": 820,
+        "hole": [
+          560,
+          1190
+        ],
+        "holeCard": [
+          100,
+          820,
+          960,
+          1420
+        ],
         "bars": [
           {
             "label": "Reel 09",
             "v": 1.67,
             "dec": 2,
             "unit": " s",
-            "hero": true
+            "hero": true,
+            "text": "1.67 s"
           },
           {
             "label": "Reel 12",
@@ -90,66 +123,52 @@
       "hold": 0.3
     },
     {
-      "type": "compare",
-      "in": "railScroll",
-      "say": "Three. A sound on every move? *No*. Only *half* of them get one, a hair before the picture.",
+      "type": "charMute",
+      "in": "charHole",
+      "say": "Three. A sound on *every* move? *No*. Only *half* of them get one, a hair *before* the picture.",
       "props": {
-        "a": {
-          "tag": "The usual advice",
-          "title": "A sound on every move",
-          "lines": [
-            "whoosh, pop, whoosh, pop"
-          ]
-        },
-        "b": {
-          "tag": "What was measured",
-          "title": "On half of them",
-          "lines": [
-            "103 of 210 moves,",
-            "starting half a frame early"
-          ]
-        },
-        "strikeW": 730
+        "title": "A sound on every move?",
+        "label": "of 210 moves get a sound",
+        "early": "half a frame early"
       },
       "hold": 0.3
     },
     {
-      "type": "uiCard",
-      "in": "railScroll",
-      "say": "Four. The ending. *Nine* of twelve ask for one word in the comments. *One* says follow. *Two* just stop.",
+      "type": "charSort",
+      "in": "charWhip",
+      "say": "Four. The *ending*. *Nine* of twelve ask for one word in the comments. *One* says follow. *Two* just stop.",
       "props": {
         "kicker": "How the 12 reels end",
-        "title": "last three seconds",
-        "rows": [
+        "title": "The ending",
+        "piles": [
           {
-            "label": "Comment one word",
-            "kind": "value",
-            "value": 9,
-            "unit": " of 12"
+            "n": 9,
+            "label": "Comment one word"
           },
           {
-            "label": "Follow for more",
-            "kind": "value",
-            "value": 1,
-            "unit": " of 12"
+            "n": 1,
+            "label": "Follow"
           },
           {
-            "label": "A closing line",
-            "kind": "value",
-            "value": 2,
-            "unit": " of 12"
+            "n": 2,
+            "label": "Just stop"
           }
         ]
       },
       "hold": 0.3
     },
     {
-      "type": "save",
-      "in": "rampCut",
+      "type": "charSave",
+      "in": "charPush",
       "say": "*Save* this for your next edit.",
       "props": {
         "title": "Save this.",
-        "sub": "Four rules for your next edit."
+        "sub": "Four rules for your next edit.",
+        "face": [
+          540,
+          906,
+          430
+        ]
       },
       "hold": 0.3
     },
