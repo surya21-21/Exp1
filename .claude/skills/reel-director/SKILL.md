@@ -9,30 +9,36 @@ One entry point for making a reel. It owns the order of work, the proof each sta
 
 ## Rules that never bend
 
-1. **No stage is skipped, merged or done "in your head".** Each stage writes its evidence to the run ledger before the next stage starts. If a stage cannot be done (a tool is missing, a site is unreachable, a credit limit is hit), write `BLOCKED: <reason>` in the ledger, tell the user in plain words, and stop or continue only with what is honestly possible. Never fill a gap with invented data.
-2. **Two human gates.** The user approves the storyboard before any full render, and the user presses post. Everything else runs without asking.
-3. **Nothing renders on the user's phone or device.** Test frames in the cloud workspace; full renders on GitHub Actions or the Linux server.
-4. **Every on-screen number has a named product and a source link**, checked on the day of the render. Repo star counts are fetched live at render time.
+1. **No stage is skipped, merged or done "in your head".** Each stage writes its evidence to the ledger before the next stage starts. If a stage cannot be done (a tool is missing, a site is unreachable, a credit limit is hit), write `BLOCKED: <reason>` in the ledger, tell the user in plain words, and stop or continue only with what is honestly possible. Never fill a gap with invented data.
+2. **Two human gates.** The user approves the script, storyboard and animatic before any finished render, and the user presses post. Gate 1 is enforced: the Make reel workflow refuses a finished render unless `reel.json` carries the user's approval of the exact spoken script and the reel folder has a `ledger.md`. Record an approval with `python scripts/plan_reel.py reels/<name>/reel.json --approve` only after the user's yes is quoted in the ledger.
+3. **Nothing renders on the user's phone or device.** Test frames in the cloud workspace; finished renders on GitHub Actions or the Linux server.
+4. **Every on-screen number has a named product and a source**, checked on the day of the render and listed in the reel's `script.md`.
 5. **Every "I" statement is true for the user.** Ask; do not invent a personal story.
-6. **Every asset has a licence line** (voice, music, each sound, fonts, logos, any clip). Logos are the official files from the brand's own repo or page, never redrawn.
-7. **The user locks what they choose; the craft rules decide everything else.** Only items on the Locked list of the brand sheet are fixed. Every other look and editing choice is made per reel by the craft rules in this skill, with the reason written down. Other skills contribute tools and method; their house palettes and defaults rank last. See "Look: locked and open".
+6. **Every asset has a line in `docs/licences.md`** (voice, music, each sound set, fonts, logos, code libraries). Logos are the official files from the brand's own repo or page, never redrawn.
+7. **The user locks what they choose; the craft rules decide everything else.** Only items on the Locked and Signature lists of the brand sheet are fixed. Every other look and editing choice is made per reel by the craft rules in this skill, with the reason written down. Other skills contribute tools and method; their house palettes and defaults rank last. See "Look: locked and open".
 8. **Never promise reach.** Scores are pattern-based estimates. Say so.
+9. **Motion is judged, not assumed.** A reel is not done because it is correct. It must pass the variety and stillness checks in Stage 9 and the motion review of its transition strips.
 
 ## Where things live
 
+Everything is in the repo Exp1 unless a line says otherwise.
+
 | Thing | Place |
 | --- | --- |
-| Run ledger and all outputs of one reel | `runs/<yyyy-mm-dd>-<slug>/` in repo Exp1 (`ledger.md`, `research.md`, `script.md`, `storyboard/`, `audio/`, `frames/`, `out/`) |
-| Style guide learned from reference reels | `docs/reel-style-guide.md` in Exp1 |
-| Reference videos and their analysis | `References/<name>/` (video, burst strips, transcript, numbers, `sfx-map.csv`) |
-| Finished videos | `Exports/` |
-| Brand folder: brand sheet (Locked, Signature, Avoid lists), avatar, outro, background options | `brand/` in Exp1: `brand-sheet.md`, `avatar/avatar.png`, `outro/outro.md`, `backgrounds/` |
-| Official logos | `logos/` |
-| Live repo counts | `data/stars.json`, written by the workflow step before render |
+| One reel: ledger, script, reel file, saved voice | `reels/<yyyy-mm-dd>-<slug>/` (`ledger.md`, `research.md`, `script.md`, `reel.json`, and after the first voiced run `voiceover.mp3`, `words.json`, `music.mp3`) |
+| What a run produced | Branch `reel-previews`, folder `<reel name>/`: `storyboard.jpg`, `transitions.jpg`, `animatic.mp4`, `timing.md`, `contact.jpg`, `checks.md`, `final.mp4`. The MP4 is also in a draft release |
+| Collection: every learned transition, move, hook, layout, UI piece, caption style, avatar use, script structure and sound finding, with our own effect code | `collection/` (`recipes/`, `lib/`, `demo/`, `data/`, `tools/`) |
+| Reel engine | `studio/` (`engine.js`, `scenes.js`, `scenes3d.js`, `render.py`); the reel format is in `reels/README.md` |
+| Style guide from the first six reference reels | `docs/reel-style-guide.md` (older; where it disagrees with `collection/`, the collection wins) |
+| Reference reels | `References/<name>/` holds numbers only (`study.json`, `report.md`, `onsets.csv`). Videos, frames and audio are never committed. Transcripts are other people's words and live only in the private journal repo under `study/` |
+| Brand folder | `brand/`: `brand-sheet.md` (Locked, Signature, Avoid), `avatar/avatar.png`, `avatar/expressions/` (9 faces for the large avatar), `avatar/heads/` (6 heads for the cursor), `outro/outro.md`, `backgrounds/`, `voice/voice.json` |
+| Sound effects | `assets/sfx/*.wav` (ElevenLabs set); fallback sounds are synthesised by `scripts/make_sfx.py` |
+| Licences | `docs/licences.md` |
+| Official logos | `logos/` (created when the first logo is added) |
 | Editing notes, script notes | the user's memory files for editing and script material |
-| Daily journal (what the user did, tried, broke, learned) | `journal/<yyyy-mm-dd>.md` in a private repo, never in a public one |
-| Collection: every learned transition, move, hook, layout, UI piece, caption style, avatar use, script structure and sound finding, with our own effect code | `collection/` in Exp1 (`recipes/`, `lib/`, `demo/`, `data/`) |
-| Reel engine and reel files | `studio/` (engine) and `reels/<yyyy-mm-dd>-<slug>/` (`reel.json`, `script.md`) in Exp1; format in `reels/README.md` |
+| Daily journal (what the user did, tried, broke, learned) | `journal/<yyyy-mm-dd>.md` in the private journal repo, never in a public one |
+
+Not built yet, so a reel that needs it is BLOCKED until it is: live repo counts at render time (the old template's `scripts/build_timeline.py` has the fetch code; the reel engine has no such step).
 
 ## Which skill does which job
 
@@ -41,150 +47,151 @@ Load the named skill at the stage shown. If a skill is not installed in the curr
 | Job | Skill or tool | Fallback |
 | --- | --- | --- |
 | Trend and hook pass, hook scoring rubric | `invideo-director` (its virality reference); vidIQ connector if connected | Web search, labelled as thinner data |
-| Hook critique and rewrite | `hook-master` (router for its nine skills: viewer-panel, the-council, four-failures-check, hook-formats, niche-tuner, viral-scout, visual-match, lock-in) | The hook patterns and rubric in Stage 3 |
-| Art style for a reel, scene or element | Lemo-Opuscar style library (99 coded film styles in 15 families) | The shading and look rules below |
-| Labelling sound effects in reference reels | LAION-CLAP (labels a clip from the user's own word list) with PANNs (`panns-inference`, finds when sound events happen) | Onset detection with ffmpeg or librosa, then label by listening notes and spectrogram shape, marked "unverified" |
-| Reference deconstruction (energy map, cuts, stillness, motion) | `onetake` `scripts/analyze_ref.py` | ffmpeg scene detection plus sampled frames and Whisper |
-| Motion vocabulary, carry between beats, camera operation | `onetake` references (rhythm, composition, motion library, 3d) | The craft rules below |
-| Composition and render | The Exp1 reel engine (`studio/` with `collection/lib`), run by the Make reel workflow; HyperFrames or Remotion skills when the user asks for them | Plain HTML plus headless Chrome plus ffmpeg |
-| Render hygiene (one file per scene, concat, test frames first) | `video-making` | Same rules, restated in Stage 8 |
+| Hook critique and rewrite | `hook-master` and its eight companions (`viewer-panel`, `the-council`, `four-failures-check`, `hook-formats`, `niche-tuner`, `viral-scout`, `visual-match`, `lock-in`), stored in `.claude/skills/` of Exp1 | The hook kinds in `collection/recipes/hooks.md` and the rubric in Stage 3 |
+| Art style for a hero scene or element | Lemo-Opuscar style library (99 coded film styles in 15 families), cloned when needed | The shading and look rules below |
+| Labelling sound effects in reference reels | LAION-CLAP with PANNs, through the `study-audio` workflow in the private journal repo, or `scripts/label_sfx.py` in `reference.yml` | Onset detection, labels marked "unverified" |
+| Reference picture study | `scripts/study_reference.py` then `collection/tools/catalogue_events.py` | `onetake` `scripts/analyze_ref.py` (non-commercial only) |
+| Motion vocabulary and carry between beats | `collection/recipes/` first; `onetake` references for ideas | The craft rules below |
+| Composition and render | The Exp1 reel engine, run by the Make reel workflow; HyperFrames or Remotion skills only when the user asks for them | Plain HTML plus headless Chrome plus ffmpeg |
 | ffmpeg commands and filtergraphs | `ffmpeg-llm` skills | Write the command by hand, test on 2 seconds |
-| AI-generated footage or b-roll prompts | `invideo-director` | None; skip generated footage |
-| Captions and word timings | Whisper; Remotion captions skill when in Remotion | ElevenLabs transcription |
-| Voice, sound effects | ElevenLabs connector | Code-generated SFX set in Exp1; open-source TTS |
-| Script pack the user reads and comments on | `docs` | A markdown file in the run folder |
-| Automated quality check | `onetake` `scripts/verify_promo.py` | The measurable gates in Stage 9 |
+| AI-generated images (character sheets) or footage | invideo with Seedream 5 Flash, seat credits only; `invideo-director` for prompts | None; skip generated footage |
+| Word timings and captions | ElevenLabs timings from `scripts/reel_voice.py`; Whisper (`scripts/reel_words.py`) only for a voice the user recorded | Estimated timing, marked in the checks |
+| Voice, music, sound effects | ElevenLabs, called by the workflows with the repo secret `E` (`reel_voice.py`, `reel_music.py`, `sfx_library.py`) | Silent draft; synthesised sounds from `make_sfx.py` |
+| Script pack the user reads and comments on | `docs` | `script.md` in the reel folder |
+| Automated quality check | `scripts/check_reel.py` (runs in the workflow, writes `checks.md`) | None: without it the reel is not checked |
 
-Licence note: `onetake` is free for noncommercial use only. Once a channel is monetised or sponsored, do not run its code for that channel's reels unless the user has permission from its author; use the fallbacks.
+Licence notes: `onetake` is free for noncommercial use only; do not run its code for a monetised channel. Lemo-Opuscar's code is MIT but its style guides are CC BY-NC: read them for technique, never copy their text into the repo.
 
-Not part of this pipeline unless the user asks for that style: `clawd-animation-base` (hand-painted cartoon), `gbro-collage-broll` (paper-collage b-roll).
+Not part of this pipeline unless the user asks for that style: `clawd-animation-base`, `gbro-collage-broll`.
 
 ## Collection and engine
 
-The collection in Exp1 is the first place to look for any effect, layout or structure; the engine is the default way to build and render.
+The collection is the first place to look for any effect, layout or structure; the engine is the default way to build and render.
 
-- Stage 2: after studying a new reference, add what is new to `collection/recipes/` with its measured numbers, and build anything reusable in `collection/lib/` with a demo still. Store techniques and our own code only, never a creator's frames, audio or script.
-- Stage 4: take the structure and pace from `collection/recipes/script.md` and the hook kind from `hooks.md`; name the IDs used.
-- Stage 5: write the reel as `reels/<date>-<slug>/reel.json` (scene types, props and transitions are listed in `reels/README.md`) and `script.md` with the fact table and look card. Run the Make reel workflow with "storyboard stills only" for the stills.
-- Stage 6: the engine writes the sound cues itself; follow `collection/recipes/sound.md` (about half the moves get a sound, one frame early).
-- Stages 7 to 9: run the Make reel workflow with "finished reel". It plans the timing from the voice, renders every frame, mixes the sound and writes `checks.md`. A FAIL in that table is fixed and re-run, or reported.
-- A new effect is first added to the collection (recipe, code, demo still), then used. Each reel may have one hero invention.
-- If a reel needs a scene type the engine lacks, add it to `studio/scenes.js` and the table in `reels/README.md` rather than working around it.
+- A new effect is first added to the collection (recipe card with its measured source, code in `collection/lib` or `studio/scenes*.js`, demo still), then used.
+- If a reel needs a scene type the engine lacks, add it to `studio/scenes.js` or `studio/scenes3d.js` and to the table in `reels/README.md` rather than working around it.
+- Store techniques and our own code only, never a creator's frames, audio or script.
+- The engine writes the sound cues itself from the same code that draws each event.
+- Run `python collection/tools/make_demo.py` after changing the library, so the demo sheets stay true.
 
 ## The pipeline
 
-Start every run by creating `runs/<date>-<slug>/ledger.md` with the ten stage names as unchecked items. Tick a stage only when its evidence exists. The final message to the user lists each stage with one line of evidence or its BLOCKED reason.
+Start every run by creating `reels/<date>-<slug>/ledger.md` with the eleven stage names (0 to 10) as unchecked items. Tick a stage only when its evidence exists. The final message to the user lists each stage with one line of evidence or its BLOCKED reason.
 
 ### Stage 0 - Brief
-Read `brand/brand-sheet.md` and `brand/outro/outro.md` first and copy the Locked, Signature and Avoid lists and the outro wording into the brief. Collect or assume, and write down: channel, one promise ("the viewer leaves knowing X"), audience, language, platform and size (default Instagram Reels, 1080 x 1920, 30 fps), target length, the true personal facts available, the CTA keyword.
-Evidence: `brief.md`.
+Read `brand/brand-sheet.md` first and copy its Locked, Signature and Avoid lists into the brief. Collect or assume, and write down: channel, one promise ("the viewer leaves knowing X"), audience, language, platform and size (default Instagram Reels, 1080 x 1920, 30 fps), target length, the true personal facts available, the CTA keyword.
+Evidence: the brief at the top of `ledger.md`.
 
 ### Stage 1 - Trend and topic research
+- Check the journal's "Post ideas" first: the user's own work is the channel's subject.
 - Pull what is rising in the niche this week and 3 to 5 outlier videos (views far above the channel's average). Record the date of the data and its source.
 - For each outlier: hook line, first-frame visual, structure, length, on-screen text, CTA.
 - Extract the mechanism, never the script. Write an original angle.
-- Read the journal: yesterday's entry first, then earlier days when a topic needs more. Pull post ideas from what the user actually did, tried, got wrong and learned. The channel covers using Claude Code for edits and motion, how to use other AI apps such as Higgsfield, the user's mistakes, and their journey. A script may combine several days into one story; every personal claim must come from a journal entry or from the user.
-Evidence: `research.md` with links and dates, and the journal entries used, by date. If only web search was available, say so at the top. If there is no journal entry for recent days, say so and ask the user what they did.
+Evidence: `research.md` with links and dates. If only web search was available, say so at the top. If the topic came from the user and no trend pass was run, write that instead of pretending.
 
 ### Stage 2 - Reference study
-- Use the reels the user supplied. A link is fetched by the yt-dlp step in the Exp1 workflow; if the platform blocks it, ask the user to upload the file. Reference videos are for study only and never re-uploaded or reused as footage.
-- **Sample by motion, not by the clock.** A frame every 0.5 s misses anything shorter than half a second, which is most transitions, text pops and effects. Fixed sparse sampling is only for calm stretches.
-  1. Decode every frame of the source at its own frame rate for measurement. Compute the frame-to-frame difference curve and detect cuts on all frames.
-  2. Keep every frame of the first 3 seconds.
-  3. Around each cut, each peak in the difference curve and each audio onset, keep every frame from 0.5 s before to 0.5 s after. This is a burst.
-  4. In calm stretches, 2 frames a second is enough.
-  5. View each burst as a strip of 8 to 12 consecutive frames in order, never as single frames, so the motion can be read.
-  6. For each burst record: what kind of transition or effect it is, its length in frames, direction of travel, how it speeds up and slows down (track position or scale across the frames), overshoot or bounce, blur or smear, what element carries across, and the sound that lands on it.
-  7. For text: frames per word entry, pop size and settle time, measured the same way.
-- Limits to state in the notes: nothing shorter than one source frame can be seen, and compression smears fast motion, so very fast effects are described as best estimates.
-- **Label the sounds.**
-  1. Reduce the voice and music so effects stand out (duck the voice using its Whisper word timings; a source-separation tool if one is installed).
-  2. Find sound onsets across the whole track (PANNs event detection, or plain onset detection).
-  3. Cut a clip from 0.1 s before to 0.6 s after each onset.
-  4. Label each clip with LAION-CLAP against the user's own word list: whoosh, swoosh, pop, click, tick, impact, riser, glitch, stamp, slash, chime, typing, shatter, servo. Add a word to the list when a sound fits none of them.
-  5. Keep the top label and its score. Below a clear margin over the second label, mark it "unsure".
-  6. Match each labelled sound to the visual event on the same frame from the burst notes (cut, element lands, counter, strike-through, text pop).
-  7. Write `sfx-map.csv`: time, label, score, visual event, loudness relative to the voice. Summarise as "which sound on which event, how often".
-  8. Spot-check: the user or a second pass confirms at least 10 labels per reel by ear before the map is trusted. Model labels are a first pass, not truth.
-- Also measure: shot lengths, share of still time, caption position and words per line, words per second, colours.
-- Add what is new to `docs/reel-style-guide.md` and the user's editing notes.
-Evidence: numbers file, difference curve, burst strips and `sfx-map.csv` in `References/<name>/`. With no new reference, write "no new reference; using style guide of <date>".
+Only when the user supplies new reference reels. A link is fetched by the yt-dlp step in `reference.yml`; if the platform blocks it, ask the user to upload the file. Reference videos are for study only and never re-uploaded, committed or reused as footage.
+
+- **Sample by motion, not by the clock.** Decode every frame. Compute the frame-to-frame difference curve; grow each cut and motion peak into an event with its lead and settle frames (`collection/tools/catalogue_events.py`). Keep every frame of the first 3 seconds.
+- **View at least half of the events** as strips of 8 to 12 consecutive frames, and at least one of every kind in every reel. Write the count viewed and the count measured.
+- For each viewed event record: kind, length in frames, direction, how it speeds up and slows down, overshoot or bounce, blur, what carries across, the sound on it. For text: frames per word, pop size, settle time.
+- **Label the sounds** with LAION-CLAP and PANNs on the track with the voice removed. Keep only sounds that land within 3 frames of a picture event. Model labels are a first pass: only the user's ear confirms them, so mark them "not checked by ear" until the user has listened to at least 10 per reel.
+- Transcribe the voice for pace and structure. Keep transcripts private.
+- Add what is new to `collection/recipes/` with its numbers, and build anything reusable.
+Evidence: `collection/data/<reel>/events.csv` and `sfx-map.csv`, the viewed and measured counts, new recipe IDs. With no new reference: "no new reference; using the collection of <date>".
 
 ### Stage 3 - Hooks
-- Write at least 5 hooks across different patterns (specific number, demonstration first, contrarian, curiosity gap, stakes, in medias res, question).
-- When `hook-master` is installed, run it on the draft hooks in its own order: four-failures-check (delay, confusion, irrelevance, disinterest), viewer-panel (six simulated viewers say swipe or stay), the-council (top three changes), hook-formats (rewrite in its six formats), niche-tuner, visual-match (opening shot, on-screen text and spoken words agree), then lock-in (the 1 to 3 sentences after the hook). Paste its verdicts into the ledger. It never invents stats; neither do you.
-- For each: the spoken line, the frame-zero visual, the muted-readable text.
-- Score each 0 to 2 on: clear in under 3 s, one idea, works with sound off, payoff promised and delivered, reason to finish. Keep the top 3 for the user; pick one and say why.
-Evidence: hook table in `script.md`.
+- Write at least 5 hooks across at least 4 of the hook kinds H01 to H10 in `collection/recipes/hooks.md`.
+- Run `hook-master` on them in its own order (four-failures-check, viewer-panel, the-council, hook-formats, niche-tuner, visual-match, lock-in). Paste its verdicts into the ledger. It never invents stats; neither do you.
+- For each hook: the spoken line, the frame-zero visual, the on-screen text.
+- Score each 0 to 2 on five points: clear in under 3 s, one idea, works with sound off, payoff promised and delivered, reason to finish. Show all five hooks with their sub-scores; keep the top 3 for the user; pick one and say why.
+Evidence: the full hook table in `script.md`.
 
 ### Stage 4 - Script
-- Voiceover at 3.0 to 3.6 words a second; count words and compute duration with code, not by feel.
-- Structure: hook (0 to 3 s), open loop (by 5 s), first payoff by about 30% of the runtime, pattern interrupt near the midpoint, save or send prompt at 50 to 65%, second loop paid off, total or reveal, CTA in the last 3 to 5 s, last frame that loops into the first.
+- **Pace.** [owner, 15 Nov 2026] The channel voice speaks at its normal speed, measured at 2.63 words a second. Size the script by it: length in seconds is words divided by 2.65. Do not speed the voice up without asking. [measured] For context, the reference reels speak at 2.5 to 4.3 words a second.
+- **Structure.** Pick one of P01 to P06 in `collection/recipes/script.md` and name it. [measured] First word on frame zero; 6 to 14 words in the first 3 seconds; sentences of 6 to 9 words; a re-hook near 40% in any reel over 45 seconds; the ask starts 81 to 97% of the way in and lasts 1.4 to 5.7 seconds.
 - Plain words. Any sentence the user might not understand on first hearing is rewritten.
-- A fact table: every claim, its number, the named product, the source link, the date checked.
+- Mark one `*keyword*` for every line or element that must land on a word: the engine takes its beats from them.
+- A fact table: every claim, its number, the named product, the source, the date checked. A "for you to confirm" list of every "I" statement.
 - Pronunciation list for the voice model.
-Evidence: `script.md` with word count, timing table and fact table.
+Evidence: `script.md` with voiceover, fact table, confirm list; `timing.md` from `plan_reel.py --table` (words, seconds and words a second per scene).
 
-### Stage 5 - Storyboard (GATE 1)
-- Shot table: time, voiceover, on screen, camera or 3D, transition out, sound.
-- Name the 2 or 3 hero moments (the complex or 3D scenes) and what carries across every scene boundary.
-- Write the look card (see "Look: locked and open"): every open choice for this reel with a one-line reason. Include the art style: one base style and at most two guest styles for hero moments, from the style library.
-- Render still frames at full size for frame zero, each hero moment, the interrupt and the CTA. Check them against the safe zones in the Instagram app layout.
-- Publish the script pack and stop. Do not render the full video until the user approves.
-Evidence: stills in `storyboard/`, link to the pack, the user's approval quoted in the ledger.
+### Stage 5 - Storyboard and animatic (GATE 1)
+- Write `reel.json`. Scene types, props and transitions are in `reels/README.md`.
+- Shot table in `script.md`: scene, what is on screen, the move that happens, transition in, sound, and an **energy score from 1 to 5**. The scores must not be flat: at least one 5 and at least one 2 or lower.
+- **Shot variety.** No scene type twice in a row. No more than two scenes in a row with the same layout and scale. One or two 3D hero scenes per reel [owner], for the hook and the main reveal.
+- **Transitions.** The paper tear is the signature and marks chapter changes. Use at least three kinds in a reel of six scenes or more, and never the same one twice in a row except a plain cut. [measured: creators repeat one signature; owner: at least three kinds]
+- Write the look card (see "Look: locked and open"): every open choice for this reel with a one-line reason.
+- Run Make reel with "storyboard stills only". It produces `storyboard.jpg` (frame zero and the end state of each scene), `transitions.jpg` (8 frames of every transition) and `animatic.mp4` (the whole reel at 10 frames a second with the voice). Look at all three before showing them.
+- Publish the script pack with those three files and stop. Do not render the finished reel until the user approves.
+Evidence: the three files on `reel-previews`, the shot table, the user's approval quoted in the ledger, then `plan_reel.py --approve`.
 
 ### Stage 6 - Audio
-- Voice: generate in blocks, one block per generation. Then run Whisper for word timings.
-- Sound effects: build the event list from the shot table, map each event class to one sound (table below, refined by the latest `sfx-map.csv` findings), generate or reuse.
-- Music: royalty-free, 100 to 110 BPM for 3-second cuts, licence and credit line recorded.
-- Mix: voice loudest; music about 20 dB under voice and ducked further under hits; effects 6 to 10 dB under voice; no two effects on one frame; integrated loudness about -14 to -16 LUFS, true peak under -1 dBTP.
-Evidence: files in `audio/`, `licences.md`, measured loudness.
+The workflow does the work; the rules are in `collection/recipes/sound.md` and the Sound section below.
+- Voice: `brand/voice/voice.json`, spoken in one pass by `reel_voice.py`, which also returns the word timings. A voice the user recorded goes in the reel folder as `voiceover.mp3`.
+- After the first voiced run, copy `voiceover.mp3`, `words.json` and `music.mp3` from `reel-previews` into the reel folder so later runs reuse them and spend no credits. If the script changes, delete them.
+- Music: an ElevenLabs instrumental bed the length of the reel (`"music"` in `reel.json` sets the prompt), or the user's own `music.mp3`.
+- Sound effects: the engine's cue list, played from `assets/sfx`.
+Evidence: loudness, peak, voice pace and "voice matches the script" lines in `checks.md`; `docs/licences.md` up to date.
 
 ### Stage 7 - Build
-- One composition where every value is a function of time, so any frame can be drawn alone and twice the same. No randomness on the render path without a fixed seed.
-- Apply the craft rules below: lighting and shading, camera, type, captions, avatar acting.
-- Build each scene from the approved look card, reading the chosen style's own files in the Lemo-Opuscar repo before writing code. Locked items are used exactly as given.
-- Fetch live data (`data/stars.json`) in the workflow, not by hand.
-Evidence: the composition files committed, plus a contact sheet of 12 frames across the timeline.
+- Every value is a function of time, so any frame can be drawn alone and twice the same. No randomness without a fixed seed.
+- Apply the craft rules below, the Motion rules above all.
+- Build new scene types into the engine and the collection, not into one reel.
+- Test frames locally in the cloud workspace (`python studio/render.py <timed spec> --stills <dir> --times ...`) and look at them.
+Evidence: commits, and the local stills viewed (name the times).
 
 ### Stage 8 - Render
-- Before the full render: draw the busiest frames at full size and look at them.
-- One encoded file per scene, same size, frame rate and encoder settings; join with the concat demuxer and stream copy; add sound with video stream copy.
-- Draft at 1080 x 1920, 30 fps. Tell the user the time estimate before a long render.
-- Test one 3D scene alone first to learn how long the runner takes.
-Evidence: `out/draft.mp4`, render log, duration and file size.
+- Run Make reel with "finished reel". It checks Gate 1, plans the timing from the voice, renders every frame in one pass, mixes the sound and runs the checks.
+- Tell the user the time estimate before a long render (about 90 seconds of rendering for a 40-second flat reel; 3D scenes take longer).
+Evidence: the run number, `final.mp4` and `contact.jpg` on `reel-previews`.
 
 ### Stage 9 - Quality check
-Run every check and record pass or fail with the measured value. A fail is fixed and re-checked, or reported; it is never waved through.
+Two parts. A fail is fixed and re-run, or reported; it is never waved through.
 
-| Check | Pass condition |
-| --- | --- |
-| Frame zero | The promise is readable muted and paused |
-| Stillness | No stretch over 1.5 s with nothing changing, except deliberate rests |
-| Rests | At least one deliberate near-still beat |
-| Rhythm | Longest shot at least 4 times the shortest; shot lengths not uniform |
-| Carry | Something on screen survives every scene boundary, except hard-cut bursts and the end card |
-| Captions | 2 to 4 words at a time, in sync within 2 frames, inside the safe zone |
-| Contrast | Text against its background at least 4.5 to 1 |
-| Light | One consistent key-light direction in every scene |
-| Locked items | Every item on the Locked list appears exactly as given |
-| Signature | The avatar and the signature motif are present and unchanged |
-| Look card | Every open choice in the render matches the approved look card |
-| Fast moves | Anything over 80 px a frame has motion blur |
-| Audio | No clipping, never fully silent except the planned drop, voice clearly on top |
-| Facts | Every number matches the fact table; live counts present with an "as of" date |
-| Truth | Every personal claim confirmed by the user |
-| Licences | `licences.md` complete |
-| Loop | Last frame flows into the first |
+**Part 1: measured by `scripts/check_reel.py`, in `checks.md`.** Every line must be pass or not applicable.
 
-For high-stakes reels, have a fresh agent that has not seen the build watch the contact sheets and the draft and list problems.
-Evidence: the filled table in the ledger.
+| Check | Pass condition | From |
+| --- | --- | --- |
+| Size, frame rate, length | 1080 x 1920, 30 fps, within 2 frames of the plan | Instagram format |
+| Frame zero | Not empty; something marked as a key element is on screen | measured: all 12 references open on content |
+| Words from the first frame | First caption by 0.1 s | measured: 12 of 12 |
+| Stillness | No stretch over 1.5 s with nothing changing | measured: longest in any reference 1.67 s |
+| Stillness outside the captions | No stretch over 2.0 s where only caption words change | check_reel (stricter than the references) |
+| Frame in use | Content spans 60% of the usable height in 80% of frames | check_reel |
+| Rhythm | 0.5 to 3.0 picture changes a second | measured: 0.4 to 2.2 plus transitions |
+| Scene variety | At least 6 scene types in 8 or more scenes; none twice in a row | owner; check_reel |
+| Transition variety | At least 3 kinds; none twice in a row except a cut | owner; check_reel |
+| Captions | 4 words or fewer; below the top 14% | measured C01-C07; Meta safe zone |
+| Safe zone | Key elements inside 40 to 1040 px across, 230 to 1490 px down, and left of 985 px in the lower half | Meta safe zone, loosened at the bottom for organic reels |
+| Smallest text | 30 px or more | Apple HIG (11 points on a phone) |
+| Accent contrast | 4.5 to 1 against the paper | WCAG 1.4.3 |
+| One effect a frame | No two sound cues on one frame | Murch, dense clarity |
+| Loudness and peak | -16.5 to -13 LUFS; peak at or under -1 dB | Spotify and Apple targets |
+| Voice | Present, word for word as scripted, no silence over 0.8 s | measured: longest reference gap in talking reels 0.76 s |
+| Signature outro | Last scene is `cta` | owner |
+
+**Part 2: by eye, each with one written line and the file it was judged on.**
+
+| Check | Judge it on | Pass condition |
+| --- | --- | --- |
+| Hook | `storyboard.jpg` frame zero, viewed at 360 px wide | The promise is readable muted and paused |
+| Motion quality | `transitions.jpg`, `animatic.mp4` | Entrances ease out, exits ease in; hero elements overshoot and settle; parts arrive staggered; no container sits empty for more than 10 frames |
+| Carry | `transitions.jpg` | Something survives every scene change (avatar, captions, an object) |
+| Hero moment | `contact.jpg` | At least one scene clearly bigger in motion and depth than the rest |
+| Light | `contact.jpg` | Shadows fall down and to the right in every scene |
+| Locked and Signature items | `contact.jpg` | Paper Studio, avatar faces, cursor heads, outro and voice exactly as given |
+| Look card | `contact.jpg` | Every open choice matches what was approved |
+| Flashes and colour | `transitions.jpg` | No more than three full-frame flashes in any second; nothing told by colour alone (WCAG 2.3.1, 1.4.1) |
+| Facts, truth, licences | `script.md`, `docs/licences.md` | Every number matches its source; every "I" line confirmed; every asset listed |
+
+Then have a fresh agent that has not seen the build look at `contact.jpg`, `transitions.jpg` and `checks.md` and list problems. If the session cannot run agents, write "no fresh reviewer" in the ledger.
+Evidence: `checks.md` with zero fails, the Part 2 table filled in the ledger, the reviewer's list and what was done about each item.
 
 ### Stage 10 - Deliver and learn
-- Send the draft, the caption, 3 cover texts, hashtags and the pinned comment.
-- Write the day's journal entry (see "Journal").
-- After posting, record what the user reports: 3-second hold, average watch time, saves, sends, comments on the keyword. Compare with earlier reels and write one line on what to change next time into the style guide.
-Evidence: `out/` files and a `results.md` once numbers exist.
+- Send the MP4, the caption, a cover frame (1080 x 1920 with 3 to 5 words inside the centre 3:4; Instagram's profile grid has shown posts at 3:4 since January 2025), hashtags and the pinned comment.
+- After posting, record what the user reports: views past 3 seconds, average watch time, saves, sends, comments on the keyword. Compare with earlier reels and write one line on what to change next time.
+Evidence: the files sent and a `results.md` once numbers exist.
 
 ## Look: locked and open
 
@@ -196,140 +203,163 @@ The user decides what is fixed. The craft rules decide the rest, reel by reel.
 3. The craft rules in this skill.
 4. House styles and defaults of other skills and libraries.
 
-**Fixed on the user's instruction.** The avatar and the signature motif stay constant in every reel.
-- Avatar: `brand/avatar/avatar.png`, used as given; it takes each scene's light direction and shadow but is never redrawn or restyled.
+**Fixed on the user's instruction.**
+- Background: Paper Studio, as drawn by `collection/lib/paper.js`.
+- Avatar: the large avatar uses the nine approved faces in `brand/avatar/expressions/`; the small cursor uses the six heads in `brand/avatar/heads/`. They take each scene's light and shadow but are never redrawn or restyled. New faces are generated only with Seedream 5 Flash on seat credits and only used after the user approves the sheet.
 - Motif: the outro in `brand/outro/outro.md`. The ask comes first ("Comment KEYWORD and I'll send you the links."), then the sign-off "This is your AI guy." as the very last line, with the avatar on screen. Only the keyword changes between reels.
-- Background: chosen by the user from `brand/backgrounds/`. Until `brand/brand-sheet.md` names one, ask before the first storyboard and do not guess.
+- Voice: the channel voice in `brand/voice/voice.json`, at normal speed.
+- The bottom of the frame stays empty for the app's buttons.
 - The user edits these files directly. Always read the current files; never rely on an earlier copy.
 
-**Open choices.** Anything not on the Locked or Signature lists is open, and the director chooses it for each reel from the content: accent colour, caption colour and style, caption position, typefaces, editing style, transition family, art style, light plan, sound material and music mood. A brand sheet with only a background, the avatar and a motif on it is valid; everything else is then open.
+**Open choices.** Anything not on the Locked or Signature lists is open, and the director chooses it for each reel from the content: accent colour, caption style, typefaces, editing style, transitions, art style of hero scenes, sound material and music mood.
 
 **How to choose**
-- Accent colour: one per reel. It must stand clear of the locked background, and any text in it must reach 4.5 to 1 contrast. Pick it for the feeling of the topic, then test it on a still frame.
-- Caption colour: the highest-contrast neutral against the background for sentences, the accent for the one keyword per line.
-- Typefaces: two at most, chosen for the voice of the reel (blunt and bold for claims, lighter for calm explainers).
-- Editing style, from the content: lists and price reveals take fast cuts and hits; "how it works" takes one canvas with elements morphing in place; a story or mistake takes slower shots with real rests.
-- Transition family and art style: one family per reel, matched to the editing style and the style library table.
-- Sound material and music: match the editing style; fewer, softer sounds for calm reels.
+- Accent colour: one per reel, 4.5 to 1 against the paper when used for text (the current default is #c2381d). Test it on a still.
+- Caption colour: near-black for sentences, the keyword on accent-tinted tape.
+- Typefaces: two at most (Inter and Lora are bundled).
+- Editing style, from the content: lists and reveals take cuts and hits; "how it works" takes one canvas with elements changing in place; a story or mistake takes slower shots with real rests.
+- Sound and music: match the editing style; fewer, softer sounds for calm reels.
 
-**The look card.** At Stage 5, write each open choice with a one-line reason and show it on the storyboard stills. The user approves or changes it at Gate 1. After approval it is fixed for that reel.
+**The look card.** At Stage 5, write each open choice with a one-line reason. The user approves or changes it at Gate 1. After approval it is fixed for that reel.
 
 **Memory across reels**
-- Signature: never change the avatar or the motif silently. Propose a change and wait for the user.
+- Signature: never change the avatar, the outro or the voice silently. Propose a change and wait for the user.
 - Avoid: when the user rejects a look, record it in the Avoid list and do not offer it again.
 - The user can move any item between locked and open at any time.
 
 ## Craft rules
 
-Each rule is tagged with where it comes from: **[measured]** from the user's own reference reels, **[craft]** established editing practice, **[research]** published learning research, **[claimed]** widely repeated industry figures with no checkable data. Prefer the first three when they conflict with the last.
+Every rule carries its source in brackets. A rule with no source does not belong here.
+
+| Tag | Source |
+| --- | --- |
+| measured | Our study of 12 reference reels: `collection/recipes/` and `collection/data/` (18,271 frames, 210 picture events) |
+| Murch | Walter Murch, *In the Blink of an Eye* (2nd ed., 2001), the Rule of Six; and "Dense Clarity - Clear Density" (Transom Review, 2005) |
+| Disney | Frank Thomas and Ollie Johnston, *The Illusion of Life: Disney Animation* (1981), the twelve principles of animation |
+| Katz | Steven D. Katz, *Film Directing: Shot by Shot* (1991), on the moving camera |
+| Mayer | Richard E. Mayer, *Multimedia Learning* (3rd ed., Cambridge University Press, 2020) |
+| Gurney | James Gurney, *Color and Light: A Guide for the Realist Painter* (2010) |
+| Material | Google Material Design guidelines: motion (easing and duration) and light and shadows |
+| Instagram | "Instagram Ranking Explained" (about.instagram.com) and "Tips for improving your reach" (creators.instagram.com) |
+| Meta | Meta Business Help Centre, safe zones for 9:16 Stories and Reels: keep text and logos out of the top 14%, the bottom 35% and 6% at each side |
+| WCAG | W3C Web Content Accessibility Guidelines 2.1: 1.4.3 contrast, 1.4.1 use of colour, 2.3.1 three flashes |
+| ITU | ITU-R BT.1359-1: sound that is early is noticed from about 45 ms, sound that is late from about 125 ms |
+| Loudness | Spotify for Artists (-14 LUFS, peak -1 dB) and Apple Podcasts (-16 LKFS, peak -1 dB), both measured by ITU-R BS.1770 |
+| Verizon | Verizon Media and Publicis Media survey, 2019, 5,616 US adults: 69% watch with the sound off in public, 25% in private |
+| Apple HIG | Apple Human Interface Guidelines, Typography: text no smaller than 11 points |
+| Bentivoglio | Bentivoglio et al., "Analysis of blink rate patterns in normal subjects", *Movement Disorders* (1997) |
+| owner | A decision the user made; the date is in the journal |
+| check_reel | A limit this project enforces in `scripts/check_reel.py`; the number is ours and can be changed there |
 
 ### Direction and taste
-- [craft] Murch's order of priority for any cut or transition: emotion first, then story, then rhythm, then where the eye is, then screen direction, then spatial continuity. When something must give, give up the last ones first. A move that looks clever but dulls the feeling is wrong.
-- [craft] One idea per shot, one focal point per frame. If two things move, one is the subject and the other is quiet.
-- [craft] Eye-trace: the next element appears where the viewer is already looking, or a motion leads the eye there first.
-- [craft] Contrast makes emphasis: big next to small, fast next to slow, loud next to quiet. Uniform intensity reads as noise.
-- [craft] Carry, do not replace: a subject, a container or the camera survives each boundary and becomes the next scene.
-- [craft] The cause is visible: things react to a hand, a cursor, a hit, the avatar's glance. Nothing moves for no reason.
-- [craft] Restraint: one background, one accent, two typefaces, one sound material set.
+- [Murch] Six things a cut should serve, in this order of weight: emotion (51%), story (23%), rhythm (10%), where the eye is (7%), the flat picture plane (5%), three-dimensional space (4%). When something must give, give up from the bottom of the list. A move that looks clever but dulls the feeling is wrong.
+- [Murch] Eye-trace: the next element appears where the viewer is already looking, or a motion leads the eye there first.
+- [Disney: staging] One idea per shot, one focal point per frame. If two things move, one is the subject and the other is quiet.
+- [measured: layouts-and-ui.md] One highlight at a time (an outline, a switch, the avatar). Every claim is shown as a state change: a switch turns on, a bar fills, a counter lands.
+- [measured: transitions.md] Carry, do not replace: something on screen survives each boundary (in the references a brand chip, a caption bar, the avatar).
+- [measured: transitions.md] Most creators own one signature transition and repeat it. Ours is the paper tear.
+
+### Motion
+What makes code-made video look alive. Frame counts are at 30 frames a second.
+- [Disney: slow in and slow out; Material] Every move is eased. Things entering slow down as they arrive; things leaving speed up as they go. Straight-line speed only for counters and typing.
+- [Disney: anticipation] A hero element pulls back 2 to 3 frames, by no more than a tenth of its travel, before a big move.
+- [Disney: follow through; measured: moves.md] Hero elements overshoot and settle. Measured settles are 2 to 12 frames after the main change.
+- [Disney: overlapping action; measured: M13] The parts of a group arrive one after another, 2 frames apart, never all on one frame. No card or container sits empty for more than 10 frames.
+- [Disney: arcs] Things that travel move on a shallow curve, not a straight line.
+- [Disney: secondary action] One supporting motion per hero action (its shadow, the lamp, the cursor's glance), never one that competes.
+- [Disney: timing; measured: moves.md] Frames set weight. Small things (a tick, a pop, a stamp) take 2 to 6 frames; a card or camera move 8 to 13; a full page scroll about 17.
+- [Material; measured] Exits are shorter than entrances.
+- [Disney: squash and stretch] A soft landing may squash 5 to 8% for one frame. Type never squashes.
+- [measured: M24] Stepped animation (drawing on every second frame) is a deliberate hand-made look in 4 of the 12 references. Use it for a whole scene or not at all.
+- [measured: M01] A counter or chart is already moving on frame zero. Never start from a still zero.
 
 ### Retention
-- [measured] Something changes about every 0.2 s (a caption word or a visual), a new visual element every 1 to 1.5 s, nothing frozen beyond 1 to 2 s, voice at 3 to 4 words a second with no audible pauses.
-- [measured] Cuts or wipes about every 3 s in fast reels; calm one-canvas reels never cut and morph elements in place.
-- [craft] The first 3 seconds decide distribution on Reels; open on the strongest line and picture, never a logo or title card. Put the spoken hook on screen for muted viewers.
-- [craft] Open a loop early, pay it off, open the next before the first closes.
-- [craft] Design for the send and the save: a named list with prices is save material; "send this to the friend who still pays for X" is a send prompt.
-- [claimed] Something new every 6 to 8 s, an interrupt near 50%, a forward hook near 70%, CTA at 85 to 90%. Use as starting points and replace with the user's own numbers once reels are posted.
-- [craft] Do not repeat the same interrupt type twice in one reel. Silence and stillness are interrupts too.
+- [Instagram] For Reels, the predictions Instagram says matter most are whether a viewer will reshare the reel, watch it to the end, like it, and go to the audio page. Design for the send and the full watch.
+- [Instagram] Reels that are low-resolution, watermarked, muted, bordered, mostly text, or reposted from elsewhere are shown less. Reels over 3 minutes are not recommended to new viewers.
+- [measured: hooks.md] All 12 references start speaking on frame zero with content on screen: no intro, no logo card. 6 to 14 words are spoken in the first 3 seconds and the picture changes 2 to 10 times.
+- [measured: moves.md] Outside the transitions there are 0.4 to 1.0 small picture changes a second, and nothing sits still for longer than 1.67 seconds.
+- [measured: script.md] A re-hook near 40% in the longer reels; "save this" in one of twelve, just before the ask; 9 of 12 end by asking for one keyword in the comments.
+- [Verizon] Many viewers have the sound off, so the hook and every key claim are also on screen.
+- [Murch: emotion first] Open a question early and answer it; do not explain before the viewer wants to know.
 
-### Clarity (from multimedia learning research)
-- [research] Coherence: cut anything that does not serve the one promise.
-- [research] Signaling: highlight, underline or point at the thing being talked about.
-- [research] Temporal contiguity: the picture for a word appears with that word, not after it.
-- [research] Spatial contiguity: labels sit next to what they label.
-- [research] Redundancy: full sentences on screen while the same sentences are spoken overload the viewer. Captions stay to 2 to 4 words with one keyword stressed; they are there for muted viewing and emphasis.
-- [research] Personalization and voice: conversational wording and a natural-sounding voice.
-- [research] Segmenting: numbered beats with a visible progress bar.
+### Clarity
+- [Mayer: coherence] Cut anything that does not serve the one promise.
+- [Mayer: signaling] Highlight, underline or point at the thing being talked about.
+- [Mayer: temporal contiguity] The picture for a word appears with that word, not after it. The engine's beats come from the `*keywords*` for this reason.
+- [Mayer: spatial contiguity] Labels sit next to what they label.
+- [Mayer: redundancy] Full sentences on screen while the same sentences are spoken overload the viewer. Captions stay at 2 to 4 words with one keyword stressed.
+- [Mayer: personalization, voice] Conversational wording and a natural-sounding voice.
+- [Mayer: segmenting; measured: L05-L07] Break the content into numbered parts. Four of the references also show progress (dots, a rail, step numbers); ours is the paper-tab strip.
 
 ### Camera
-One move per shot, always motivated, always eased, and it lands just before the key word.
+[Katz] One move per shot, always motivated by what the viewer needs to see next, and eased at both ends. [Mayer: temporal contiguity] It lands with the key word.
 
-| Move | Use it for |
-| --- | --- |
-| Slow push-in (about 4% over the shot) | Default on every shot so nothing is frozen |
-| Punch-in (6 to 10%, 4 to 6 frames) | The key word or the price |
-| Pull-out | A reveal or showing the whole system |
-| Orbit (15 to 30 degrees) | Showing off a 3D object or the exploded frame |
-| Whip pan or whip up | High-energy scene change; needs motion blur and a whoosh |
-| Push through (into a card until it is the scene) | Carrying into the next scene |
-| Rack focus | Moving attention between depth layers without a cut |
-| Tilt or pedestal | Following something that falls or rises |
-| Small roll (3 to 5 degrees, back within 8 frames) | The mistake or surprise beat |
-| Handheld float (slow two-sine drift) | Life in long holds; zero during hard rests |
+| Move | Use it for | Measured size (median) |
+| --- | --- | --- |
+| Push-in | The key word or number | 11% closer over about 12 frames |
+| Pull-out | A reveal, or showing the whole system | 13% wider over about 13 frames |
+| Slide or page scroll | Step to step | A fifth to a quarter of the frame over 10 to 18 frames |
+| Small camera move | Keeping a held shot alive | Under 1% over 8 to 9 frames |
+| Whip | A fast change of subject | 3 to 4 frames, heavily blurred |
+| Ramp into a cut | Energy into a still scene | 9 to 12 frames of acceleration, then a hard cut |
+| Orbit or travel in 3D | Hero scenes: showing an object or moving through a space | No reference numbers (one of twelve references is 3D); keep the subject in frame and ease both ends |
 
-A chasing camera keys the subject about 0.1 s ahead and never lets it leave frame. CSS perspective between 1200 and 1800 px looks natural; under 600 px distorts.
+- [measured: T12, T17] Fast moves are blurred in the direction of travel; the engine's `ctx.blur` does this.
+- [Katz] A camera that follows a subject never lets it leave the frame.
 
-### Depth, light and shading (the 3D look)
+### Depth, light and shading
 Flat fills are the main reason code-made video looks cheap. Every scene follows one lighting plan.
 
-1. **One light plan per reel.** Key light from the top-left, a dim cool fill from the right, an accent-coloured rim from behind. Every gradient, highlight and shadow agrees with it.
-2. **No flat surface.** Each card, tile and panel gets a gradient about 8 to 15% lighter toward the key and darker away from it.
-3. **Shade the dark side.** The parts facing away from the key get a darker tone of the same hue, never grey and never pure black. Tint shadows toward the background colour.
-4. **Two shadows per object.** A contact shadow (tight, dark, small blur, right under the object) and an ambient shadow (wide, soft, low opacity), both thrown away from the key. As an object lifts, the contact shadow fades and the ambient one grows and softens.
-5. **Ambient occlusion.** Darken where surfaces meet: the base of a card on a floor, inner corners, the crease behind an overlapping layer.
-6. **Edge light.** A one-pixel lighter line on key-side edges; an accent rim on the far edge of hero objects to lift them off the dark background.
-7. **Specular sweep.** A soft highlight band crosses glossy surfaces once, on the beat of emphasis.
-8. **Atmospheric depth.** Farther layers are darker, lower in contrast, less saturated and slightly blurred; the nearest layer is the brightest and sharpest.
-9. **Depth of field.** Blur the background 2 to 6 px when the subject is near.
-10. **Parallax.** Under any camera move, near layers travel more than far ones. Give even flat art (the avatar's hair, face, glasses, headphones) a few pixels of Z separation.
-11. **Grounding.** Objects sit on a floor plane with a faint reflection or shadow; nothing floats without a reason.
-12. **Falloff.** Background glow is a radial gradient behind the subject with darker corners.
-13. **Avatar shading.** Cel shading in two tones: shadow shapes under the chin, under the hair, inside the headphones and on the side away from the key, as a multiply layer; a small highlight on the glasses.
-14. **Real geometry** (Three.js) only for hero objects that must rotate: standard or physical materials, a key, fill and rim light, soft shadows, filmic tone mapping. Panels, flips, stacks and fans are CSS 3D transforms and render much faster.
-15. **Motion blur** on anything fast; without it fast moves strobe.
+1. [owner: Paper Studio] One light plan: a warm key light from the top-left. Shadows fall down and to the right. No glow and no rim light: they read wrong on paper.
+2. [Gurney: the form principle] No flat surface. Each card and panel is a little lighter toward the light and darker away from it.
+3. [Gurney] Shade the dark side with a darker tone of the same colour, never grey and never pure black. Shadows are warm brown on this paper.
+4. [Material: light and shadows] Two shadows per object: a tight dark one from the key light right under it, and a wide soft one from the ambient light. As an object lifts, the tight one fades and the soft one grows.
+5. [Gurney: occlusion shadows] Darken where surfaces meet: the base of a card on the desk, inner corners, the crease behind an overlapping layer.
+6. [Gurney: atmospheric perspective] Farther layers are lighter, lower in contrast and softer; the nearest layer is the sharpest.
+7. [Gurney: cast shadows] A cast shadow is sharp near the object and softer farther away.
+8. [Disney: the multiplane camera] Under any camera move, near layers travel more than far ones (parallax).
+9. [owner] Real 3D (three.js, `studio/scenes3d.js`) for one or two hero scenes a reel: objects with real thickness, the same top-left key light, shadows cast onto the paper by a shadow-only floor, no tone mapping so the paper colours match the flat scenes.
+10. [measured: T12, T17] Motion blur on anything fast.
 
 ### Type and captions
-- [measured] A proven starting point from the reference reels, not a fixed rule: bold sans for sentences, italic serif in the accent colour for the one keyword per line; the keyword pops to 2 to 3 times size for about 0.5 s and settles.
-- Entries 12 frames ease-out, exits 8 frames. Transitions travel left to right or bottom to top.
-- Keep text out of the top and bottom interface zones; confirm on a test frame.
+- [measured: C01-C07] Captions are 2 to 4 words at a time in the top fifth, each word arriving as it is spoken, one keyword stressed (ours: Lora italic on a strip of paper tape).
+- [Meta] Captions and key text stay below the top 14% (268 px). [Meta; check_reel] Meta's bottom limit for ads is 35%; organic reels show less interface, so this project allows key elements down to 1490 px and keeps the hook promise and the keyword above 1250 px.
+- [WCAG 1.4.3] Text is 4.5 to 1 against its background (3 to 1 for very large type).
+- [Apple HIG; check_reel] Nothing the viewer must read is under 30 px; aim for 40 px and up.
+- [measured: M10] The key word may arrive at 2 to 3 times size and settle into the line in about 6 frames.
+- [Mayer: redundancy] Never put the whole spoken sentence on screen.
 
 ### Sound
-One material set in one room. Fewer sounds than events.
-
-| Event class | Sound | Notes |
-| --- | --- | --- |
-| Scene change | Whoosh or swoosh | [measured] on about 3 of 4 cuts, not all |
-| Element lands | Short impact or thud | Size of sound matches size of object |
-| Small UI appears | Pop or click | [measured] at most 1 in 3 cuts |
-| Counter runs | Tick sequence that stops sharply | Chime only when it lands on the final number |
-| Strike-through, stamp | Marker slash, stamp thunk | The "gone" motif; keep identical each time so it becomes a signature |
-| Typing, terminal | Key burst | Under the voice, never over a key word |
-| Build-up before a reveal | Riser into a gap of silence, then impact | Once per reel |
-| Mistake or glitch beat | Glitch burst, music drops out for 0.3 s | The audio interrupt |
-| Avatar reaction | Nothing, or the faintest breath of air | Do not cartoon it |
-
-- Place the sound's attack on the frame of the visual hit.
-- Vary pitch and level slightly on repeats so they do not sound stamped.
-- Silence is a sound: one planned drop makes the next hit land.
+- [measured: sound.md] About half the picture events carry a sound (103 of 210). Give one to every transition and to the one or two moves in a scene that carry the point, not to everything.
+- [measured: sound.md; ITU] The sound starts on the frame of the picture event or one frame before it (the references' middle value is half a frame early). Never more than one frame early; late sound is noticed less than early sound.
+- [measured: sound.md] Transitions take a soft swoosh about 10 dB under the voice; clicks and ticks sit 12 to 17 dB under; one hit a scene at most (stamp, slam, counter landing) may reach the level of the voice.
+- [Murch: dense clarity] The ear follows about two and a half things at once. Voice, music and one effect is the limit: never two effects on one frame, and nothing under a key word.
+- [measured: sound.md] In talking reels the music and effects together sit 17 to 24 dB under the voice.
+- [Loudness] Mix to -14 to -16 LUFS with peaks at or under -1 dB.
+- [owner] Voice, music and sound effects all come from ElevenLabs. The paper sounds (tear, stamp, pencil) are the signature set: keep them the same in every reel.
 
 ### Voice and avatar
-- The voice matches the drawn character in age and temperament; warm, confident, lightly amused.
-- Mouth shapes driven by word timings; blink every 3 to 4 s; brows react on numbers and on the mistake beat; eyes glance at whatever enters.
+- [owner] The channel voice at normal speed.
+- [owner] The large avatar opens the hook and returns for "Save this" and the outro; the small cursor head travels to whatever is being talked about. [measured: A01-A07]
+- [Bentivoglio] People blink about 17 times a minute at rest and more in conversation, so the avatar blinks every 3 to 4 seconds, for about 3 frames.
+- [Mayer: temporal contiguity] Mouth shapes change only while a word is being spoken.
+- [Disney: arcs, secondary action] The cursor head travels on a shallow arc, tilts into the move, and sends one ring out when it arrives.
 
 ## Style library (Lemo-Opuscar)
 
-A library of 99 film styles made in code, in 15 families. Use it to choose a treatment that suits the content of a scene, not for variety's sake. One base style per reel; a guest style only for a hero moment, and only when it carries from the scene before it.
+A library of 99 film styles made in code, in 15 families. Use it to choose a treatment for a hero scene or a hero object, not for variety's sake. Paper Studio stays the background in every scene, so a style is applied to what sits on the paper (a card, an object, a 3D prop), never to the whole frame.
 
 The pairings below are this skill's own starting suggestions, not rules from the library. Replace them with the user's choices as they approve or reject looks.
 
 | What the scene shows | Families and styles to try first |
 | --- | --- |
-| App or repo page, web page, UI panel | Screens and Interfaces: Dark Tech Keynote, Tabletop App Flythrough, Mascot Screencast |
+| App or repo page, web page, UI panel | Screens and Interfaces: Tabletop App Flythrough, Mascot Screencast; Dark Tech Keynote only as the inside of a card |
 | How a tool works inside, layers, pipeline | Line Diagrams: Exploded Teardown, Isometric Infographic, Color-Coded Mechanism, Assembly-Line Diagram |
 | Prices, counters, comparisons | Data and Maps: Data Storytelling, Data Physicalization; Graphic and Type: Scale Zoom Explainer |
 | Hook words, labels, keyword hits | Graphic and Type: Swiss Motion Graphics, Text Flash Cuts |
-| Hero object, product moment | 3D and Miniature: Glass Product Render, Low-poly Isometric Island, Tilt-Shift Miniature, Brick Toy |
+| Hero object, product moment | 3D and Miniature: Low-poly Isometric Island, Tilt-Shift Miniature, Brick Toy, Glass Product Render |
 | Cutouts, documents, evidence, the "mistake" beat | Print and Printmaking: Halftone Dossier, Vintage Engraving Collage; Instruments and Evidence: Archive Light Table, Engineering Briefing Board |
-| Terminal, code, glitch | Film and Tape: CRT ASCII Terminal; Light and Lines: Circuit Board, Neon Tubes |
+| Terminal, code, glitch | Film and Tape: CRT ASCII Terminal, as a screen sitting on the desk |
 | Explaining an idea simply | Sketch and Board: Whiteboard Explainer, Sketchnote, Marker on Paper |
 | Science channel topics | Painting and Illustration: Colored-Pencil Science Illustration; Instruments and Evidence: Under the Microscope, Satellite Briefing; Data and Maps: 3D Map Explainer |
 
@@ -337,14 +367,15 @@ Other families (Edit and Documentary, Traditional Crafts, Cartoons, Games) are a
 
 Rules:
 - Locked and signature items keep their given look in every style. The avatar takes that scene's light direction and shadow.
-- A style change happens on a carry (a push through, a flip, a morph), never as a bare swap.
-- If the library is not installed in the current environment, write that in the ledger and build with the look card alone.
+- A style arrives on a carry (a push through, a flip, a morph), never as a bare swap.
+- Name the style in the look card. Read that style's own files in the library before writing code; do not copy their text.
+- To use it: `git clone --depth 1 https://github.com/lemomo-ai/lemo-opuscar` outside the repo. If it cannot be cloned, write that in the ledger and build with the look card alone.
 
 ## Environments
 
-- **Cloud workspace:** research, writing, test frames. It cannot reach social sites; do not try to work around that.
-- **GitHub Actions (Exp1):** fetching references with yt-dlp, live data, full renders.
-- **Linux server (optional):** needs git, Node 20 or newer, Python 3, ffmpeg, Playwright's Chromium, Whisper, yt-dlp and the GitHub CLI. Skills are read from the repo's `.claude/skills/` folder, so cloning Exp1 brings them along. Also install there: `hook-master` (clone github.com/Liamrjohnston/hook-master-skill and run its `install.sh`, which copies nine skills into `~/.claude/skills`), the Lemo-Opuscar library (clone github.com/lemomo-ai/lemo-opuscar and follow its README), and for sound labelling `laion-clap` and `panns-inference` from pip (both run on CPU, slowly). Read each licence before first use and record it in `licences.md`. On an ARM server, check that each tool has an ARM build before relying on it.
+- **Cloud workspace:** research, writing, test frames with `studio/render.py`. It cannot reach social sites and cannot play audio; do not try to work around that.
+- **GitHub Actions (Exp1):** `reference.yml` (fetch and study a reference), `make-reel.yml` (storyboard, animatic, finished reel, checks), `voice-setup.yml` (voice, music test, sound set), `auto-reel.yml` (topic to storyboard; needs `CLAUDE_CODE_OAUTH_TOKEN`), `add-asset.yml` (bring a file in from a link).
+- **Linux server (optional):** needs git, Python 3, ffmpeg, Playwright's Chromium, yt-dlp and the GitHub CLI. Skills are read from the repo's `.claude/skills/` folder, so cloning Exp1 brings reel-director and Hook Master along.
 - **Scheduled run:** a weekly task may run Stages 0 to 5 unattended and stop at Gate 1 with the script pack ready.
 
 ## Journal
@@ -361,4 +392,4 @@ The journal is automatic. The user does not have to ask.
 
 ## Final report format
 
-Lead with what was produced and where. Then the ten stages, one line each: done with its evidence, or BLOCKED with the reason. Then what the user must check or decide. No recap of effort.
+Lead with what was produced and where. Then the eleven stages, one line each: done with its evidence, or BLOCKED with the reason. Then the number of failed checks and what the fresh reviewer found. Then what the user must check or decide. No recap of effort.
