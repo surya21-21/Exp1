@@ -135,7 +135,7 @@ export function walk(Q, t, W) {
       Q.lean += W.dn * 4.5 * Math.sin(Math.PI * s) * (1 - 0.4 * s);
       Q.bob += 0.018 * S * Math.sin(Math.PI * s);
       Q.head.tilt += W.dn * 4 * (1 - outCubic(s));
-      Q.spread = lerp(0.35, 1, outCubic(s));
+      Q.spread = lerp(0.55, 1, outCubic(s));
       Q.facing = s < 0.4 ? W.dn : 0;
       const ra = REST_ARMS;
       Q.arms = Q.arms.map((a, i) => [lerp(ra[i][0] - W.dn * 14, a[0], outCubic(s)), a[1]]);
@@ -146,19 +146,20 @@ export function walk(Q, t, W) {
   const cruise = clamp(Math.min(u, W.n - u));
   Q.x = walkX(W, t); Q.y = W.gy(Q.x);
   Q.feet = [footAt(W, 0, t), footAt(W, 1, t)];
-  Q.spread = lerp(1, 0.35, clamp(u * 1.5));
+  Q.spread = lerp(1, 0.55, clamp(u * 1.5));
   Q.facing = W.dn;
   Q.knee = [W.dn, W.dn];
   Q.bob += 0.016 * S * Math.cos(2 * Math.PI * (s - 0.22)) * lerp(0.5, 1, cruise);   // down after contact, up before the next
   Q.lean += W.dn * 5 * cruise;
   // arms swing opposite the legs: the arm across from the swinging foot comes forward
   const swingFoot = (j + 1) % 2 ? W.b : 1 - W.b, oa = 1 - swingFoot;
-  const A = 27 * lerp(0.45, 1, cruise) * W.arms, sw = -Math.cos(Math.PI * s) * W.dn * A;
-  const fwd = x => clamp(x * W.dn / A);
-  const arm = a => [a, W.dn * (6 + 26 * fwd(a))];
+  // each arm swings about its own outward rest angle, so the forearms never cross the chest
+  const A = 24 * lerp(0.45, 1, cruise) * W.arms, sw = -Math.cos(Math.PI * s) * W.dn * A;
+  const lead = W.dn > 0 ? 1 : 0;                  // the arm on the side he walks toward
+  const arm = (i, a) => { const fwd = clamp(a * W.dn / A), k = i === lead ? 1 : 0.45; return [(i ? 1 : -1) * 14 + a * k, (i ? -1 : 1) * 6 + (i === lead ? W.dn * 18 * fwd : 0)]; };
   const aw = clamp(u * 2) * (W.arms > 0 ? 1 : 0);
   const wa = [];
-  wa[oa] = arm(sw); wa[1 - oa] = arm(-sw);
+  wa[oa] = arm(oa, sw); wa[1 - oa] = arm(1 - oa, -sw);
   Q.arms = Q.arms.map((a, i) => [angLerp(a[0], wa[i][0], aw), lerp(a[1], wa[i][1], aw)]);
   Q.head.tilt += W.dn * 3 + 1.6 * Math.sin(2 * Math.PI * s);
   Q.head.dy += -0.006 * Math.cos(2 * Math.PI * (s - 0.35));
@@ -223,7 +224,9 @@ export function point(Q, t, o) {
   if (t < o.t0 - pull || t > o.t1 + out) return Q;
   const at = typeof o.at === 'function' ? o.at(t) : o.at;
   const sh = shoulderOf(Q, i), rest = Q.arms[i].slice();
-  const goal = o.reach ? armTo(Q, i, at, o.pref || [0, 1]) : [angOf(at[0] - sh[0], at[1] - sh[1]) - Q.lean * 0.3 - (i ? -8 : 8), i ? -8 : 8];
+  // a pointing arm never rises more than 35 degrees above level: higher, it would cross his face
+  const raw = angOf(at[0] - sh[0], at[1] - sh[1]) - Q.lean * 0.3;
+  const goal = o.reach ? armTo(Q, i, at, o.pref || [0, 1]) : [Math.sign(raw) * Math.min(Math.abs(raw), o.maxUp ?? 125) - (i ? -8 : 8), i ? -8 : 8];
   const d = angDelta(rest[0], goal[0]);
   const back = [rest[0] - d * 0.1, rest[1] + (i ? 10 : -10)];
   let a;

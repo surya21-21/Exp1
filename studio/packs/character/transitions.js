@@ -40,7 +40,7 @@ export const TRANSITIONS = {
     const curl = h('div', 'position:absolute;left:0;top:-80px;width:56px;height:2080px;display:none;border-radius:28px;' +
       `background:linear-gradient(90deg,#c9b48d,#efe1c2 30%,#fbf3e2 48%,#e2cfa9 70%,#b49c74);box-shadow:-10px 10px 22px rgba(70,52,25,.4);transform-origin:28px 1040px`);
     under.append(curl);
-    const grab = 0.18, fly = 0.66;
+    const grab = 0.07, fly = 0.62;
     const pose = (t, QA, QB) => {
       const p = T.pOf(t);
       if (!QA || !QB) return QB || QA;

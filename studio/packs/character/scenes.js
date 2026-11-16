@@ -71,13 +71,36 @@ export const ADAPT = {
     const b = sc.beats || [], tType = b[0] ?? 0.5, tSign = b[1] ?? 2.6, tFollow = tSign + 0.75;
     const Q = stand(226, 1700, 280);
     const settle = spring(prog(t, -fr(4), fr(14)), 0.8, 6);
-    const tilt = t < tSign - 0.2 ? lerp(-6, 4, settle) + 2 * Math.sin(t * 2.4) : -2 + 3 * pulse(t, tFollow, fr(3), fr(10));
+    const tilt = t < tSign - 0.2 ? lerp(-6, 4, settle) + 2 * Math.sin(t * 2.4) : -2 + 3 * pulse(t, tFollow, fr(3), fr(10)) + 1.6 * Math.sin((t - tSign) * 2.1);
     bigHead(Q, { x: 226, y: 1431 - 10 * pulse(t, tSign - fr(5), fr(5), fr(8)), size: 280, tilt, face: t > tFollow ? 'grin' : t < tType + 0.1 ? 'interested' : null });
     return Q;
   },
 };
 
 export const SCENES = {
+  // Test bench and demo sheet for the puppet (R01): front pose, walk, point, react, hop, sit.
+  // Not for reels; collection/demo/character/r01-puppet.jpg is drawn from it.
+  charDemo(wrap, p, ctx) {
+    const S = p.S || 260, Y = p.y || 1400;
+    const ledge = card(650, 1020, 330, 380); wrap.append(ledge);
+    const W = walkPlan({ t0: 1.0, t1: 2.6, x0: 230, x1: 560, y0: Y, S });
+    return {
+      update() {},
+      character(t) {
+        const Q = stand(230, Y, S);
+        idle(Q, t);
+        walk(Q, t, W);
+        point(Q, t, { t0: 3.0, t1: 3.8, hand: 0, at: [150, 820] });
+        react(Q, t, { t0: 4.2, kind: 'leanBack', dur: 0.6, face: 'curious', dn: 1 });
+        hop(Q, t, { t0: 5.3, dur: 0.42, x0: 560, y0: Y, x1: 815, y1: 1020, h: 90 });
+        sit(Q, t, { t0: 5.85, seat: [815, 1020] });
+        return Q;
+      },
+      lamp: () => ({ x: 540, y: 1100, k: 1 }),
+      cues: [],
+    };
+  },
+
   // R02 Unfold and count (hook). Frame 0: the large approved face talks under a tally counter
   // already rolling. On "twelve" the head flies down to the first of twelve reels and his body
   // unfolds under it in parts (torso, arms, legs, 2 frames apart). He hops across the reels,
@@ -271,7 +294,7 @@ export const SCENES = {
     const character = t => {
       const Q = stand(175, LEDGE, S);
       idle(Q, t, 0.6);
-      point(Q, t, { t0: B[0], t1: B[0] + 0.85, hand: 0, at: [140, 300], look: false });
+      armsTo(Q, t, { t0: B[0], t1: B[0] + 0.8, in: fr(4), out: fr(6), arms: [[-122, -58], null], hands: ['point', null] });   // "One": a finger up beside his face
       walk(Q, t, RUN);
       walk(Q, t, BACK);
       hop(Q, t, HOP);
@@ -318,7 +341,7 @@ export const SCENES = {
         logo.style.opacity = t < land + 0.5 ? '1' : (1 - prog(t, land + 0.5, fr(8))).toFixed(3);
       },
       lamp: t => ({ x: t < B[1] ? 300 : lerp(300, 820, clamp((t - B[1]) / 1.3)), y: 900, k: 1 }),
-      cues: [{ t: B[1], sfx: 'scratch', gain: 0.55 }, { t: introUp, sfx: 'pop', gain: 0.4 }, { t: swat, sfx: 'swoosh', gain: 0.7 }, { t: logoUp, sfx: 'pop', gain: 0.4 }, { t: HOP.t0 + HOP.dur, sfx: 'stamp', gain: 0.9 }],
+      cues: [{ t: B[1], sfx: 'scratch', gain: 0.55 }, { t: swat, sfx: 'swoosh', gain: 0.7 }, { t: HOP.t0 + HOP.dur, sfx: 'stamp', gain: 0.9 }],
     };
   },
 
@@ -530,7 +553,7 @@ export const SCENES = {
         });
       },
       lamp: t => ({ x: t < B[1] ? 300 : 650, y: 1200, k: 1 }),
-      cues: [{ t: B[1], sfx: 'swoosh', gain: 0.5 }, { t: B[1] + 8 * fr(3) + fr(9), sfx: 'pop', gain: 0.5 }, { t: B[2], sfx: 'whoosh', gain: 0.5 }, { t: B[2] + fr(15), sfx: 'pop', gain: 0.6 }, { t: B[3] + fr(10), sfx: 'tick', gain: 0.5 }],
+      cues: [{ t: B[1], sfx: 'swoosh', gain: 0.5 }, { t: B[1] + 8 * fr(3) + fr(9), sfx: 'pop', gain: 0.5 }, { t: B[2] + fr(15), sfx: 'pop', gain: 0.6 }, { t: B[3] + fr(10), sfx: 'tick', gain: 0.5 }],
     };
   },
 
