@@ -71,8 +71,8 @@ export const ADAPT = {
     const b = sc.beats || [], tType = b[0] ?? 0.5, tSign = b[1] ?? 2.6, tFollow = tSign + 0.75;
     const Q = stand(226, 1700, 280);
     const settle = spring(prog(t, -fr(4), fr(14)), 0.8, 6);
-    const tilt = t < tSign - 0.2 ? lerp(-6, 4, settle) + 2 * Math.sin(t * 2.4) : -2 + 3 * pulse(t, tFollow, fr(3), fr(10)) + 1.6 * Math.sin((t - tSign) * 2.1);
-    bigHead(Q, { x: 226, y: 1431 - 10 * pulse(t, tSign - fr(5), fr(5), fr(8)), size: 280, tilt, face: t > tFollow ? 'grin' : t < tType + 0.1 ? 'interested' : null });
+    const tilt = t < tSign - 0.2 ? lerp(-6, 4, settle) + 2 * Math.sin(t * 2.4) : -2 + 3 * pulse(t, tFollow, fr(3), fr(10)) + 2.8 * Math.sin((t - tSign) * 2.3);
+    bigHead(Q, { x: 226 + 4 * Math.sin(t * 1.7), y: 1431 - 10 * pulse(t, tSign - fr(5), fr(5), fr(8)) - 4 * Math.abs(Math.sin(t * 1.9)), size: 280, tilt, face: t > tFollow ? 'grin' : t < tType + 0.1 ? 'interested' : null });
     return Q;
   },
 };
@@ -359,14 +359,17 @@ export const SCENES = {
     const hero = items[0] || {}, LENS = [796, SEAT[1] + 62 + 50];
     const character = t => {
       const Q = stand(SEAT[0], SEAT[1], S);
-      // nothing sits still: his legs never stop, faster once the bars are racing
-      sit(Q, t, { t0: -1, seat: SEAT, swing: 1, period: 1.0, in: 0.01 });
+      idle(Q, t, 0.9);
+      // nothing sits still: his legs never stop
+      sit(Q, t, { t0: -1, seat: SEAT, swing: 1.35, period: 0.95, in: 0.01 });
       Q.thighK = [0.42, 0.42];
       // the magnifier comes out on "longest" and goes over the top bar
       const m = env(t, B[1], ctx.dur + 1, fr(6));
       if (m) {
         reach(Q, t, { t0: B[1], t1: 99, in: fr(6), hand: 0, at: [LENS[0] + 52, LENS[1] - 128], pref: [-1, 0.3] });
-        Q.props = [{ kind: 'magnifier', hand: 0, ang: -22, r: 0.62, text: hero.text || '', sub: hero.label || '', size: 54, lensO: clamp(m * 1.4) }];
+        // the lens reads the bar: its value counts up as it arrives, and bumps on "seven"
+        const read = outCubic(prog(t, B[1] + fr(3), fr(16))), bump = pulse(t, B[2], fr(2), fr(8));
+        Q.props = [{ kind: 'magnifier', hand: 0, ang: -22 + 4 * Math.sin(t * 3.1), r: 0.62, text: `${((hero.v || 0) * read).toFixed(hero.dec ?? 2)}${hero.unit || ''}`, sub: hero.label || '', size: Math.round(54 * (1 + 0.18 * bump)), lensO: clamp(m * 1.4) }];
       }
       look(Q, t, { t0: B[1], t1: 99, tilt: -10, dx: -0.03, dy: 0.02 });
       react(Q, t, { t0: B[2], kind: 'tilt', side: -1, dur: 0.9, face: 'curious' });
@@ -380,6 +383,10 @@ export const SCENES = {
         rise(sub, outCubic(prog(t, fr(3), fr(8))), 20);
         rise(c, ctx.pre ? 1 : outCubic(prog(t, -fr(4), fr(8))), 40);
         b.update(t + 0.15);
+        // focus: once the lens is on the longest bar, the other three step back
+        const dim = outCubic(prog(t, B[1] + fr(10), fr(10)));
+        [...b.el.children].forEach((r, i) => { if (i) { r.style.opacity = (1 - 0.55 * dim).toFixed(3); r.style.transform = `translateX(${(-14 * dim).toFixed(1)}px)`; } });
+        const hb = b.el.children[0]; if (hb) hb.style.transform = `translateX(${(10 * dim).toFixed(1)}px) scale(${(1 + 0.04 * pulse(t, B[2], fr(2), fr(8))).toFixed(4)})`;
       },
       lamp: t => ({ x: t < B[1] ? 540 : 760, y: t < B[1] ? 1050 : 930, k: 1 }),
       cues: [{ t: (p.run || 1.5) - 0.05, sfx: 'pop', gain: 0.55 }, { t: B[1], sfx: 'swoosh', gain: 0.45 }, { t: B[2], sfx: 'click', gain: 0.6 }],
