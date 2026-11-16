@@ -192,6 +192,9 @@ def main():
     spec = {"title": reel.get("title", ""), "accent": reel.get("accent", "#c2381d"), "fps": fps,
             "duration": duration, "voice": voice, "voiceExactMatch": exact,
             "keyword": reel.get("keyword", ""), "scenes": out_scenes, "captions": captions}
+    for key in ("layers", "options"):               # whole-reel layers from studio/packs, and their settings
+        if key in reel:
+            spec[key] = reel[key]
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(spec, f, ensure_ascii=False, indent=1)
     n = sum(len(r) for r in timed)

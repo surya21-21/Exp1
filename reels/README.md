@@ -68,6 +68,10 @@ Music: the first file in `assets/music/`, if there is one.
 
 `logo` is a path to an official logo file in `logos/`. Without one the tile shows the name's first letter; logos are never redrawn.
 
+## Packs
+
+Scene types, transitions and whole-reel layers can also come from a pack in `studio/packs/` (the contract is in `studio/packs/README.md`). A reel switches a whole-reel layer on by name with `"layers": ["name"]`, and passes it settings in `"options": { }`. Each pack lists its own scene types and props in `studio/packs/<pack>.md`.
+
 ## Rules that stay in force
 
 - The storyboard is approved before a reel is posted, and you press post.

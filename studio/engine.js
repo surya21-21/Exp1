@@ -4,6 +4,7 @@
 // effect library in collection/lib, and exposes:
 //   window.DURATION, window.FPS, window.CUES (sound cues from the same code that draws the
 //   events), window.AUDIT() (boxes of the key elements, for the safe-zone check), window.READY.
+// Packs in studio/packs/ add scene types, transitions and whole-reel layers; see studio/packs/README.md.
 import { FPS, fr, clamp, prog } from '../collection/lib/ease.js';
 import { h, W, H, SAFE, background, contrast } from '../collection/lib/paper.js';
 import { TRANSITIONS } from '../collection/lib/transitions.js';
@@ -12,7 +13,16 @@ import { avatar, mixState } from '../collection/lib/avatar.js';
 import { progress } from '../collection/lib/elements.js';
 import { SCENES as FLAT } from './scenes.js';
 import { SCENES3D } from './scenes3d.js';
+import { PACKS } from './packs/index.js';
 const SCENES = { ...FLAT, ...SCENES3D };
+const TRANS = { ...TRANSITIONS };
+// Packs (studio/packs/) add scene types, transitions and whole-reel layers without touching this file.
+const PACK_LAYERS = [];
+for (const [pack, m] of Object.entries(PACKS)) {
+  for (const [k, v] of Object.entries(m.SCENES || {})) { if (SCENES[k]) throw new Error(`pack "${pack}": scene type "${k}" already exists`); SCENES[k] = v; }
+  for (const [k, v] of Object.entries(m.TRANSITIONS || {})) { if (TRANS[k]) throw new Error(`pack "${pack}": transition "${k}" already exists`); TRANS[k] = v; }
+  for (const l of m.LAYERS || []) PACK_LAYERS.push({ ...l, pack });
+}
 
 export async function boot(specUrl) {
   const spec = await (await fetch(specUrl)).json();
@@ -20,9 +30,12 @@ export async function boot(specUrl) {
   const accent = spec.accent || '#c2381d';
   stage.style.setProperty('--accent', accent);
   const layer = name => { const d = h('div', 'position:absolute;inset:0'); d.dataset.layer = name; stage.append(d); return d; };
-  const under = layer('background'), sceneLayer = layer('scenes'), avLayer = layer('avatar'), ovLayer = layer('transition'),
+  // Stack, back to front. The three "pack" slots hold whole-reel layers a reel asks for by name ("layers" in reel.json).
+  const under = layer('background'), slotUnder = layer('pack-under'), sceneLayer = layer('scenes'), slotOver = layer('pack-over'),
+    avLayer = layer('avatar'), slotFront = layer('pack-front'), ovLayer = layer('transition'),
     capLayer = layer('captions'), furn = layer('furniture'), over = layer('grain');
   const lamp = background(under, over);
+  const slots = { under: slotUnder, over: slotOver, front: slotFront };
 
   // Directional motion blur: a small pool of SVG filters, handed out afresh every frame.
   const defs = document.getElementById('defs'), pool = [];
@@ -37,17 +50,32 @@ export async function boot(specUrl) {
     pool[i].setAttribute('stdDeviation', `${sx.toFixed(1)} ${sy.toFixed(1)}`);
     el.style.filter = `url(#mb${i})`;
   };
-  const ctx = { accent, blur };
+  // shared: one object per reel that layers, scenes and transitions can all read and write (a 3D world, a character rig).
+  const ctx = { accent, blur, shared: {}, options: spec.options || {} };
+
+  // Whole-reel layers are made first, so scenes can find what a layer put in ctx.shared.
+  const layers = [];
+  for (const name of spec.layers || []) {
+    const def = PACK_LAYERS.find(l => l.name === name);
+    if (!def) throw new Error(`unknown layer "${name}"`);
+    const el = h('div', 'position:absolute;inset:0');
+    el.dataset.layer = name;
+    (slots[def.z] || slotUnder).append(el);
+    layers.push({ def, el, inst: def.make(el, spec, ctx) });
+  }
 
   const scenes = spec.scenes.map((s, i) => {
     const wrap = h('div', 'position:absolute;inset:0;display:none');
     sceneLayer.append(wrap);
-    const make = i === 0 ? null : TRANSITIONS[s.in || 'cut'] || TRANSITIONS.cut;
-    const tr = make ? make(ovLayer, ctx) : null;
+    if (i && s.in && !TRANS[s.in]) throw new Error(`unknown transition "${s.in}"`);
+    const make = i === 0 ? null : TRANS[s.in || 'cut'];
+    const tr = make ? make(ovLayer, ctx, { index: i, from: spec.scenes[i - 1], to: s }) : null;
     if (!SCENES[s.type]) throw new Error(`unknown scene type "${s.type}"`);
-    const impl = SCENES[s.type](wrap, s.props || {}, { ...ctx, dur: s.end - s.start, beats: s.beats || [], pre: !!(tr && tr.both) });
+    const impl = SCENES[s.type](wrap, s.props || {}, { ...ctx, dur: s.end - s.start, beats: s.beats || [], pre: !!(tr && tr.both),
+      index: i, start: s.start, end: s.end, total: spec.duration, count: spec.scenes.length });
     return { s, wrap, impl, tr };
   });
+  const list = scenes.map(sc => ({ type: sc.s.type, props: sc.s.props || {}, start: sc.s.start, end: sc.s.end, in: sc.s.in || 'cut', beats: sc.s.beats || [], impl: sc.impl, wrap: sc.wrap }));
 
   const groups = spec.captions || groupWords(spec.words || []);
   const caps = captions(capLayer, groups, { accent });
@@ -73,12 +101,13 @@ export async function boot(specUrl) {
     }
     for (const sc of scenes) { sc.wrap.style.cssText = 'position:absolute;inset:0;display:none'; if (sc.tr) sc.tr.off(); }
     const show = (sc, tl, top) => { sc.wrap.style.display = 'block'; if (top) sc.wrap.style.zIndex = 2; sc.impl.update(tl); };
-    let state, main;
+    let state, main, wf = null;
     if (win) {
       const A = scenes[win.j - 1], B = scenes[win.j], after = t >= B.s.start - 1e-6;
       if (B.tr.both || !after) show(A, local(A, t), false);
       if (B.tr.both || after) show(B, Math.max(0, local(B, t)), true);
-      B.tr.apply(win.p, A.wrap, B.wrap, B.s.at);
+      wf = { p: win.p, name: B.s.in || 'cut', from: win.j - 1, to: win.j, after, both: !!B.tr.both, lead: B.tr.lead, settle: B.tr.settle, boundary: B.s.start };
+      B.tr.apply(win.p, A.wrap, B.wrap, B.s.at, { ...wf, t, A: A.impl, B: B.impl });
       const sa = A.impl.avatar ? A.impl.avatar(local(A, t)) : null, sb = B.impl.avatar ? B.impl.avatar(Math.max(0, local(B, t))) : null;
       main = after ? B : A;
       if (B.tr.both) state = mixState(sa, sb, win.p);
@@ -91,6 +120,12 @@ export async function boot(specUrl) {
       main = scenes[i];
       show(main, local(main, t), false);
       state = main.impl.avatar ? main.impl.avatar(local(main, t)) : null;
+    }
+    // Layers draw after the scenes have updated, and may change the brand avatar's state for this frame.
+    if (layers.length) {
+      const frame = { t, index: i, local: Math.max(0, local(main, t)), main: list[scenes.indexOf(main)], win: wf, scenes: list, speaking: speakingAt(t), state, fps: FPS, duration: spec.duration };
+      for (const L of layers) L.inst.update(frame);
+      state = frame.state;
     }
     av.update(state, t, speakingAt(t));
     const lp = main.impl.lamp ? main.impl.lamp(Math.max(0, local(main, t))) : null;
@@ -105,8 +140,10 @@ export async function boot(specUrl) {
   scenes.forEach(sc => {
     // each sound starts one frame before its picture event, as measured in the reference reels
     for (const c of sc.impl.cues || []) if (c.t >= -0.05 && sc.s.start + c.t < spec.duration) cues.push({ t: +(Math.max(0, sc.s.start + c.t - fr(1))).toFixed(3), sfx: c.sfx, gain: c.gain ?? 1 });
-    if (sc.tr && sc.tr.sfx) cues.push({ t: +(Math.max(0, sc.s.start - fr(sc.tr.lead))).toFixed(3), sfx: sc.tr.sfx, gain: 0.9 });
+    if (sc.tr && sc.tr.sfx) cues.push({ t: +(Math.max(0, sc.s.start - fr(sc.tr.lead))).toFixed(3), sfx: sc.tr.sfx, gain: sc.tr.gain ?? 0.9 });
   });
+  // a layer's own cues are in seconds from the start of the reel
+  for (const L of layers) for (const c of L.inst.cues || []) if (c.t >= 0 && c.t < spec.duration) cues.push({ t: +(Math.max(0, c.t - fr(1))).toFixed(3), sfx: c.sfx, gain: c.gain ?? 1 });
   // never two effects on one frame: a quieter cue that collides moves 2 frames later, or is dropped
   cues.sort((a, b) => a.t - b.t || b.gain - a.gain);
   const taken = new Set(), kept = [];
@@ -126,15 +163,17 @@ export async function boot(specUrl) {
   // Smallest text on screen now (scenes and furniture; captions are checked separately).
   window.TEXTMIN = () => {
     let best = null;
-    const walk = document.createTreeWalker(sceneLayer, NodeFilter.SHOW_TEXT);
-    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
-      const tx = n.nodeValue.trim(), el = n.parentElement;
-      if (tx.length < 2 || !el || el.offsetParent === null) continue;
-      let o = 1;
-      for (let e = el; e && e !== sceneLayer; e = e.parentElement) o *= parseFloat(getComputedStyle(e).opacity);
-      if (o < 0.5) continue;
-      const px = parseFloat(getComputedStyle(el).fontSize);
-      if (!best || px < best.px) best = { px, text: tx.slice(0, 24) };
+    for (const root of [sceneLayer, slotUnder, slotOver, slotFront]) {
+      const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+        const tx = n.nodeValue.trim(), el = n.parentElement;
+        if (tx.length < 2 || !el || el.offsetParent === null || el.closest('[data-proxy]')) continue;
+        let o = 1;
+        for (let e = el; e && e !== root; e = e.parentElement) o *= parseFloat(getComputedStyle(e).opacity);
+        if (o < 0.5) continue;
+        const px = parseFloat(getComputedStyle(el).fontSize);
+        if (!best || px < best.px) best = { px, text: tx.slice(0, 24) };
+      }
     }
     return best;
   };
@@ -158,6 +197,7 @@ export async function boot(specUrl) {
   await document.fonts.ready;
   await Promise.all(['500 20px Inter', '700 20px Inter', '800 20px Inter', '900 20px Inter', '900 20px "Inter Display"', 'italic 700 20px Lora'].map(f => document.fonts.load(f)));
   await av.ready();
+  await Promise.all(layers.map(L => (L.inst.ready ? L.inst.ready() : null)));
   window.renderAt(0);
   window.READY = true;
 }
