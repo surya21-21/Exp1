@@ -46,7 +46,7 @@ function stage3d(wrap, accent) {
 }
 
 // A card with real thickness and rounded corners; `draw(ctx2d, W, H)` paints its face.
-function paperCard(w, hgt, depth, draw, { res = 512, edge = '#e8e0cf' } = {}) {
+export function paperCard(w, hgt, depth, draw, { res = 512, edge = '#e8e0cf' } = {}) {
   const r = Math.min(w, hgt) * 0.09, s = new THREE.Shape();
   s.moveTo(-w / 2 + r, -hgt / 2);
   s.lineTo(w / 2 - r, -hgt / 2); s.quadraticCurveTo(w / 2, -hgt / 2, w / 2, -hgt / 2 + r);
@@ -74,10 +74,10 @@ function paperCard(w, hgt, depth, draw, { res = 512, edge = '#e8e0cf' } = {}) {
   return mesh;
 }
 
-const rr = (g, x, y, w, hh, r) => { g.beginPath(); g.roundRect(x, y, w, hh, r); };
+export const rr = (g, x, y, w, hh, r) => { g.beginPath(); g.roundRect(x, y, w, hh, r); };
 
 // Face of one studied reel: our own generic drawing of a phone screen, never a creator's frame.
-function reelFace(i, accent) {
+export function reelFace(i, accent) {
   const R = rng(100 + i);
   return (g, W, H) => {
     const grd = g.createLinearGradient(0, 0, W, H);
