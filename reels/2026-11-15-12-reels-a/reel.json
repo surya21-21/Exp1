@@ -1,0 +1,171 @@
+{
+  "title": "I made Claude study 12 viral reels, frame by frame",
+  "status": "approved 15 Nov 2026",
+  "accent": "#c2381d",
+  "keyword": "STUDY",
+  "wps": 3.5,
+  "scenes": [
+    {
+      "type": "hook3d",
+      "say": "I made Claude study *twelve* viral reels, frame by frame. All *eighteen thousand* frames.",
+      "props": {
+        "from": 11900,
+        "to": 18271,
+        "label": "frames studied",
+        "sub": "12 viral reels, every single frame",
+        "chips": [
+          "210 moves",
+          "1,621 sounds"
+        ]
+      }
+    },
+    {
+      "type": "cards3d",
+      "in": "tear",
+      "say": "Here are *four* things it found.",
+      "props": {
+        "title": "4 things",
+        "sub": "all measured, none guessed",
+        "items": [
+          "Talk from frame zero",
+          "Nothing sits still",
+          "A sound on half the moves",
+          "Ask for one word"
+        ]
+      },
+      "hold": 0.5
+    },
+    {
+      "type": "steps",
+      "in": "shuffle",
+      "say": "*One*. All twelve start *talking* on the very first frame. *No intro*. *No logo*.",
+      "props": {
+        "n": 1,
+        "of": 4,
+        "name": "Talk from frame zero",
+        "underline": 700,
+        "lines": [
+          "12 of 12 start talking at 0.0 s",
+          "No intro",
+          "No logo"
+        ]
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "chart",
+      "in": "railScroll",
+      "say": "Two. Nothing sits *still*. The longest pause in any of them is one point seven seconds.",
+      "props": {
+        "title": "Longest still moment",
+        "sub": "seconds with nothing changing, by reel",
+        "bars": [
+          {
+            "label": "Reel 09",
+            "v": 1.67,
+            "dec": 2,
+            "unit": " s",
+            "hero": true
+          },
+          {
+            "label": "Reel 12",
+            "v": 1.4,
+            "dec": 2,
+            "unit": " s"
+          },
+          {
+            "label": "Reel 11",
+            "v": 1.27,
+            "dec": 2,
+            "unit": " s"
+          },
+          {
+            "label": "Reel 02",
+            "v": 1.17,
+            "dec": 2,
+            "unit": " s"
+          }
+        ]
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "compare",
+      "in": "railScroll",
+      "say": "Three. A sound on every move? *No*. Only *half* of them get one, a hair before the picture.",
+      "props": {
+        "a": {
+          "tag": "The usual advice",
+          "title": "A sound on every move",
+          "lines": [
+            "whoosh, pop, whoosh, pop"
+          ]
+        },
+        "b": {
+          "tag": "What was measured",
+          "title": "On half of them",
+          "lines": [
+            "103 of 210 moves,",
+            "starting half a frame early"
+          ]
+        },
+        "strikeW": 730
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "uiCard",
+      "in": "railScroll",
+      "say": "Four. The ending. *Nine* of twelve ask for one word in the comments. *One* says follow. *Two* just stop.",
+      "props": {
+        "kicker": "How the 12 reels end",
+        "title": "last three seconds",
+        "rows": [
+          {
+            "label": "Comment one word",
+            "kind": "value",
+            "value": 9,
+            "unit": " of 12"
+          },
+          {
+            "label": "Follow for more",
+            "kind": "value",
+            "value": 1,
+            "unit": " of 12"
+          },
+          {
+            "label": "A closing line",
+            "kind": "value",
+            "value": 2,
+            "unit": " of 12"
+          }
+        ]
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "save",
+      "in": "rampCut",
+      "say": "*Save* this for your next edit.",
+      "props": {
+        "title": "Save this.",
+        "sub": "Four rules for your next edit."
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "cta",
+      "in": "tear",
+      "say": "Comment *STUDY* and I'll send you the links. *This* is your AI guy.",
+      "props": {
+        "keyword": "STUDY",
+        "send": "the links"
+      },
+      "hold": 1.4
+    }
+  ],
+  "approved": {
+    "date": "2026-11-15",
+    "say_sha1": "fb04f6d1864d4d883ab9fa84b74bb0d9cce3ff9c"
+  }
+}
