@@ -75,7 +75,7 @@ export const SCENES = {
         num.update(val(T), val(T + fr(1)));
         const e0 = outCubic(prog(t, -fr(6), fr(8)));
         nb.style.opacity = e0.toFixed(3);
-        label.style.opacity = outCubic(prog(t, fr(2), fr(8))).toFixed(3);
+        label.style.opacity = outCubic(prog(t, -fr(8), fr(8))).toFixed(3);
         const si = stepIdx(t);
         cards.forEach(k => {
           const q = pos(k, t), q1 = pos(k, t - fr(1));

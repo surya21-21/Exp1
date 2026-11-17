@@ -100,10 +100,11 @@ export const TRANSITIONS = {
     const svg = h('div', 'position:absolute;left:0;top:0;width:1080px;height:1920px;display:none;pointer-events:none',
       `<svg width="1080" height="1920" viewBox="0 0 1080 1920" style="overflow:visible;display:block"><defs><clipPath id="${id}" clipPathUnits="userSpaceOnUse">` +
       `<text class="c" x="0" y="0" font-family="Inter Display, Inter, sans-serif" font-weight="900" font-size="${SIZE}" letter-spacing="-18">${word}</text></clipPath></defs>` +
+      `<g clip-path="url(#${id})"><text class="sh" x="0" y="0" font-family="Inter Display, Inter, sans-serif" font-weight="900" font-size="${SIZE}" letter-spacing="-18" fill="none" stroke="rgba(70,52,25,.42)" style="filter:blur(9px)">${word}</text></g>` +
       `<text class="e" x="0" y="0" font-family="Inter Display, Inter, sans-serif" font-weight="900" font-size="${SIZE}" letter-spacing="-18" fill="none" stroke="#fffdf8" stroke-linejoin="round" style="filter:drop-shadow(8px 14px 12px rgba(70,52,25,.38))">${word}</text></svg>`);
     slot.append(svg);
     const M = morpher(slot, ctx, { lead, settle, stagger: 2 });
-    const tc = svg.querySelector('.c'), te = svg.querySelector('.e'), blurW = blurrer();
+    const tc = svg.querySelector('.c'), te = svg.querySelector('.e'), tsh = svg.querySelector('.sh'), blurW = blurrer();
     let geo = null;
     const paper = h('div', 'position:absolute;inset:0'), paperLamp = background(paper, h('div'));
     return {
@@ -126,6 +127,10 @@ export const TRANSITIONS = {
         tc.setAttribute('transform', tf);
         te.setAttribute('transform', tf);
         te.setAttribute('stroke-width', (16 / s).toFixed(2));
+        // the letters are holes cut in the top sheet: its edge casts a shadow down and right inside them
+        tsh.setAttribute('transform', `translate(10 16) ${tf}`);
+        tsh.setAttribute('stroke-width', (44 / s).toFixed(2));
+        tsh.style.opacity = te.style.opacity;
         te.style.opacity = (1 - prog(k2, 0.55, 0.45)).toFixed(3);
         // the letters are windows onto the new scene: it gets a copy of the paper behind it,
         // so the old scene does not show through them

@@ -58,9 +58,9 @@ export const SCENES = {
     });
     // behind everything: the chapter number drawn as a giant pencil outline that boils on twos,
     // and the empty grooves the shorter tapes will drop into (the scene is never an empty stage)
-    const big = h('div', abs(p.bigX || 470, p.bigY || 300, 700, 1200, `font:900 ${p.bigSize || 1180}px/1 ${DISPLAY};color:transparent;-webkit-text-stroke:7px rgba(194,56,29,.42);white-space:nowrap;pointer-events:none`), String(p.n || 2));
-    cam.append(big);
-    const grooves = bars.slice(1).map((b, i) => { const g = h('div', abs(TX, HY + 132 + i * 82, len(b.v), 38, 'border-radius:4px;background:#e4dccb;box-shadow:inset 2px 3px 5px rgba(70,52,25,.22)')); cam.append(g); return g; });
+    const big = h('div', abs(p.bigX || 600, p.bigY || 380, 600, 900, `font:900 ${p.bigSize || 800}px/1 ${DISPLAY};color:transparent;-webkit-text-stroke:6px rgba(194,56,29,.34);white-space:nowrap;pointer-events:none`), String(p.n || 2));
+    const grooves = bars.slice(1).map((b, i) => h('div', abs(TX, HY + 132 + i * 82, len(b.v), 38, 'border-radius:4px;background:#e4dccb;box-shadow:inset 2px 3px 5px rgba(70,52,25,.22)')));
+    cam.prepend(big, ...grooves);              // at the back, under the tapes that drop into them
     const ul = pencilLine(300, { seed: 44, width: 12 });
     ul.el.style.left = '84px'; ul.el.style.top = `${(p.headY || 478) + 404}px`;
     cam.append(tl, line1, last, ul.el, lab, tape, tab, caseEl, nbox);
@@ -235,7 +235,7 @@ export const SCENES = {
       c.append(h('div', abs(30, 26, 64, 64), `<svg viewBox="0 0 64 64" width="64" height="64">${icons[r.icon] || icons.comment}</svg>`),
         h('div', abs(118, 30, 520, null, `font:800 46px/1.1 ${SANS};letter-spacing:-.5px;color:${P.ink};white-space:nowrap`), r.label));
       for (let k = 0; k < r.n; k++) c.append(h('div', abs(120 + k * 50, (i ? 104 : 120), 38, 38, 'border-radius:50%;box-shadow:inset 2px 3px 5px rgba(70,52,25,.28);background:#e9e2d3')));
-      const cnt = h('div', abs(CW - 300, 28, 270, null, `text-align:right;font:900 56px/1 ${DISPLAY};color:${P.ink};white-space:nowrap`), '');
+      const cnt = h('div', abs(CW - 340, 28, 270, null, `text-align:right;font:900 56px/1 ${DISPLAY};color:${P.ink};white-space:nowrap`), '');
       c.append(cnt);
       cam.append(c);
       return { c, cnt, r };
@@ -251,7 +251,7 @@ export const SCENES = {
     stopLine.el.style.left = '260px'; stopLine.el.style.top = '110px';
     const stopBar = h('div', abs(616, 92, 10, 60, `border-radius:4px;background:${P.ink};opacity:0`));
     if (built[2]) built[2].c.append(stopLine.el, stopBar);
-    const tick = E.badge('tick', 84); tick.el.style.left = `${CW - 70}px`; tick.el.style.top = '-30px';
+    const tick = E.badge('tick', 84); tick.el.style.left = `${CW - 62}px`; tick.el.style.top = '-36px';
     if (built[0]) built[0].c.append(tick.el);
     const dots = Array.from({ length: of }, (_, i) => {
       const d = h('div', abs(dotX(i), DY, 46, 46, `border-radius:50%;background:var(--accent);box-shadow:inset -3px -4px 6px rgba(60,15,5,.25),${lift(0)}`));
@@ -312,7 +312,7 @@ export const SCENES = {
         });
       },
       avatar: t => ({ chip: travel(t, [{ t: 0, x: 980, y: (p.headY || 478) + 40 }, { t: typeAt, x: X + 600, y: RY[0] + 62 }, { t: followAt, x: X + 880, y: RY[1] + 112 },
-        { t: stopAt, x: X + 600, y: RY[2] + 70 }, { t: winAt, x: X + 900, y: RY[0] + 20 }], 104) }),
+        { t: stopAt, x: X + 600, y: RY[2] + 70 }, { t: winAt, x: X + 40, y: RY[0] - 18 }], 104) }),
       lamp: t => ({ x: 540, y: t < B[1] - 0.3 ? RY[0] + 90 : t < B[2] - 0.3 ? RY[1] + 80 : t < winAt ? RY[2] + 80 : RY[0] + 90, k: 1 }),
       cues: [{ t: B[0], sfx: 'swoosh', gain: 0.45 }, ...[0, 1, 2, 3].map(k => ({ t: typeAt + k / 12, sfx: 'tick', gain: 0.3 })), { t: B[1] + fr(7), sfx: 'pop', gain: 0.55 },
         { t: followAt, sfx: 'click', gain: 0.7 }, { t: B[2] + fr(7), sfx: 'pop', gain: 0.5 }, { t: stopAt + fr(1), sfx: 'stamp', gain: 0.6 }, { t: winAt + fr(2), sfx: 'pop', gain: 0.7 }],
