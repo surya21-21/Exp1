@@ -171,9 +171,19 @@ export function rollNumber({ final, fmt = v => Math.round(v).toLocaleString('en-
     // v: the value now; vNext: the value one frame later (for blur). land: 0..1 bounce on landing.
     update(v, vNext = v, land = 0) {
       const speedAll = Math.abs(vNext - v);
+      // odometer: the lowest place rolls smoothly; a higher place rolls only while every place
+      // below it shows 9, together with them, so no figure is ever left half-turned
+      const rolls = new Map();
+      let r = 0;
+      [...cells].sort((x, y) => x.unit - y.unit).forEach((k, j, arr) => {
+        const raw = v / k.unit + 1e-9, f = raw - Math.floor(raw);
+        if (j === 0) r = speedAll < 1e-9 ? 0 : f;
+        else { const below = arr[j - 1], d = Math.floor(v / below.unit + 1e-9) % 10; r = d === 9 ? r : 0; }
+        rolls.set(k, r);
+      });
       cells.forEach((k, i) => {
-        const raw = v / k.unit + 1e-9, cur = Math.floor(raw) % 10, f = raw - Math.floor(raw);
-        const roll = speedAll < 1e-9 ? 0 : k.unit <= Math.pow(10, -dec) ? f : Math.pow(f, 5);
+        const raw = v / k.unit + 1e-9, cur = Math.floor(raw) % 10;
+        const roll = rolls.get(k);
         k.a.textContent = cur; k.b.textContent = (cur + 1) % 10;
         k.strip.style.transform = `translateY(${(-roll * cellH).toFixed(1)}px)`;
         const sp = speedAll / k.unit;

@@ -3,7 +3,7 @@
 // Contract: name -> (overlay, ctx, info) => { lead, settle, both, sfx, gain, apply(p, out, inn, at, win), off() }.
 // Options come from the incoming scene's props: "carry": { lead, settle, stagger }, "wipe": "WORD".
 import { FPS, fr, clamp, lerp, prog, inCubic, outCubic, inOutCubic, outBack } from '../../../collection/lib/ease.js';
-import { P, h, W, H } from '../../../collection/lib/paper.js';
+import { P, h, W, H, background } from '../../../collection/lib/paper.js';
 import { DISPLAY, blurrer } from './kit.js';
 import { morpher, packSlot, stageOrigin, rectOf, sceneClone, leave, arrive } from './morph.js';
 
@@ -67,11 +67,12 @@ export const TRANSITIONS = {
           col = colA;
         } else {
           // the frame is inside the dot; it shrinks onto the new scene's badge
-          const k = (p - pb) / (1 - pb), e = outBack(k, 1.25), m = outCubic(k);
+          const k = (p - pb) / (1 - pb), e = outBack(k, 1.1), m = outCubic(k);
           out.style.visibility = 'hidden';
           const bx = rb.x + rb.w / 2, by = rb.y + rb.h / 2;
           x = lerp(540, bx, m); y = lerp(960, by, m);
-          r = Math.max(rb.w / 2 * 0.5, lerp(cover(540, 960) * 1.02, rb.w / 2, e));
+          // radius eased in log space, so the overshoot is a share of the badge, not of the frame
+          r = (rb.w / 2) * Math.exp(Math.log((cover(540, 960) * 1.02) / (rb.w / 2)) * (1 - e));
           const s = lerp(1.14, 1, m);
           inn.style.transformOrigin = `${bx.toFixed(1)}px ${by.toFixed(1)}px`;
           inn.style.transform = `scale(${s.toFixed(4)})`;
@@ -104,6 +105,7 @@ export const TRANSITIONS = {
     const M = morpher(slot, ctx, { lead, settle, stagger: 2 });
     const tc = svg.querySelector('.c'), te = svg.querySelector('.e'), blurW = blurrer();
     let geo = null;
+    const paper = h('div', 'position:absolute;inset:0'), paperLamp = background(paper, h('div'));
     return {
       lead, settle, both: true, sfx: 'whoosh', gain: 0.6,
       apply(p, out, inn, at2, win) {
@@ -125,6 +127,13 @@ export const TRANSITIONS = {
         te.setAttribute('transform', tf);
         te.setAttribute('stroke-width', (16 / s).toFixed(2));
         te.style.opacity = (1 - prog(k2, 0.55, 0.45)).toFixed(3);
+        // the letters are windows onto the new scene: it gets a copy of the paper behind it,
+        // so the old scene does not show through them
+        // (Paper Studio from collection/lib/paper.js, its lamp set from this frame's scene, as the engine does)
+        const main = win.after ? win.B : win.A, start = win.after ? info.to.start : info.from.start;
+        const lp = main && main.lamp ? main.lamp(Math.max(0, win.t - start)) : null;
+        paperLamp.update(lp ? lp.x : W / 2, lp ? lp.y : 900, lp ? lp.k : 0);
+        if (paper.parentNode !== inn) inn.prepend(paper);
         inn.style.clipPath = p >= 1 ? '' : `url(#${id})`;
         // the old scene drifts left more slowly than the word (parallax) and dims a little
         out.style.transform = `translateX(${(-60 * outCubic(slideK)).toFixed(1)}px)`;
@@ -132,7 +141,7 @@ export const TRANSITIONS = {
         blurW(svg, Math.abs(outCubic(slideK) - outCubic(clamp((p - 1 / N) / 0.42))) * (W + 40 - (W - geo.w) / 2) * 0.05, 0);
         M.draw(p);
       },
-      off() { svg.style.display = 'none'; M.off(); },
+      off() { svg.style.display = 'none'; paper.remove(); M.off(); },
     };
   },
 

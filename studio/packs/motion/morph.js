@@ -112,7 +112,8 @@ export function morpher(slot, ctx, { lead = 6, settle = 10, stagger = 2, bend = 
         const r = lerp(radiusPx(pr.pa.radius, pr.A.w, pr.A.h), radiusPx(pr.pb.radius, pr.B.w, pr.B.h), clamp(u));
         const c = outCubic(prog(x, 0.3, 0.45));           // paint and content cross over in the middle of the move
         F.f.style.cssText = `position:absolute;left:0;top:0;width:${w.toFixed(1)}px;height:${hh.toFixed(1)}px;transform:translate(${(cx - w / 2).toFixed(1)}px,${(cy - hh / 2).toFixed(1)}px);filter:${dropLift(Math.sin(Math.PI * x) * 0.9)}`;
-        for (const [bg, pa, o] of [[F.bgA, pr.pa, 1 - c], [F.bgB, pr.pb, c]]) {
+        // the new paint fades in on top of the old, which goes only once it is covered (no pale middle)
+        for (const [bg, pa, o] of [[F.bgA, pr.pa, 1 - prog(c, 0.7, 0.3)], [F.bgB, pr.pb, c]]) {
           bg.style.cssText = `position:absolute;inset:0;border-radius:${r.toFixed(1)}px;background-color:${pa.bg};background-image:${pa.img};box-shadow:${pa.shadow};border:${pa.border};opacity:${o.toFixed(3)}`;
         }
         const fit = (cl, lw, lh, el, o) => {
@@ -120,8 +121,8 @@ export function morpher(slot, ctx, { lead = 6, settle = 10, stagger = 2, bend = 
           el.replaceChildren(cl);
           el.style.cssText = `position:absolute;left:0;top:0;width:${lw}px;height:${lh}px;transform-origin:0 0;transform:translate(${((w - lw * s) / 2).toFixed(1)}px,${((hh - lh * s) / 2).toFixed(1)}px) scale(${s.toFixed(4)});opacity:${o.toFixed(3)}`;
         };
-        fit(pr.ca, pr.la[0], pr.la[1], F.ca, 1 - outCubic(prog(x, 0.25, 0.35)));
-        fit(pr.cb, pr.lb[0], pr.lb[1], F.cb, outCubic(prog(x, 0.4, 0.35)));
+        fit(pr.ca, pr.la[0], pr.la[1], F.ca, 1 - outCubic(prog(x, 0.42, 0.25)));
+        fit(pr.cb, pr.lb[0], pr.lb[1], F.cb, outCubic(prog(x, 0.25, 0.3)));
         // fast moves are blurred along the direction of travel (T12, T17)
         F.blur(F.inner, Math.abs(cx - px) * 0.07, Math.abs(cy - py) * 0.07);
       });

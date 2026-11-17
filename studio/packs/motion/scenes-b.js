@@ -26,23 +26,23 @@ export const SCENES = {
   tapeMeasure(wrap, p, ctx) {
     const cam = stage(wrap);
     const bars = p.bars || [], hero = bars[0] || { label: '', v: 1 }, max = p.max || Math.max(...bars.map(b => b.v)) * 1.08, unit = p.unit ?? ' s';
-    const TX = 270, TL = p.tapeW || 640, len = v => (v / max) * TL;
+    const TX = 300, TL = p.tapeW || 620, len = v => (v / max) * TL;
     const tl = tile(p.n || 2, 92); tl.style.position = 'absolute'; tl.style.left = '80px'; tl.style.top = `${p.headY || 478}px`; tl.dataset.morph = 'tile';
     const words = (p.title || ['NOTHING', 'SITS', 'STILL']).map(w => String(w).toUpperCase());
     const w1 = words.slice(0, -1).map((w, i) => h('div', `display:inline-block;margin-right:26px;transform-origin:0 70%`, w));
     const line1 = h('div', abs(80, (p.headY || 478) + 120, 960, null, `font:900 ${p.titleSize || 100}px/1 ${DISPLAY};letter-spacing:-3px;color:${P.ink};white-space:nowrap`));
     line1.append(...w1);
-    const last = h('div', abs(74, (p.headY || 478) + 222, 960, null, `font:900 ${p.lastSize || 176}px/1 ${DISPLAY};letter-spacing:-6px;color:var(--accent);transform-origin:20% 60%;white-space:nowrap`), words[words.length - 1]);
+    const last = h('div', abs(74, (p.headY || 478) + 222, 960, null, `font:900 ${p.lastSize || 176}px/1 ${DISPLAY};letter-spacing:-6px;color:var(--accent);transform-origin:0 60%;white-space:nowrap`), words[words.length - 1]);
     last.dataset.key = 'title';
     const HY = p.tapeY || 1100, HH = 58;
-    const lab = h('div', abs(80, HY + 8, 180, null, `font:800 38px/1.1 ${SANS};color:${P.ink}`), hero.label);
+    const lab = h('div', abs(80, HY - 96, 220, null, `font:800 38px/1.1 ${SANS};color:${P.ink}`), hero.label);
     const tape = h('div', abs(TX, HY, 10, HH, `background:linear-gradient(${KRAFT},#cdb68e);border-radius:4px;box-shadow:${lift(0.1)};overflow:hidden`));
     tape.dataset.morph = 'ruler';
     const tsvg = h('div', 'position:absolute;left:0;top:0', `<svg width="${TL + 40}" height="${HH}" style="display:block"><path class="tk" fill="none" stroke="${P.graphite}" stroke-width="3" stroke-linecap="round"/></svg>`);
     tape.append(tsvg);
     const tk = tsvg.querySelector('.tk');
     const tab = h('div', abs(0, HY - 8, 22, HH + 16, `background:${P.graphite};border-radius:5px;box-shadow:${lift(0.2)}`));
-    const caseEl = h('div', abs(TX - 96, HY - 30, 118, 118, `border-radius:50%;background:radial-gradient(circle at 38% 34%,#5d574e,${P.graphite} 62%);box-shadow:${lift(0.3)}`));
+    const caseEl = h('div', abs(TX - 118, HY - 30, 118, 118, `border-radius:50%;background:radial-gradient(circle at 38% 34%,#5d574e,${P.graphite} 62%);box-shadow:${lift(0.3)}`));
     caseEl.append(h('div', abs(34, 34, 50, 50, 'border-radius:50%;background:#efe8da;box-shadow:inset 3px 4px 6px rgba(0,0,0,.25)')));
     const num = rollNumber({ final: hero.v, fmt: v => v.toFixed(2) + unit, size: 108 });
     const nbox = h('div', abs(0, HY - 140, null, 120, 'display:flex;align-items:center;transform-origin:100% 100%'));
@@ -56,6 +56,11 @@ export const SCENES = {
       cam.append(l, t2, v);
       return { els: [l, t2, v], path: t2.querySelector('path'), w: len(b.v), seed: 50 + i };
     });
+    // behind everything: the chapter number drawn as a giant pencil outline that boils on twos,
+    // and the empty grooves the shorter tapes will drop into (the scene is never an empty stage)
+    const big = h('div', abs(p.bigX || 470, p.bigY || 300, 700, 1200, `font:900 ${p.bigSize || 1180}px/1 ${DISPLAY};color:transparent;-webkit-text-stroke:7px rgba(194,56,29,.42);white-space:nowrap;pointer-events:none`), String(p.n || 2));
+    cam.append(big);
+    const grooves = bars.slice(1).map((b, i) => { const g = h('div', abs(TX, HY + 132 + i * 82, len(b.v), 38, 'border-radius:4px;background:#e4dccb;box-shadow:inset 2px 3px 5px rgba(70,52,25,.22)')); cam.append(g); return g; });
     const ul = pencilLine(300, { seed: 44, width: 12 });
     ul.el.style.left = '84px'; ul.el.style.top = `${(p.headY || 478) + 404}px`;
     cam.append(tl, line1, last, ul.el, lab, tape, tab, caseEl, nbox);
@@ -70,8 +75,11 @@ export const SCENES = {
       update(t) {
         const b = boilStep(t);
         tl.style.transform = `scale(${(1 + 0.15 * pulse(t, Math.max(twoAt, fr(12)), fr(2), fr(6))).toFixed(4)})`;
+        const bj = jit[(b + 1) % 3];
+        big.style.transform = `translate(${(bj[0] * 0.6).toFixed(1)}px,${(bj[1] * 0.6).toFixed(1)}px) rotate(${(bj[2] * 0.5).toFixed(2)}deg)`;
+        grooves.forEach((g, i) => { g.style.opacity = outCubic(prog(t, fr(2 + 2 * i), fr(8))).toFixed(3); });
         w1.forEach((el, i) => { const s = slam(t, wAt[i], { from: 1.7, crash: 2, settle: 5 }); el.style.opacity = s.o; el.style.transform = `scale(${s.s.toFixed(4)})`; });
-        const s = slam(t, stillAt, { from: 2.2, crash: 3, settle: 6 }), j = jit[b], boil = t > slamHit(stillAt) + fr(6);
+        const s = slam(t, stillAt, { from: 1.5, crash: 3, settle: 6 }), j = jit[b], boil = t > slamHit(stillAt) + fr(6);
         last.style.opacity = s.o;
         last.style.transform = `translate(${boil ? j[0] : 0}px,${boil ? j[1] : 0}px) rotate(${boil ? j[2] : 0}deg) scale(${s.s.toFixed(4)})`;
         ul.update(prog(t, slamHit(stillAt) + fr(2), fr(6)), b);
@@ -85,7 +93,7 @@ export const SCENES = {
         num.update(v, value(t + fr(2)), prog(t, landAt, fr(8)) * 1.5);
         const np = prog(t, pullAt - fr(4), fr(6)), land = pulse(t, landAt, fr(2), fr(6));
         nbox.style.opacity = outCubic(np).toFixed(3);
-        nbox.style.left = `${(TX + L - (nbox.offsetWidth || 300) + 10).toFixed(1)}px`;
+        nbox.style.left = `${Math.max(330, TX + L - (nbox.offsetWidth || 300) + 10).toFixed(1)}px`;
         nbox.style.transform = `scale(${(1 + 0.16 * land).toFixed(4)})`;
         nbox.style.color = t >= landAt ? 'var(--accent)' : '';
         others.forEach((o, i) => {
@@ -97,7 +105,8 @@ export const SCENES = {
       avatar: t => {
         const L = Math.max(10, len(value(t)));
         if (t < pullAt) return { chip: travel(t, [{ t: 0, x: 210, y: (p.headY || 478) + 46 }, { t: pullAt, x: TX + 30, y: HY - 46 }], 108) };
-        return { chip: { x: TX + L + 30, y: HY - 46 + 6 * Math.sin(t * 9), size: 108, tilt: -8, ring: t >= landAt ? prog(t, landAt, fr(9)) : null } };
+        if (t < landAt + 0.25) return { chip: { x: TX + L + 62, y: HY + HH / 2 + 4 * Math.sin(t * 9), size: 104, tilt: -8, ring: t >= landAt ? prog(t, landAt, fr(9)) : null } };
+        return { chip: travel(t, [{ t: 0, x: TX + len(hero.v) + 62, y: HY + HH / 2 }, { t: landAt + 0.25 + fr(9), x: 980, y: HY - 230 }], 104) };
       },
       lamp: t => ({ x: t < pullAt ? 420 : 560, y: t < pullAt ? 760 : HY, k: 1 }),
       cues: [{ t: slamHit(stillAt), sfx: 'pop', gain: 0.6 }, ...Array.from({ length: Math.floor((landAt - pullAt) / 0.2) }, (_, i) => ({ t: pullAt + i * 0.2, sfx: 'tick', gain: 0.22 })),
@@ -117,7 +126,7 @@ export const SCENES = {
     const ruler = h('div', abs(X, Y - 74, CW, 54, `background:linear-gradient(${KRAFT},#cdb68e);border-radius:5px;box-shadow:${lift(0.1)};overflow:hidden`),
       `<svg width="${CW}" height="54" style="display:block"><path fill="none" stroke="${P.graphite}" stroke-width="3" stroke-linecap="round" d="${tapeTicks(CW, 54, 71)}"/></svg>`);
     ruler.dataset.morph = 'ruler';
-    const card = h('div', abs(X, Y, CW, CHh, paperCss(34))); card.dataset.key = 'lanes';
+    const card = h('div', abs(X, Y, CW, CHh, paperCss(34)));
     const lbl = (tx, y) => h('div', abs(34, y, 300, null, `font:800 32px/1 ${SANS};letter-spacing:.1em;color:${P.muted}`), tx);
     card.append(lbl('PICTURE', 26), lbl('SOUND', 206));
     const MX = i => 40 + i * 74, MY = 72, BY = 254;
@@ -144,11 +153,13 @@ export const SCENES = {
     const scap = h('div', abs(36, 456, 700, null, `font:700 34px/1.1 ${SANS};color:${P.muted}`), p.statLabel || 'moves with a sound');
     card.append(sbox, scap);
     const early = h('div', abs(0, 0, null, 60, `padding:0 24px;border-radius:30px;background:${P.ink};display:flex;align-items:center;font:800 34px/1 ${SANS};color:#fffdf8;white-space:nowrap;box-shadow:${lift(0.4)}`), p.early || 'half a frame early');
+    early.dataset.key = 'early';
     const fline = h('div', abs(0, MY - 10, 5, BY - MY + 60, 'background:var(--accent);border-radius:3px'));
     card.append(fline, early);
-    const no = h('div', abs(0, 760, 1080, null, `text-align:center;font:900 ${p.slamSize || 300}px/1 ${DISPLAY};letter-spacing:-10px;color:var(--accent);transform-origin:540px 150px`), p.slam || 'NO.');
+    const no = h('div', abs(0, 780, 1080, null, `text-align:center;font:900 ${p.slamSize || 260}px/1 ${DISPLAY};letter-spacing:-9px;color:var(--accent);transform-origin:540px 130px`), p.slam || 'NO.');
     no.dataset.key = 'answer';
-    cam.append(ruler, card, tl, no);
+    cam.append(ruler, card, tl);
+    wrap.append(no);                       // the answer stays put while the camera pushes in
     const threeAt = beat(ctx, 0, 0.12), everyAt = beat(ctx, 1, 1.54), noAt = beat(ctx, 2, 2.5), halfAt = beat(ctx, 3, 3.6), hairAt = beat(ctx, 4, 5.2);
     const onlyAt = wordAt(ctx, 'only', 0, noAt + 0.76), backAt = Math.min(ctx.dur - fr(16), hairAt + 1.0);
     const paint = i => everyAt + i * fr(1.5);
@@ -171,15 +182,15 @@ export const SCENES = {
           b.style.transform = `translate(${i === Z ? (-14 * zoomK(t)).toFixed(1) : 0}px,${(-50 * outCubic(off)).toFixed(1)}px) scale(${(q <= 0 ? 0.3 : outBack(q, 2.4) * (1 - 0.5 * off) * (1 + 0.12 * kept)).toFixed(4)})`;
           lnEls[i].setAttribute('opacity', ((0.35 * clamp(q * 2)) * (1 - off)).toFixed(3));
         });
-        const s = slam(t, noAt, { from: 2.6, crash: 3, settle: 7 }), fly = inOutCubic(prog(t, onlyAt, fr(9)));
+        const s = slam(t, noAt, { from: 1.6, crash: 3, settle: 7 }), fly = inOutCubic(prog(t, onlyAt, fr(9)));
         no.style.opacity = (s.o * (1 - 0.0 * fly)).toFixed(3);
-        no.style.transform = `translate(${(-330 * fly).toFixed(1)}px,${(-322 * fly).toFixed(1)}px) scale(${(s.s * lerp(1, 0.34, fly)).toFixed(4)})`;
+        no.style.transform = `translate(${(-322 * fly).toFixed(1)}px,${(-402 * fly).toFixed(1)}px) scale(${(s.s * lerp(1, 0.39, fly)).toFixed(4)})`;
         const sp = prog(t, halfAt, fr(14));
         sbox.style.opacity = scap.style.opacity = clamp(sp * 4).toFixed(3);
         stat.update(103 * outCubic(sp), 103 * outCubic(prog(t + fr(1), halfAt, fr(14))), prog(t, halfAt + fr(14), fr(8)) * 1.5);
         const zk = zoomK(t);
         cam.style.transformOrigin = `${zx}px ${zy}px`;
-        cam.style.transform = `scale(${(1 + 0.75 * zk).toFixed(4)})`;
+        cam.style.transform = `scale(${(1 + 0.6 * zk).toFixed(4)})`;
         fline.style.left = `${MX(Z) - 1}px`; fline.style.opacity = clamp(zk * 2).toFixed(3);
         const ep = prog(t, hairAt + fr(6), fr(6));
         early.style.left = `${MX(Z) - 120}px`; early.style.top = `${BY + 62}px`;
@@ -207,7 +218,7 @@ export const SCENES = {
   // typed, Follow becomes Following, a line just stops); the winning row is ticked last.
   tallyDots(wrap, p, ctx) {
     const cam = stage(wrap);
-    const rows = p.rows || [], of = p.of || 12, X = 70, CW = 940;
+    const rows = p.rows || [], of = p.of || 12, X = 70, CW = 900;
     const tl = tile(p.n || 4, 92); tl.style.position = 'absolute'; tl.style.left = '80px'; tl.style.top = `${p.headY || 478}px`; tl.dataset.morph = 'tile';
     const title = h('div', abs(196, (p.headY || 478) + 6, 860, null, `font:900 ${p.titleSize || 84}px/1 ${DISPLAY};letter-spacing:-2.5px;color:${P.ink};white-space:nowrap`), (p.title || 'The ending').toUpperCase());
     title.dataset.key = 'title';
@@ -231,10 +242,10 @@ export const SCENES = {
     });
     built.forEach(b => { b.c.dataset.key = 'row'; });
     // row acts: a typed word, a Follow button, a line that just stops
-    const field = h('div', abs(620, 104, 280, 64, `border-radius:32px;background:#fff;box-shadow:inset 3px 4px 8px rgba(70,52,25,.16);display:flex;align-items:center;padding:0 24px;font:800 36px/1 ${SANS};letter-spacing:2px;color:${P.ink}`));
+    const field = h('div', abs(596, 104, 270, 64, `border-radius:32px;background:#fff;box-shadow:inset 3px 4px 8px rgba(70,52,25,.16);display:flex;align-items:center;padding:0 24px;font:800 36px/1 ${SANS};letter-spacing:2px;color:${P.ink}`));
     const ty = E.typer(p.typed || 'WORD', { cps: 12 }); field.append(ty.el);
     if (built[0]) built[0].c.append(field);
-    const fb = h('div', abs(640, 86, 250, 66, `border-radius:33px;display:flex;align-items:center;justify-content:center;font:800 34px/1 ${SANS}`));
+    const fb = h('div', abs(616, 86, 250, 66, `border-radius:33px;display:flex;align-items:center;justify-content:center;font:800 34px/1 ${SANS}`));
     if (built[1]) built[1].c.append(fb);
     const stopLine = pencilLine(360, { seed: 61, width: 10, color: P.graphite });
     stopLine.el.style.left = '260px'; stopLine.el.style.top = '110px';
@@ -300,7 +311,7 @@ export const SCENES = {
           d.blur(d.d, Math.abs(x - xp) * 0.06, Math.abs(y - yp) * 0.06);
         });
       },
-      avatar: t => ({ chip: travel(t, [{ t: 0, x: 980, y: (p.headY || 478) + 40 }, { t: typeAt, x: X + 900, y: RY[0] + 100 }, { t: followAt, x: X + 880, y: RY[1] + 110 },
+      avatar: t => ({ chip: travel(t, [{ t: 0, x: 980, y: (p.headY || 478) + 40 }, { t: typeAt, x: X + 600, y: RY[0] + 62 }, { t: followAt, x: X + 880, y: RY[1] + 112 },
         { t: stopAt, x: X + 600, y: RY[2] + 70 }, { t: winAt, x: X + 900, y: RY[0] + 20 }], 104) }),
       lamp: t => ({ x: 540, y: t < B[1] - 0.3 ? RY[0] + 90 : t < B[2] - 0.3 ? RY[1] + 80 : t < winAt ? RY[2] + 80 : RY[0] + 90, k: 1 }),
       cues: [{ t: B[0], sfx: 'swoosh', gain: 0.45 }, ...[0, 1, 2, 3].map(k => ({ t: typeAt + k / 12, sfx: 'tick', gain: 0.3 })), { t: B[1] + fr(7), sfx: 'pop', gain: 0.55 },
@@ -316,8 +327,7 @@ export const SCENES = {
     const cam = stage(wrap);
     const words = String(p.title || 'Save this.').split(' ');
     const row = h('div', abs(0, p.titleY || 1112, 1080, 150, `display:flex;justify-content:center;gap:34px;font:900 ${p.titleSize || 136}px/1 ${DISPLAY};letter-spacing:-5px;color:${P.ink};white-space:nowrap`));
-    const wEls = words.map(w => { const e = h('div', 'transform-origin:50% 70%', w); row.append(e); return e; });
-    row.dataset.key = 'title';
+    const wEls = words.map(w => { const e = h('div', 'transform-origin:50% 70%', w); e.dataset.key = 'title'; row.append(e); return e; });
     const btn = h('div', abs(330, p.buttonY || 1300, 420, 112, `${paperCss(56)}display:flex;align-items:center;justify-content:center;gap:22px;font:800 50px/1 ${SANS};color:${P.ink}`));
     const icon = h('div', '', '<svg viewBox="0 0 40 52" width="40" height="52"><path class="bm" d="M5 4 H35 V48 L20 36 L5 48 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/></svg>');
     const label = h('div', '', p.button || 'Save');

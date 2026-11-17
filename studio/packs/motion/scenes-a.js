@@ -144,10 +144,10 @@ export const SCENES = {
       }
       for (const yy of [0.05, 0.86]) for (let i = 0; i < 90; i++) row.append(h('div', `position:absolute;left:${i * Math.round(hh * 0.22) + 6}px;top:${Math.round(hh * yy)}px;width:${Math.round(hh * 0.1)}px;height:${Math.round(hh * 0.08)}px;border-radius:2px;background:#efeae0;opacity:.75`));
       el.append(row);
-      strips.push({ el, row, speed, pitch, depth: z, period: pitch * count, blur: blurrer() });
+      strips.push({ el, row, y, speed, pitch, depth: z, period: pitch * count, blur: blurrer() });
       return el;
     };
-    const far = mkStrip(p.farY || 478, 74, 70, 0.32, 1.6, 0.2), mid = mkStrip(p.midY || 572, 104, -150, 0.62, 0, 0.5);
+    const far = mkStrip(p.farY || 540, 64, 70, 0.32, 1.6, 0.15), mid = mkStrip(p.midY || 620, 96, -150, 0.62, 0, 0.45), OY = 880;
     const near = mkStrip(p.nearY || 1258, 196, 330, 1, 0, 1);
     const num = rollNumber({ final: cfg.to, cards: true, cardW: 158, cardH: 228, gap: 12, morph: 'dg' });
     const nb = h('div', abs(0, p.counterY || 756, 1080, 228, 'display:flex;justify-content:center;transform-origin:540px 114px'));
@@ -157,10 +157,10 @@ export const SCENES = {
     const dot = h('div', `flex:none;width:36px;height:36px;margin-left:10px;border-radius:50%;background:var(--accent);box-shadow:3px 5px 8px rgba(70,52,25,.35)`);
     dot.dataset.zoom = 'dot';
     wrow.append(word.el, dot); word.el.dataset.key = 'word';
-    cam.append(far, mid, nb, wrow, near);
+    wrap.prepend(far, mid); cam.append(nb, wrow); wrap.append(near);
     const wordAtT = wordAt(ctx, p.word || 'frames', 0, beat(ctx, 1, tl + 1.0));
     const dotAt = wordAtT + fr(5);
-    const zoom = t => 1 + 0.1 * outCubic(prog(t, tl, fr(12))) + 0.012 * Math.sin(t * 1.3);
+    const zoom = t => 1 + 0.08 * outCubic(prog(t, tl, fr(12))) + 0.01 * Math.sin(t * 1.3);
     return {
       selfEnter: true,
       update(t) {
@@ -179,21 +179,20 @@ export const SCENES = {
           s.row.style.transform = `translateX(${x.toFixed(1)}px)`;
           const v = Math.abs(s.speed * (1 + kick)) / FPS;
           s.blur(s.row, v > 8 ? v * 0.35 * s.depth : 0, 0);
-          // parallax under the push-in: near layers grow and travel more than far ones
-          const pz = 1 + (Z - 1) * (0.4 + 1.4 * s.depth);
-          s.el.style.transformOrigin = '700px 50%';
-          s.el.style.transform = `translateY(${((s.el.offsetTop - 960) * (pz - 1)).toFixed(1)}px) scale(${pz.toFixed(4)})`;
+          // multiplane: under the push-in near layers grow and travel more than far ones
+          const pz = 1 + (Z - 1) * (0.3 + 1.6 * s.depth);
+          s.el.style.transformOrigin = `700px ${OY - s.y}px`;
+          s.el.style.transform = `scale(${pz.toFixed(4)})`;
         });
+        cam.style.transformOrigin = `540px ${OY}px`;
         cam.style.transform = `scale(${Z.toFixed(4)})`;
         // the word lands with a tracking settle, its full stop pops 5 frames later
         trackIn(word.el, t, wordAtT, { spread: 0.38, to: -0.02, dur: 9 });
         const dp = prog(t, dotAt, fr(6));
         dot.style.opacity = dp > 0 ? 1 : 0;
         dot.style.transform = `scale(${dp <= 0 ? 0 : outBack(dp, 3).toFixed(4)})`;
-        const e = outCubic(prog(t, -fr(2), fr(8)));
-        for (const s of [far, mid]) s.style.opacity = (e * +s.dataset.o || e).toFixed(3);
       },
-      avatar: t => ({ chip: travel(t, [{ t: 0, x: 96, y: 744 }, { t: dotAt + fr(6), x: 150, y: 1210 }], 112) }),
+      avatar: t => ({ chip: travel(t, [{ t: 0, x: 990, y: 700 }, { t: dotAt + fr(4), x: 1000, y: 1196 }], 104) }),
       lamp: t => ({ x: 540, y: t < wordAtT ? 880 : 1000, k: 1 }),
       cues: [{ t: tl, sfx: 'impact', gain: 0.75 }, { t: dotAt, sfx: 'pop', gain: 0.7 }],
     };
@@ -215,7 +214,7 @@ export const SCENES = {
     cam.append(badge, head, sub);
     const RY = p.rowY || 700, RH = 150, RG = 26;
     const rows = items.map((tx, i) => {
-      const r = h('div', abs(92, RY + i * (RH + RG), 896, RH, `${paperCss(30)}display:flex;align-items:center;gap:30px;padding:0 36px;font:800 50px/1.1 ${SANS};letter-spacing:-.5px;color:${P.ink};white-space:nowrap`));
+      const r = h('div', abs(92, RY + i * (RH + RG), 880, RH, `${paperCss(30)}display:flex;align-items:center;gap:30px;padding:0 36px;font:800 50px/1.1 ${SANS};letter-spacing:-.5px;color:${P.ink};white-space:nowrap`));
       const tl = tile(i + 1, 92);
       r.append(tl, h('div', '', tx));
       if (i === (p.tap || 0)) r.dataset.morph = 'head';
@@ -223,9 +222,10 @@ export const SCENES = {
       return { r, tl };
     });
     if (rows[0]) rows[0].r.dataset.key = 'row';
-    const at = beat(ctx, 0, 0.48), headAt = wordAt(ctx, 'things', 0, at + 0.3);
-    const rowAt = i => at + fr(2 + 3 * i);
-    const tapAt = Math.min(ctx.dur - fr(8), rowAt(items.length - 1) + 0.45);
+    // the rows and the heading build around the arriving badge; the number lands on the beat
+    const at = beat(ctx, 0, 0.48), headAt = fr(4);
+    const rowAt = i => fr(3 + 3 * i);
+    const tapAt = Math.min(ctx.dur - fr(10), wordAt(ctx, 'found', 0, 1.25));
     const tapRow = rows[p.tap || 0];
     return {
       selfEnter: true,
@@ -271,11 +271,12 @@ export const SCENES = {
   // second swapped into the first one's place.
   trackTimeline(wrap, p, ctx) {
     const cam = stage(wrap);
-    const nT = p.tracks || 12, X = 70, Y = p.cardY || 640, CW = 940, CHh = 520, PX = 150;
-    const hdr = h('div', abs(X, p.headY || 470, CW, 132, `${paperCss(34)}display:flex;align-items:center;gap:30px;padding:0 30px;font:900 ${p.titleSize || 58}px/1.05 ${DISPLAY};letter-spacing:-1.5px;color:${P.ink};white-space:nowrap`));
+    const nT = p.tracks || 12, X = 70, Y = p.cardY || 640, CW = 900, CHh = 520, PX = 150;
+    const hdr = h('div', abs(X, p.headY || 470, CW, 120, `${paperCss(34)}display:flex;align-items:center;gap:30px;padding:0 30px;font:900 ${p.titleSize || 58}px/1.05 ${DISPLAY};letter-spacing:-1.5px;color:${P.ink};white-space:nowrap`));
     const tl = tile(p.n || 1, 92); tl.dataset.morph = 'tile';
-    hdr.append(tl, h('div', '', p.title || '')); hdr.dataset.morph = 'head'; hdr.dataset.key = 'title';
-    const card = h('div', abs(X, Y, CW, CHh, paperCss(34))); card.dataset.key = 'timeline';
+    const htx = h('div', '', p.title || ''); htx.dataset.key = 'title';
+    hdr.append(tl, htx); hdr.dataset.morph = 'head';
+    const card = h('div', abs(X, Y, CW, CHh, paperCss(34)));
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', CW); svg.setAttribute('height', CHh); svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible';
@@ -299,11 +300,11 @@ export const SCENES = {
     const head = document.createElementNS(svgNS, 'g');
     head.innerHTML = `<line x1="${PX}" y1="20" x2="${PX}" y2="${TY + nT * TP}" stroke-width="5" style="stroke:var(--accent)"/><path d="M${PX - 14} 14 H${PX + 14} V30 L${PX} 44 L${PX - 14} 30 Z" style="fill:var(--accent)"/>`;
     svg.append(head);
-    const flag = h('div', abs(PX - 6, -54, null, 58, `padding:0 18px;border-radius:29px;background:var(--accent);display:flex;align-items:center;font:900 38px/1 ${DISPLAY};color:#fffdf8;transform-origin:10% 100%;box-shadow:${lift(0.3)}`), p.flag || '0.0 s');
+    const flag = h('div', abs(PX - 6, -46, null, 58, `padding:0 18px;border-radius:29px;background:var(--accent);display:flex;align-items:center;font:900 38px/1 ${DISPLAY};color:#fffdf8;transform-origin:10% 100%;box-shadow:${lift(0.3)}`), p.flag || '0.0 s');
     const tally = h('div', abs(CW - 300, 18, 270, 54, `display:flex;align-items:baseline;justify-content:flex-end;gap:10px;font:900 50px/1 ${DISPLAY};color:${P.ink}`));
     const tN = h('span', '', ''), tOf = h('span', `font:800 36px/1 ${SANS};color:${P.muted}`, `of ${nT}`);
     tally.append(tN, tOf);
-    card.append(flag, tally);
+    card.append(flag, tally); flag.dataset.key = 'flag'; tally.dataset.key = 'tally';
     // rejected openings: each slams into one slot, is struck out and drops away
     const rej = (p.reject || ['INTRO', 'LOGO']).map((w, i) => {
       const slot = h('div', abs(0, p.rejectY || 1212, 1080, 170, 'display:flex;justify-content:center;align-items:center'));
@@ -313,7 +314,7 @@ export const SCENES = {
       st.el.style.left = '-30px'; st.el.style.top = '52px';
       const x = E.badge('cross', 92); x.el.style.right = '-112px'; x.el.style.top = '16px';
       box.append(word, st.el, x.el); slot.append(box); cam.append(slot);
-      word.dataset.key = 'reject';
+      box.dataset.key = 'reject';
       return { slot, box, st, x };
     });
     cam.prepend(card); cam.prepend(hdr);
@@ -346,9 +347,9 @@ export const SCENES = {
         flag.style.transform = `scale(${(1 + 0.25 * Math.sin(Math.PI * fp) * (1 - fp * 0.4)).toFixed(4)})`;
         const ck = camK(t);
         cam.style.transformOrigin = `${X + PX}px ${Y + 120}px`;
-        cam.style.transform = `scale(${(1 + 0.13 * ck).toFixed(4)})`;
+        cam.style.transform = `scale(${(1 + 0.08 * ck).toFixed(4)})`;
         rej.forEach((r, i) => {
-          const s = slam(t, noAt[i], { from: 2.1, crash: 3, settle: 6 }), out = i === 0 ? inCubic(prog(t, noAt[1] - fr(5), fr(5))) : 0;
+          const s = slam(t, noAt[i], { from: 1.6, crash: 3, settle: 6 }), out = i === 0 ? inCubic(prog(t, noAt[1] - fr(5), fr(5))) : 0;
           r.box.style.opacity = (s.o * (1 - out)).toFixed(3);
           r.box.style.transform = `translateY(${(-120 * out).toFixed(1)}px) scale(${(s.s * (1 - 0.3 * out)).toFixed(4)}) rotate(${(-4 * out).toFixed(2)}deg)`;
           r.st.update(prog(t, strikeAt[i], fr(6)));
