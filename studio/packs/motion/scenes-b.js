@@ -56,11 +56,9 @@ export const SCENES = {
       cam.append(l, t2, v);
       return { els: [l, t2, v], path: t2.querySelector('path'), w: len(b.v), seed: 50 + i };
     });
-    // behind everything: the chapter number drawn as a giant pencil outline that boils on twos,
-    // and the empty grooves the shorter tapes will drop into (the scene is never an empty stage)
+    // behind everything: the chapter number drawn as a giant pencil outline that boils on twos
     const big = h('div', abs(p.bigX || 600, p.bigY || 380, 600, 900, `font:900 ${p.bigSize || 800}px/1 ${DISPLAY};color:transparent;-webkit-text-stroke:6px rgba(194,56,29,.34);white-space:nowrap;pointer-events:none`), String(p.n || 2));
-    const grooves = bars.slice(1).map((b, i) => h('div', abs(TX, HY + 132 + i * 82, len(b.v), 38, 'border-radius:4px;background:#e4dccb;box-shadow:inset 2px 3px 5px rgba(70,52,25,.22)')));
-    cam.prepend(big, ...grooves);              // at the back, under the tapes that drop into them
+    cam.prepend(big);
     const ul = pencilLine(300, { seed: 44, width: 12 });
     ul.el.style.left = '84px'; ul.el.style.top = `${(p.headY || 478) + 404}px`;
     cam.append(tl, line1, last, ul.el, lab, tape, tab, caseEl, nbox);
@@ -77,7 +75,6 @@ export const SCENES = {
         tl.style.transform = `scale(${(1 + 0.15 * pulse(t, Math.max(twoAt, fr(12)), fr(2), fr(6))).toFixed(4)})`;
         const bj = jit[(b + 1) % 3];
         big.style.transform = `translate(${(bj[0] * 0.6).toFixed(1)}px,${(bj[1] * 0.6).toFixed(1)}px) rotate(${(bj[2] * 0.5).toFixed(2)}deg)`;
-        grooves.forEach((g, i) => { g.style.opacity = outCubic(prog(t, fr(2 + 2 * i), fr(8))).toFixed(3); });
         w1.forEach((el, i) => { const s = slam(t, wAt[i], { from: 1.7, crash: 2, settle: 5 }); el.style.opacity = s.o; el.style.transform = `scale(${s.s.toFixed(4)})`; });
         const s = slam(t, stillAt, { from: 1.5, crash: 3, settle: 6 }), j = jit[b], boil = t > slamHit(stillAt) + fr(6);
         last.style.opacity = s.o;
@@ -287,6 +284,9 @@ export const SCENES = {
           built[0].c.style.transform += ` scale(${(1 + 0.03 * outCubic(prog(t, winAt, fr(8)))).toFixed(4)})`;
         }
         ty.update(t - typeAt);
+        const fp = prog(t, typeAt - fr(4), fr(5));          // the field appears only when it is about to be typed in
+        field.style.opacity = clamp(fp * 3).toFixed(3);
+        field.style.transform = `scale(${fp <= 0 ? 0.6 : outBack(fp, 2).toFixed(4)})`;
         const on = t >= followAt;
         fb.textContent = on ? 'Following' : 'Follow';
         fb.style.background = on ? 'transparent' : 'var(--accent)'; fb.style.color = on ? P.ink : '#fffdf8';
