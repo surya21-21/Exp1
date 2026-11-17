@@ -103,34 +103,6 @@ export function maskIn(el, t, at, { dur = 7, dx = -30, dir = 'right' } = {}) {
   el.style.transform = dir === 'up' ? `translateY(${(40 * (1 - e)).toFixed(1)}px)` : `translateX(${(dx * (1 - e)).toFixed(1)}px)`;
   return p;
 }
-export const maskOut = (el, t, at, dur = 5) => {
-  const p = prog(t, at, fr(dur)), e = inCubic(p);
-  if (p <= 0) return 0;
-  el.style.clipPath = `inset(-20% -5% -20% ${(100 * e).toFixed(1)}%)`;
-  el.style.transform = `translateX(${(40 * e).toFixed(1)}px)`;
-  return p;
-};
-
-// SWAP IN PLACE: the old word leaves upward through a slot as the new one rises into it.
-// `els` are stacked in one slot (overflow hidden); `ats` the moments each takes over.
-export function swapIn(els, t, ats, { dur = 6, dist = 1.05 } = {}) {
-  let cur = -1;
-  ats.forEach((a, i) => { if (t >= a) cur = i; });
-  els.forEach((el, i) => {
-    const hh = el.offsetHeight || 100;
-    if (i === cur) {
-      const e = outBack(prog(t, ats[i], fr(dur)), 1.5);
-      el.style.opacity = 1;
-      el.style.transform = `translateY(${(hh * dist * (1 - e)).toFixed(1)}px)`;
-    } else if (i === cur - 1) {
-      const e = inCubic(prog(t, ats[cur], fr(dur - 1)));
-      el.style.opacity = (1 - e).toFixed(3);
-      el.style.transform = `translateY(${(-hh * dist * e).toFixed(1)}px)`;
-    } else { el.style.opacity = 0; el.style.transform = `translateY(${hh * dist}px)`; }
-  });
-  return cur;
-}
-
 // LETTERS: a word split into spans, so each letter can be moved on its own.
 export function letters(text, css = '') {
   const el = h('div', `white-space:nowrap;${css}`);
@@ -216,8 +188,6 @@ export function pencilLine(len, { seed = 7, width = 10, color = ACCENT, wobble =
 export const boilStep = (t, fps = 15) => Math.floor(t * fps + 1e-6) % 3;
 
 // ------------------------------------------------------------ helpers
-export const show = (el, o) => { el.style.opacity = clamp(o).toFixed(3); };
-export const place = (el, x, y, s = 1, r = 0) => { el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(4)}) rotate(${r.toFixed(2)}deg)`; };
 // a point on a shallow arc from a to b (bend = share of the distance, to the left of travel)
 export function arc(ax, ay, bx, by, u, bend = 0.18) {
   const mx = (ax + bx) / 2, my = (ay + by) / 2, d = Math.hypot(bx - ax, by - ay) || 1;
