@@ -25,7 +25,7 @@ def main():
     if args.video:
         tmp = tempfile.mkdtemp()
         rate = subprocess.check_output(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=r_frame_rate",
-                                        "-of", "csv=p=0", args.video], text=True).strip().split("/")
+                                        "-of", "csv=p=0", args.video], text=True).strip().splitlines()[0].split(",")[0].split("/")   # newer ffprobe may add a trailing comma
         step = max(1, round(args.every * int(rate[0]) / int(rate[1])))
         # exactly every Nth frame, so the label on each picture is its true time
         subprocess.run(["ffmpeg", "-v", "error", "-i", args.video, "-vf", f"select=not(mod(n\\,{step}))", "-vsync", "vfr",
