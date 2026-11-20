@@ -1,0 +1,116 @@
+{
+  "title": "Claude Code can now design motion graphics",
+  "status": "draft, waiting for the owner's approval (Gate 1)",
+  "accent": "#2b54b8",
+  "keyword": "MOTION",
+  "wps": 3.2,
+  "scenes": [
+    {
+      "type": "hook3d",
+      "say": "Did you know Claude Code can now *design* motion graphics? *No* keyframes. *No* After Effects.",
+      "props": {
+        "from": 420,
+        "to": 946,
+        "label": "frames drawn by code",
+        "sub": "my engine test: 946 frames in 90 s",
+        "chips": ["No keyframes", "No After Effects"]
+      }
+    },
+    {
+      "type": "bigWord",
+      "in": "tear",
+      "say": "This whole reel? *Written* in code.",
+      "props": {
+        "word": "Written",
+        "over": "This whole reel was",
+        "sub": "in code, every single frame"
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "compare",
+      "in": "whip",
+      "say": "The old way: drag a *keyframe*, nudge it, render, repeat. The new way? You just *describe* the motion.",
+      "props": {
+        "a": { "tag": "After Effects", "title": "Keyframes by hand", "lines": ["drag, nudge, render, repeat"] },
+        "b": { "tag": "Claude Code", "title": "Describe the motion", "lines": ["it writes the code,", "you approve the frames"] },
+        "strikeW": 640
+      },
+      "hold": 0.2
+    },
+    {
+      "type": "cards3d",
+      "in": "tear",
+      "say": "And the twist? I make *every* reel from my phone. No editing app at all.",
+      "props": {
+        "title": "From my phone",
+        "sub": "no editing app",
+        "items": ["I write the script", "Claude writes the code", "GitHub renders it", "I approve, then post"]
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "network",
+      "in": "iris",
+      "at": [540, 900],
+      "say": "You need Claude Code, plus one motion skill: *Remotion*, *HyperFrames*, or *three.js* for 3D.",
+      "props": {
+        "title": "What you need",
+        "hub": { "name": "Claude Code" },
+        "tiles": [
+          { "name": "Remotion", "sub": "video in React" },
+          { "name": "HyperFrames", "sub": "video in HTML" },
+          { "name": "three.js", "sub": "real 3D" }
+        ]
+      },
+      "hold": 0.2
+    },
+    {
+      "type": "steps",
+      "in": "shuffle",
+      "say": "Step *one*. Install the skill with a *single* command.",
+      "props": {
+        "n": 1,
+        "of": 2,
+        "name": "Install a motion skill",
+        "underline": 600,
+        "lines": ["One command, in your project"],
+        "prompt": "npx skills add remotion-dev/skills"
+      },
+      "hold": 0.4
+    },
+    {
+      "type": "uiCard",
+      "in": "railScroll",
+      "say": "Step two. Talk like a director: *ease* in, *overshoot*, then *settle*. *Done*.",
+      "props": {
+        "kicker": "Step 2 of 2",
+        "title": "Say it like a director",
+        "rows": [
+          { "label": "Ease in", "kind": "toggle" },
+          { "label": "Overshoot", "kind": "toggle" },
+          { "label": "Settle in 6 frames", "kind": "toggle" }
+        ],
+        "stamp": { "text": "DIRECTED" }
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "save",
+      "in": "rampCut",
+      "say": "*Save* this for your first motion reel.",
+      "props": {
+        "title": "Save this.",
+        "sub": "Your first motion reel, no keyframes."
+      },
+      "hold": 0.3
+    },
+    {
+      "type": "cta",
+      "in": "tear",
+      "say": "Comment *MOTION* and I'll send you the links. *This* is your AI guy.",
+      "props": { "keyword": "MOTION", "send": "the links" },
+      "hold": 1.4
+    }
+  ]
+}
