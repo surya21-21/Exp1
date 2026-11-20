@@ -1,14 +1,10 @@
 {
- "voice_id": "mUfWEBhcigm8YlCDbmGP",
- "name": "This is your AI guy",
- "made": "2026-11-15",
- "method": "Voice Library voice (the samples' original)",
- "samples": 6,
- "requires_verification": false,
- "library_voice_match": {
-  "library_voice_id": "mUfWEBhcigm8YlCDbmGP",
-  "public_owner_id": "19ce68b7b5adbf25e601d51a3b985ff64e420a831b7b3957d0c5603adeb22133"
- },
- "model": "eleven_multilingual_v2",
- "speed": 1.06
+ "voice_id": "c6SfcYrb2t09NHXiT80T",
+ "name": "Jarnathan - Confident and Versatile (ElevenLabs library, American English)",
+ "chosen": "2026-11-20 by the owner (replaces the 15 Nov voice mUfWEBhcigm8YlCDbmGP, which stays on the first reel and the three director versions)",
+ "model": "eleven_v4_turbo",
+ "speed": 1.2,
+ "target_words_per_second": 3.2,
+ "max_tempo": 1.15,
+ "pace_note": "ElevenLabs speed stops at 1.2. scripts/voice_pace.py then shortens pauses over 0.22 s and speeds the take up by at most max_tempo, once, right after a new voice is made."
 }

@@ -99,6 +99,8 @@ jobs:
             fi
           else
             python scripts/reel_voice.py "reels/$REEL/reel.json" --out-dir build
+            # a new voice only: shorten long pauses and bring it to the channel pace (voice.json); saved voices are never touched
+            if [ -f build/voiceover.mp3 ]; then python scripts/voice_pace.py build/voiceover.mp3 build/words.json; fi
           fi
 
       - name: Music

@@ -122,7 +122,7 @@ Evidence: `collection/data/<reel>/events.csv` and `sfx-map.csv`, the viewed and 
 Evidence: the full hook table in `script.md`.
 
 ### Stage 4 - Script
-- **Pace.** [owner, 15 Nov 2026] The channel voice speaks at its normal speed, measured at 2.63 words a second. Size the script by it: length in seconds is words divided by 2.65. Do not speed the voice up without asking. [measured] For context, the reference reels speak at 2.5 to 4.3 words a second.
+- **Pace.** [owner, 20 Nov 2026] 3.0 to 3.5 words a second, aiming at 3.2, from the second reel on. Size the script by it: length in seconds is words divided by 3.2. The channel voice is made at ElevenLabs' top speed (1.2), then `scripts/voice_pace.py` shortens pauses over 0.22 s and speeds the take up by at most 1.15x, once, right after the voice is made (settings in `brand/voice/voice.json`). Never pace a saved voice again. The first reel (15 Nov) and the three director versions keep their saved voice at 2.63 words a second. [measured] For context, the reference reels speak at 2.5 to 4.3 words a second.
 - **Structure.** Pick one of P01 to P06 in `collection/recipes/script.md` and name it. [measured] First word on frame zero; 6 to 14 words in the first 3 seconds; sentences of 6 to 9 words; a re-hook near 40% in any reel over 45 seconds; the ask starts 81 to 97% of the way in and lasts 1.4 to 5.7 seconds.
 - Plain words. Any sentence the user might not understand on first hearing is rewritten.
 - Mark one `*keyword*` for every line or element that must land on a word: the engine takes its beats from them.
@@ -142,7 +142,7 @@ Evidence: the three files on `reel-previews`, the shot table, the user's approva
 
 ### Stage 6 - Audio
 The workflow does the work; the rules are in `collection/recipes/sound.md` and the Sound section below.
-- Voice: `brand/voice/voice.json`, spoken in one pass by `reel_voice.py`, which also returns the word timings. A voice the user recorded goes in the reel folder as `voiceover.mp3`.
+- Voice: `brand/voice/voice.json`, spoken in one pass by `reel_voice.py`, which also returns the word timings, then brought to the channel pace by `voice_pace.py` (the workflows run both). Record the pace it prints in the ledger. A voice the user recorded goes in the reel folder as `voiceover.mp3`.
 - After the first voiced run, copy `voiceover.mp3`, `words.json` and `music.mp3` from `reel-previews` into the reel folder so later runs reuse them and spend no credits. If the script changes, delete them.
 - Music: an ElevenLabs instrumental bed the length of the reel (`"music"` in `reel.json` sets the prompt), or the user's own `music.mp3`.
 - Sound effects: the engine's cue list, played from `assets/sfx`.
@@ -222,7 +222,7 @@ The user decides what is fixed. The craft rules decide the rest, reel by reel.
 - Background: Paper Studio, as drawn by `collection/lib/paper.js`.
 - Avatar: the large avatar uses the nine approved faces in `brand/avatar/expressions/`; the small cursor uses the six heads in `brand/avatar/heads/`. They take each scene's light and shadow but are never redrawn or restyled. New faces are generated only with Seedream 5 Flash on seat credits and only used after the user approves the sheet.
 - Motif: the outro in `brand/outro/outro.md`. The ask comes first ("Comment KEYWORD and I'll send you the links."), then the sign-off "This is your AI guy." as the very last line, with the avatar on screen. Only the keyword changes between reels.
-- Voice: the channel voice in `brand/voice/voice.json`, at normal speed.
+- Voice: the channel voice in `brand/voice/voice.json` (Jarnathan, `eleven_v4_turbo`, since 20 Nov 2026), paced to about 3.2 words a second (Stage 4).
 - The bottom of the frame stays empty for the app's buttons.
 - The user edits these files directly. Always read the current files; never rely on an earlier copy.
 
@@ -355,7 +355,7 @@ Flat fills are the main reason code-made video looks cheap. Every scene follows 
 - [owner] Voice, music and sound effects all come from ElevenLabs. The paper sounds (tear, stamp, pencil) are the signature set: keep them the same in every reel.
 
 ### Voice and avatar
-- [owner] The channel voice at normal speed.
+- [owner, 20 Nov 2026] The channel voice, paced to 3.0 to 3.5 words a second.
 - [owner] The large avatar opens the hook and returns for "Save this" and the outro; the small cursor head travels to whatever is being talked about. [measured: A01-A07]
 - [Bentivoglio] People blink about 17 times a minute at rest and more in conversation, so the avatar blinks every 3 to 4 seconds, for about 3 frames.
 - [Mayer: temporal contiguity] Mouth shapes change only while a word is being spoken.
