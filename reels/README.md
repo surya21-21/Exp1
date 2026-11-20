@@ -78,3 +78,5 @@ Scene types, transitions and whole-reel layers can also come from a pack in `stu
 - Every number on screen has a named source in the reel's `script.md`.
 - Every "I" statement is true for you.
 - The last scene is always `cta`, which carries the outro.
+
+Glass panels (optional): `"options": { "glass": true }` turns the cards, the settings panel, the comment field and the sign-off card into frosted glass (blur, light edge, tinted lights behind them). Off by default, so older reels draw as before. The 3D cards, sticky note and key tiles are not glass.

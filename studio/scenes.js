@@ -3,7 +3,7 @@
 // ctx: { dur, beats, pre, accent }. beats are the moments (seconds into the scene) the
 // planner took from the voice: each *keyword* in the scene's line is one beat.
 import { fr, clamp, lerp, prog, outCubic, inOutCubic, outBack, pulse } from '../collection/lib/ease.js';
-import { P, h, abs, card, cardCss } from '../collection/lib/paper.js';
+import { P, h, abs, card, cardCss, glassOn, glassLights } from '../collection/lib/paper.js';
 import * as E from '../collection/lib/elements.js';
 import { travel } from '../collection/lib/avatar.js';
 
@@ -92,6 +92,7 @@ export const SCENES = {
   uiCard(wrap, p, ctx) {
     const rows = p.rows || [], RH = 156, HD = 128, X = 100, CW = 850, CH = HD + rows.length * RH + 22, Y = Math.round(clamp(1010 - CH / 2, 590, 720));
     const kick = kicker(p.kicker || ''); kick.style.cssText += abs(X + 8, Y - 70, CW, null);
+    if (glassOn()) glassLights(wrap, Y, CH);
     const c = card(X, Y, CW, CH); c.dataset.key = 'card';
     c.append(h('div', `height:${HD}px;display:flex;align-items:center;gap:14px;padding:0 44px;border-bottom:3px solid ${P.line};font:800 44px ${SANS};color:${P.ink}`,
       `<i style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:block"></i><i style="width:20px;height:20px;border-radius:50%;background:${P.track};display:block"></i><i style="width:20px;height:20px;border-radius:50%;background:${P.track};display:block;margin-right:14px"></i>${p.title || ''}`));
@@ -151,6 +152,7 @@ export const SCENES = {
     const ul = E.pencil(p.underline || 420, { seed: 3 + (p.n || 0), width: 11, color: 'var(--accent)' });
     wrap.append(numeral, row, name, ul.el);
     const lines = p.lines || [], LH = 134, CY = p.cardY || 830, CH = 60 + lines.length * LH + (p.prompt ? 196 : 0);
+    if (glassOn()) glassLights(wrap, CY, CH);
     const c = card(100, CY, 850, CH); c.dataset.key = 'card';
     const B = beatList(ctx, lines.length + 2, 0.25, 0.6), at = i => B[i + 1];
     const els = lines.map((tx, i) => {
@@ -222,6 +224,7 @@ export const SCENES = {
         h('div', `padding:18px 52px 0;font:500 44px/1.3 ${SANS};color:${P.graphite}`, (d.lines || []).join('<br>')));
       return c;
     };
+    if (glassOn()) glassLights(wrap, 560, 780);
     const a = mk(p.a, 500), b = mk(p.b, 950); b.dataset.key = 'card';
     const strike = E.pencil(p.strikeW || 600, { seed: 21, width: 13, color: 'var(--accent)' }); strike.el.style.left = '44px'; strike.el.style.top = '128px'; a.append(strike.el);
     const x = E.badge('cross', 100), ok = E.badge('tick', 100);
@@ -287,6 +290,7 @@ export const SCENES = {
     const word = (p.keyword || 'LINK').toUpperCase(), size = Math.min(140, Math.floor((900 - 16 * (word.length - 1)) / word.length));
     const head = h('div', abs(60, 500, 960, null, `text-align:center;font:900 92px/1 ${DISPLAY};letter-spacing:-3px;color:${P.ink}`), 'Comment');
     const keys = E.keycaps(word, { size }); const kb = h('div', abs(0, 632, 1080, size + 30)); kb.append(keys.el); keys.el.dataset.key = 'keyword';
+    if (glassOn()) glassLights(wrap, 840, 600);
     const field = card(100, 850, 850, 132, 'border-radius:66px;display:flex;align-items:center;padding:0 30px 0 52px');
     const ty = E.typer(word, { cps: 12 }); const tx = h('div', `flex:1;font:800 50px ${SANS};letter-spacing:2px;color:${P.ink}`); tx.append(ty.el);
     const send = h('div', `position:relative;flex:none;width:84px;height:84px;border-radius:50%;background:var(--accent);box-shadow:4px 6px 12px rgba(70,52,25,.35)`,

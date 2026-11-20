@@ -6,7 +6,7 @@
 //   events), window.AUDIT() (boxes of the key elements, for the safe-zone check), window.READY.
 // Packs in studio/packs/ add scene types, transitions and whole-reel layers; see studio/packs/README.md.
 import { FPS, fr, clamp, prog } from '../collection/lib/ease.js';
-import { h, W, H, SAFE, background, contrast } from '../collection/lib/paper.js';
+import { h, W, H, SAFE, background, contrast, setGlass } from '../collection/lib/paper.js';
 import { TRANSITIONS } from '../collection/lib/transitions.js';
 import { captions, groupWords } from '../collection/lib/captions.js';
 import { avatar, mixState } from '../collection/lib/avatar.js';
@@ -27,6 +27,7 @@ for (const [pack, m] of Object.entries(PACKS)) {
 export async function boot(specUrl) {
   const spec = await (await fetch(specUrl)).json();
   const stage = document.getElementById('stage');
+  setGlass(spec.options && spec.options.glass);
   const accent = spec.accent || '#c2381d';
   stage.style.setProperty('--accent', accent);
   const layer = name => { const d = h('div', 'position:absolute;inset:0'); d.dataset.layer = name; stage.append(d); return d; };

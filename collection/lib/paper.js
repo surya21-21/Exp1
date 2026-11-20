@@ -25,8 +25,30 @@ export const cardCss = (radius = 36) =>
   `border-radius:${radius}px;background:linear-gradient(160deg,${P.card},${P.card2} 70%);` +
   `box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 rgba(0,0,0,.06),4px 6px 12px ${P.shadowSoft},18px 44px 80px -24px ${P.shadowDeep};`;
 
+// Glass mode (optional, off by default): frosted panels in the Apple style. A reel turns it
+// on with "options": { "glass": true }. Needs something behind the panel to blur, see glassLights.
+let GLASS = false;
+export const setGlass = v => { GLASS = !!v; };
+export const glassOn = () => GLASS;
+export const glassCss = (radius = 36) =>
+  `border-radius:${radius}px;` +
+  `background:linear-gradient(135deg,rgba(255,255,255,.66),rgba(255,255,255,.22) 42%,rgba(255,255,255,.34));` +
+  `backdrop-filter:blur(30px) saturate(1.9) brightness(1.04);-webkit-backdrop-filter:blur(30px) saturate(1.9) brightness(1.04);` +
+  `border:2px solid rgba(255,255,255,.72);` +
+  `box-shadow:inset 0 2px 1px rgba(255,255,255,.95),inset 0 -2px 3px rgba(120,90,50,.10),0 6px 14px ${P.shadowSoft},0 40px 70px -26px ${P.shadowDeep};`;
+
+// Soft tinted lights placed behind a glass panel (inside the scene, never in the locked background).
+export function glassLights(wrap, y, hh) {
+  const o = (l, t, d, c, a) => h('div', `position:absolute;left:${l}px;top:${t}px;width:${d}px;height:${d}px;border-radius:50%;background:${c};opacity:${a};filter:blur(46px)`);
+  wrap.append(
+    o(70, y - 20, 250, 'var(--accent)', .42),
+    o(700, y + hh - 190, 240, '#e8b04a', .40),
+    o(400, y + hh * 0.42, 190, '#6f8f7d', .22),
+  );
+}
+
 export function card(x, y, w, hh, extra = '') {
-  return h('div', abs(x, y, w, hh, cardCss() + extra));
+  return h('div', abs(x, y, w, hh, (GLASS ? glassCss() : cardCss()) + extra));
 }
 
 const GRAIN = "url(\"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence baseFrequency=%22.9%22 numOctaves=%222%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%22.05%22/></svg>\")";
