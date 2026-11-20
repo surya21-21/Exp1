@@ -25,5 +25,8 @@ Started 20 Nov 2026 by Opus 5.5. Owner's instruction for this run: "DO NOT run a
 - [ ] **10 Deliver and learn.** Not started.
 
 ## Waiting on the owner
-- Gate 1: approve or change the script, the hook pick (A) and the look card (accent #2b54b8).
+- Gate 1: approve or change the script, the hook pick (A) and the look card (accent #c2381d).
 - Confirm the two "I" lines in `script.md`.
+
+## Change log
+- 20 Nov (Sonnet): accent changed from cobalt #2b54b8 to the channel's original brick red #c2381d on the owner's request ("use original color"). Contrast 4.52 to 1 on #efeae0, passes at the limit. Stills, strips and animatic re-made.

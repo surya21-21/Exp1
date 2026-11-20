@@ -94,7 +94,7 @@ Variety: 9 scene types in 9 scenes, none repeated. Transitions: 6 kinds (tear, w
 | --- | --- | --- |
 | Background | Paper Studio | Locked |
 | Avatar, outro, voice | As in `brand/` | Signature |
-| Accent | #2b54b8 cobalt blue (5.7 to 1 on the paper) | A "code" colour, and a clear change from the first reel's brick red so the two posts read as different chapters |
+| Accent | #c2381d brick red (4.52 to 1 on the paper, just over the 4.5 limit) | The channel's original accent, chosen by the owner on 20 Nov (cobalt blue #2b54b8 was the first draft); keeps this reel in the same series as the first |
 | Editing style | Cuts and hits for the hook and twist, one-canvas changes for the two steps | Pitch at the top, "how it works" in the middle |
 | 3D heroes | `hook3d` (the fan of reel cards = "motion graphics") and `cards3d` (the phone workflow) | Biggest moments: the claim and the twist |
 | Captions | 2 to 4 words, top fifth, keyword in Lora italic on accent-tinted tape | House caption style C01 |
