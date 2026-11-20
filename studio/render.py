@@ -18,6 +18,7 @@ import subprocess
 import sys
 import threading
 import time
+import urllib.parse
 
 from playwright.sync_api import sync_playwright
 
@@ -28,7 +29,11 @@ def serve():
     class Quiet(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a, **k):
             pass
-    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=ROOT))
+    class Srv(http.server.ThreadingHTTPServer):
+        # default backlog is 5: on Windows a burst of asset requests gets ERR_CONNECTION_RESET
+        request_queue_size = 256
+        daemon_threads = True
+    srv = Srv(("127.0.0.1", 0), functools.partial(Quiet, directory=ROOT))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     return srv
 
@@ -49,15 +54,44 @@ def main():
     args = ap.parse_args()
 
     spec_rel = os.path.relpath(os.path.abspath(args.spec), ROOT).replace(os.sep, "/")
-    srv = serve()
-    url = f"http://127.0.0.1:{srv.server_address[1]}/studio/index.html?spec=/{spec_rel}"
+    # No local web server: files are handed to the browser straight from disk (Playwright route),
+    # so no loopback sockets exist for security software to stall or reset.
+    url = f"http://exp1.local/studio/index.html?spec=/{spec_rel}"
+    import mimetypes
+    mimetypes.add_type("text/javascript", ".js")
+    mimetypes.add_type("text/javascript", ".mjs")
+
+    def _fulfill(route):
+        path = urllib.parse.unquote(urllib.parse.urlparse(route.request.url).path).lstrip("/")
+        full = os.path.normpath(os.path.join(ROOT, path))
+        if not full.startswith(ROOT) or not os.path.isfile(full):
+            return route.fulfill(status=404, body="not found")
+        ctype = mimetypes.guess_type(full)[0] or "application/octet-stream"
+        with open(full, "rb") as fh:
+            route.fulfill(status=200, body=fh.read(), headers={"content-type": ctype, "cache-control": "no-store"})
+
+    class srv:  # keeps the shutdown() call at the end of main() working
+        shutdown = staticmethod(lambda: None)
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(args=["--font-render-hinting=none", "--disable-lcd-text", "--force-color-profile=srgb",
-                                          "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"])
+        _args = ["--font-render-hinting=none", "--disable-lcd-text", "--force-color-profile=srgb",
+                 "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
+        # Local PC: use the installed Google Chrome first (the bundled Chromium is often blocked by security
+        # software), then Edge, then the bundled Chromium that CI runners use.
+        browser = None
+        for opts in ({"channel": "chrome"}, {"channel": "msedge"}, {}):
+            try:
+                browser = pw.chromium.launch(args=_args, **opts)
+                break
+            except Exception:
+                continue
+        if browser is None:
+            sys.exit("No browser could start: install Google Chrome, or run: python -m playwright install chromium")
         page = browser.new_page(viewport={"width": 1080, "height": 1920}, device_scale_factor=1)
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
-        page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+        # ERR_NAME_NOT_RESOLVED = Chrome's own background probe of the fake local origin, not a render problem
+        page.on("console", lambda m: errors.append(m.text) if m.type == "error" and "ERR_NAME_NOT_RESOLVED" not in m.text else None)
+        page.route("http://exp1.local/**", _fulfill)
         page.goto(url)
         try:
             page.wait_for_function("window.READY === true || window.ERROR", timeout=60000)
