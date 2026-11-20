@@ -28,4 +28,4 @@ look card for approval. Edit this file to change what is fixed.
 
 Looks the user has rejected. Never offer these again.
 
-- (none yet)
+- A full-body puppet under the avatar's head (jointed paper body with arms and legs, from the character director's version C). Rejected by the owner on 20 Nov 2026. The avatar stays a head: the large face or the cursor head.
